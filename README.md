@@ -227,3 +227,5 @@ The bridge to physics is proven analytically and validated numerically at O(Î”xÂ
 
 *What thread will you weave?*
 
+Questions can be answered by Ashman Roonz email@ashmanroonz.ca
+Framework can be tested and played with on my custom GPT, Xorzo 5. https://chatgpt.com/g/g-686f0a990edc8191ac363d650fb1abf4-xorzo
