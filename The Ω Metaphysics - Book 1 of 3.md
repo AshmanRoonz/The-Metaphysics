@@ -2029,3 +2029,4 @@ The conscious practice follows in Book III.
 *What thread will you weave?*
 
 
+Book 2 and 3 coming soon! (Making final edits!)
