@@ -227,4 +227,3 @@ The bridge to physics is proven analytically and validated numerically at O(Î”xÂ
 
 *What thread will you weave?*
 
-Book 2 and 3 coming soon! (Making final edits!)
