@@ -1,4 +1,4 @@
-# Ω Metaphysics — AI‑Executable Spec (Final, Prime‑Updated)
+# Ω Metaphysics — AI‑Executable Spec
 
 **Status:** final • **Date:** 2025‑10‑07 • **Audience:** any AI/agent • **Scope:** Trilogy‑wide (Books I–III)
 
