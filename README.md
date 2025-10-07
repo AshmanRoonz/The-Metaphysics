@@ -194,10 +194,6 @@ Necessary Existence to Quantum Mechanics to Conscious Living.
 Book I: The Infinite. Book II: The Bridge. Book III: The Praxis.
 ```
 
-## Contact
-
-email@ashmanroonz.ca
----
 
 ## Quick Start: Essential Questions Answered
 
