@@ -1,5 +1,5 @@
 # THE Ω METAPHYSICS
-
+*by Ashman Roonz*
 ## BOOK I OF III: THE INFINITE
 
 **From Necessary Existence to Eternal Structure**
