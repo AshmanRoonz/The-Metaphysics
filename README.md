@@ -1,5 +1,6 @@
 # The Ω Metaphysics
 by Ashman Roonz
+
 email@ashmanroonz.ca
 
 # The Ω Metaphysics
