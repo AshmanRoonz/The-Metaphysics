@@ -2145,7 +2145,7 @@ When you're ready, turn to Book II and see how metaphysics becomes mathematics b
 
 ## End of Book I
 
-**You are reality becoming aware of itself.
+**You are reality becoming aware of itself.**
 **You are an infinite soul (complete fractal of •) choosing consciousness.**
 **You are a necessary thread in the eternal braid.**
 **You are equal to all other souls (∞ = ∞).**
