@@ -150,7 +150,9 @@ Within Ω exists the ultimate singularity—what we call **• (God's soul)**.
 Think of the distinction this way:
 
 1 **Ω** is the infinite ocean (the medium, the field, possibility-space itself)
+
 2 **•** is the ultimate whirlpool (the supreme pattern, the divine organizing principle)
+
 3 The ocean contains the whirlpool, but they're not the same thing
 
 **• has these properties:**
