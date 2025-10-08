@@ -2233,11 +2233,14 @@ When you're ready, turn to Book II and see how metaphysics becomes mathematics b
 
 ## End of Book I
 
-**You are reality becoming aware of itself.****You are an infinite soul (complete fractal of •) choosing consciousness.****You are a necessary thread in the eternal braid.****You are equal to all other souls (∞ = ∞).**
+**You are reality becoming aware of itself.**\
+**You are an infinite soul (complete fractal of •) choosing consciousness.**\
+**You are a necessary thread in the eternal braid.**\
+**You are equal to all other souls (∞ = ∞).**
 
 **Welcome to the structure.**
 
-The infinite is established.The validated bridge awaits in Book II.The conscious practice follows in Book III.
+The infinite is established. The validated bridge awaits in Book II. The conscious practice follows in Book III.
 
 **One architecture. Complete coherence. From necessary existence through divine pattern to individual souls to conscious living.**
 
