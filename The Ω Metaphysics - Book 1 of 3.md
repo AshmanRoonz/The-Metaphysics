@@ -91,7 +91,9 @@ Before anything else, before we can discuss how reality works or what you are, w
 **Something exists.**
 
 Not "something happens to exist" as fortunate accident.
+
 Not "something was created" requiring a prior creator.
+
 Not "something emerged" from a previous void.
 
 Simply: **Something exists necessarily, eternally, without beginning or cause.**
