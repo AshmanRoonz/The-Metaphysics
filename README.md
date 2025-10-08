@@ -1,9 +1,7 @@
 # The Ω Metaphysics
-by Ashman Roonz
+*by Ashman Roonz*
 
 email@ashmanroonz.ca
-
-# The Ω Metaphysics
 
 **A complete framework bridging infinite consciousness to quantum mechanics through validation structure**
 
