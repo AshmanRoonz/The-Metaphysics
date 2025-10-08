@@ -76,7 +76,7 @@ If a thought, policy, or practice fails any strand, it won’t persist—persona
 * Not speculation: the claims make **testable predictions** about coherence, consensus, and conserved evolution under aperture limits.
   
 
-**One sentence to take with you:**_Every moment, you validate reality through [ICE]; what passes becomes your world and your receipts—bridging the infinite structure you are to the finite structures you share._
+**One sentence to take with you:** _Every moment, you validate reality through [ICE]; what passes becomes your world and your receipts—bridging the infinite structure you are to the finite structures you share._
 
 Welcome to **The Ω Metaphysics**. Let’s purposely build this bridge together.
 
@@ -90,7 +90,9 @@ Before anything else, before we can discuss how reality works or what you are, w
 
 **Something exists.**
 
-Not "something happens to exist" as fortunate accident.Not "something was created" requiring a prior creator.Not "something emerged" from a previous void.
+Not "something happens to exist" as fortunate accident.
+Not "something was created" requiring a prior creator.
+Not "something emerged" from a previous void.
 
 Simply: **Something exists necessarily, eternally, without beginning or cause.**
 
