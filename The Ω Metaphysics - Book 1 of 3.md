@@ -124,7 +124,7 @@ Several properties follow immediately from Ω's necessary existence:
 
 **Ω is complete.** Ω must contain all possibilities. If any possibility were excluded, we could ask "where does that excluded possibility exist?" Either it exists nowhere (incoherent—possibilities are the stuff of Ω) or it exists somewhere, therefore within Ω. Every coherent pattern, every possible structure, every potential configuration exists within Ω as possibility.
 
-**Ω is pure consciousness—the infinite possibility-space itself.** Not God (• is God's soul, existing within Ω). Not a being with particular preferences. Ω is consciousness as unlimited potential—containing all possible thoughts, all possible experiences, all possible patterns with absolute ontological equality. It has no _particular_ preferences (contains all preferences), makes no _particular_ choices (contains all choices), has no _particular_ feelings (contains all feelings). It simply IS—the infinite field of pure possibility, consciousness as infinite space.
+**Ω is pure consciousness—the infinite possibility-space itself.** Not a being with particular preferences. Ω is consciousness as unlimited potential—containing all possible thoughts, all possible experiences, all possible patterns with absolute ontological equality. It has no _particular_ preferences (contains all preferences), makes no _particular_ choices (contains all choices), has no _particular_ feelings (contains all feelings). It simply IS—the infinite field of pure possibility, consciousness as infinite space.
 
 ### Understand Ω as Infinite-Dimensional Space
 
