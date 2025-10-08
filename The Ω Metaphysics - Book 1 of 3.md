@@ -1568,7 +1568,7 @@ What evolved is:
 
 Cosmic democracy means: **There is no external judge.**
 
-**Î© doesn't judge.** Î© contains all possibilities equally, without preference, without evaluation, without favor. The field has no will, no intent, no moral structure.
+**Ω doesn't judge.** Ω contains all possibilities equally, without preference, without evaluation, without favor. The field has no will, no intent, no moral structure.
 
 **• doesn't judge in the traditional sense.** • is the ultimate attractor, the source pattern, not a judging deity. All •′ are fractals of •, all converge toward •, but • doesn't evaluate or condemn.
 
