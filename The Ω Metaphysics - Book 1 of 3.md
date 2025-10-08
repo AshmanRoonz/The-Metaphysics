@@ -60,7 +60,7 @@ Constrain the aperture to be **local, isotropic, conservative, and smooth**, and
 
 * **Interface:** Am I keeping clean boundaries—of bodies, roles, resources, and claims?
   
-* **Center:** Does this choice cohere with my •′ (and softly with •)?
+* **Center:** Does this choice cohere with my •′ (and softly with •)? Does it make sense and is logical?
   
 * **Evidence:** Does it track reality—data, outcomes, and receipts?
   
