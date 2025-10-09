@@ -303,7 +303,7 @@ The three validation strands aren't arbitrary—they're how patterns persist thr
 ║                                                          ║
 ║  BUT manifestation differs:                              ║
 ║  • I(t) complexity varies (simple → rich)                ║
-║  • Ω′ presence conditional (most •′ have no consciousness)║
+║  • Ω′ presence conditional (most •′ only have Ω′′ field )║
 ║  • Practical obligations follow capability/impact        ║
 ║                                                          ║
 ║  Therefore:                                              ║
