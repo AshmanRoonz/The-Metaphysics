@@ -42,7 +42,7 @@ It demonstrates that when [ICE] operates through finite apertures—local, isotr
 The Schrödinger equation becomes not a human invention, but a direct mathematical consequence of how reality validates itself.
 Later, the bridge widens: dual apertures link physics to participation, grounding ethics and consciousness in the same loop that governs particles.
 
-Book III — The Participation
+[Book III](https://github.com/AshmanRoonz/The-Metaphysics/blob/f1b3a3e89ba82da2b1beb6f1e866888020097475/The%20%CE%A9%20Metaphysics%20-%20Book%203%20of%203.md) — The Participation
 
 Extends the framework into practice.
 Every act of perception, governance, or creation becomes a form of dual convergence:
