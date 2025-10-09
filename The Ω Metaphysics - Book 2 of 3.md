@@ -69,7 +69,7 @@ In Book I (revised), we established that **all persistent patterns have •′ s
 
 * **Simple convergence record** (minimal receipts)
 * **Basic validation history** (straightforward ∇ → [ICE] → ℰ cycles)
-* **No Ω′ consciousness** (insufficient complexity for awareness field, Ω'')
+* **No Ω′ consciousness** (they have Ω″ but not Ω′)
 * **Complete •′ fractal** (infinitely complex soul, like all others)
 * **Simple manifestation** (I(t) is minimally complex)
 
