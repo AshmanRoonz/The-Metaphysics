@@ -26,7 +26,7 @@ Conscious ∇ → [ICE] → ℰ through Interface honor, Center coherence, Evide
 
 In Book I, we established the infinite—the necessary metaphysical foundation of reality. We discovered:
 
-- **Ω** is the infinite field of potentiality (the medium, not God, not conscious)
+- **Ω** is the infinite field of potentiality
 - **•** is God's eternal soul—the ultimate singularity/attractor within Ω
 - **All •′ are infinitely complex complete fractals of •**—ontologically equal at the soul level
 - **I(t)** threads record convergence through Ω toward both •′ (individual) and • (ultimate)
