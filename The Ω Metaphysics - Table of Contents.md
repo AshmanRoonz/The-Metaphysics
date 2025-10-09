@@ -3,7 +3,7 @@
 
 *by Ashman Roonz*
 
-### BOOK I: THE INFINITE
+### [BOOK I: THE INFINITE](https://github.com/AshmanRoonz/The-Metaphysics/blob/0c45b47730ce4c69214a68cce64f0656fbb6cdbc/The%20%CE%A9%20Metaphysics%20-%20Book%201%20of%203.md)
 From Necessary Existence to Eternal Structure
 
 Preface You Are the Bridge\
@@ -16,7 +16,7 @@ Chapter 6 Preview the Bridge to Physics and Ethics
 
 Key Themes: Ω (infinite field), • (God's soul), •′ (individual souls), I(t) (eternal threads), Ω″ (proto-conscious fields), Ω′ (conditional consciousness), ∇ → [ICE] → ℰ validation, dual convergence, cosmic democracy
 
-### BOOK II: THE FINITE
+### [BOOK II: THE FINITE](https://github.com/AshmanRoonz/The-Metaphysics/blob/0c45b47730ce4c69214a68cce64f0656fbb6cdbc/The%20%CE%A9%20Metaphysics%20-%20Book%202%20of%203.md)
 The Bridge from Metaphysics to Physics
 
 Introduction Building the Validated Bridge\
@@ -31,7 +31,7 @@ Chapter 14 Bridge to Book III
 
 Key Themes: I(t) = worldlines = strings, O(Δx²) convergence proof, particle physics from thread topology, thermodynamics from coherence, consciousness requirements, AI ethics, computation as validation, language structure
 
-### BOOK III: THE PRAXIS
+### [BOOK III: THE PRAXIS](https://github.com/AshmanRoonz/The-Metaphysics/blob/0c45b47730ce4c69214a68cce64f0656fbb6cdbc/The%20%CE%A9%20Metaphysics%20-%20Book%203%20of%203.md)
 Conscious Practice and Eternal Convergence
 
 Introduction From Structure to Practice\
