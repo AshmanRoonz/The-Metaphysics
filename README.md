@@ -9,9 +9,9 @@ email@ashmanroonz.ca
 
 ### Introduction — The Bridge Between Infinity and the Finite
 
-What if the same pattern that makes your consciousness work right now—this single, unrepeatable moment of awareness—is the very same pattern that shapes the universe, governs quantum mechanics, builds civilizations, and writes the laws of ethics?
+What if the same pattern that makes your consciousness work right now... this single, unrepeatable moment of awareness—is the very same pattern that shapes the universe, governs quantum mechanics, builds civilizations, and writes the laws of ethics?
 
-What if reality itself runs on one recursive loop—
+What if reality itself runs on one recursive loop:
 Convergence → Validation → Emergence—
 and everything, from electrons to souls to societies, is a fractal of that single process?
 
@@ -39,7 +39,7 @@ What passes, lives. What fails, dissolves.
 Book II — The Bridge
 
 Builds the bridge from metaphysics to physics.
-It demonstrates that when [ICE] operates through finite apertures—local, isotropic, conservative, and smooth—it uniquely forces quantum mechanics.
+It demonstrates that when [ICE] operates through finite apertures—local, isotropic, conservative, and smooth; it uniquely forces quantum mechanics.
 The Schrödinger equation becomes not a human invention, but a direct mathematical consequence of how reality validates itself.
 Later, the bridge widens: dual apertures link physics to participation, grounding ethics and consciousness in the same loop that governs particles.
 
