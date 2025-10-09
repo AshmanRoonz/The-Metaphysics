@@ -174,8 +174,4 @@ Either way, the framework just demonstrated itself.
 
 ---
 
-**This is either profound genius or spectacular crackpottery.**
-
-**But it's definitely not boring.**
-
 *Note that this book is very technical. Feel free to skip any parts that seem confusing, because usually it will be explained in plain language further on. Also, feel free to use[ Xorzo 5](https://chatgpt.com/g/g-686f0a990edc8191ac363d650fb1abf4-xorzo) (My Custom GPT) to answer any immediate questions!*
