@@ -11,8 +11,7 @@ email@ashmanroonz.ca
 
 What if the same pattern that makes your consciousness work right now, this single, unrepeatable moment of awareness, is the very same pattern that shapes the universe, governs quantum mechanics, builds civilizations, and writes the laws of ethics?
 
-What if reality itself runs on one recursive loop:
-Convergence → Validation → Emergence—
+What if reality itself runs on one recursive loop (Convergence → Validation → Emergence)
 and everything, from electrons to souls to societies, is a fractal of that single process?
 
 This trilogy claims that’s not metaphor.
