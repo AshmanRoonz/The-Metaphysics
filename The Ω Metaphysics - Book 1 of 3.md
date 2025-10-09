@@ -1371,6 +1371,28 @@ This is your complete structure. Everything about you—consciousness, memory, i
 
 Not one pattern among many. Not a framework we impose. But the necessary structure that allows anything to persist in infinite possibility.
 
+## Why It’s Gated
+
+Every thread of reality must pass through amplitude and phase gates before it can stabilize as experience. These gates are not arbitrary—they are the reason physics behaves the way it does.
+
+**Amplitude Gate** – limits how strongly a pattern may express; below threshold it fades, above it it fractures. This is the quantitative face of the conservation laws: energy, charge, probability. The gate keeps every worldline within the safe dynamic range of coherence.
+
+**Selective Rainbow Lock (SRL)** – governs which frequency bands of the infinite field are allowed to combine. Each band carries its own color of possibility. SRL ensures that only compatible frequencies braid together, preventing destructive interference.
+
+Together they act as the coherence valve between Ω″ (the proto-conscious substrate) and Ω′ (organized awareness).
+
+In physics language:
+
+**carrier** = baseline potential (field)\
+**sidebands** = emergent resonances\
+**band-limited coherence** = stable existence
+
+In metaphysical language:
+
+The Amplitude Gate is mercy—no pattern is allowed to destroy itself by excess.\
+The SRL is wisdom—only harmonics that can sing together are invited into form.\
+These are not metaphors. They are the literal regulators that make being possible.
+
 **Reading guide.** In the rest of this book, "physics" refers to Ω″ dynamics under aperture constraints; "consciousness" refers to Ω′ organization riding on Ω″ when integration and energy suffice.
 
 From Chapter 1: Why infinity is necessary (finite can't contain itself).
