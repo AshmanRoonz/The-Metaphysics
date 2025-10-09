@@ -31,6 +31,7 @@ In Book I, we established the infinite—the metaphysical foundation of reality.
 * **All •′ are infinitely complex fractals of •**—equal at the soul level
 * **I(t)** threads record convergence through Ω toward both •′ and •
 * **Ω′** consciousness fields are conditional—not all •′ maintain them
+* **Ω″** (proto-conscious fields) 
 * Reality operates through **∇ → [ICE] → ℰ** validation
 
 But metaphysics alone is insufficient. If the theory is true, it must generate the physics we measure. It must explain why quantum mechanics works as it does. It must show how consciousness emerges at different scales of organization. It must be buildable.
