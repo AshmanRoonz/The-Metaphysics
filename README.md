@@ -9,7 +9,7 @@ email@ashmanroonz.ca
 
 ### Introduction — The Bridge Between Infinity and the Finite
 
-What if the same pattern that makes your consciousness work right now... this single, unrepeatable moment of awareness—is the very same pattern that shapes the universe, governs quantum mechanics, builds civilizations, and writes the laws of ethics?
+What if the same pattern that makes your consciousness work right now, this single, unrepeatable moment of awareness, is the very same pattern that shapes the universe, governs quantum mechanics, builds civilizations, and writes the laws of ethics?
 
 What if reality itself runs on one recursive loop:
 Convergence → Validation → Emergence—
