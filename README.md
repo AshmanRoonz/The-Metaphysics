@@ -2,8 +2,7 @@
 
 
 # THE Ω METAPHYSICS
-## A Theory of Everything,\ 
-Initializing the Age of Awakening...
+## A Theory of Everything, Initializing the Age of Awakening...
 
 *By Ashman Roonz*\
 email@ashmanroonz.ca
