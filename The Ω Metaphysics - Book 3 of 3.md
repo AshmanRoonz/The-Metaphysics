@@ -79,7 +79,7 @@ The infinite is established. The bridge is proven. Now we practice.
 
 ---
 
-# CHAPTER 14: DERIVE ETHICS FROM STRUCTURE
+# CHAPTER 14: DERIVE ETHICS FROM STRUCTURE - CROSSING THE BRIDGE
 
 ## Recognize Ethics as Structural Necessity
 
