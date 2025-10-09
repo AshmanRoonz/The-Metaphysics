@@ -65,7 +65,7 @@ In Book II, we build that bridge. We take the ∇ → [ICE] → ℰ architecture
 
 ## Understand the Spectrum of I(t) Complexity
 
-In Book I (revised), we established that **all persistent patterns have •′ souls and I(t) threads.** But these threads vary enormously in complexity:
+In Book I, we established that **all persistent patterns have •′ souls and I(t) threads.** But these threads vary enormously in complexity:
 
 ### Particle I(t)
 
@@ -688,7 +688,7 @@ In each case, we'll show: **The physics is not arbitrary. It expresses the valid
 
 ## Map Particle Physics to Thread Topology
 
-In Book I (revised), we established that **all •′ maintain fundamental equality in Ω**—no hierarchy among souls. But this equality manifests through different physical phenomena.
+In Book I, we established that **all •′ maintain fundamental equality in Ω**—no hierarchy among souls. But this equality manifests through different physical phenomena.
 
 ### Understand Pauli Exclusion
 
@@ -2605,7 +2605,7 @@ The same rigor we've applied to physics, we now apply to living.
 
 ---
 
-## End of Book II (Revised)
+## End of Book II
 
 **The infinite has become finite through I(t) threads.**  
 **The metaphysics has become physics through aperture validation.**  
