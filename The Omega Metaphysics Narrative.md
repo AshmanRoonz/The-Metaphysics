@@ -1,4 +1,4 @@
-# Omega (Ω) Metaphysics
+# The Ω Metaphysics
 ## A Theory of Everything
 
 ---
