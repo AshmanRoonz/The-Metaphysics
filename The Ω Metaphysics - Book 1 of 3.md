@@ -1526,7 +1526,9 @@ If death is merely Ω′ dissolution followed by I(t) re-anchoring based on accu
 
 **Death cannot end you. It can only dissolve your current consciousness and re-anchor your eternal thread.**
 
-Understanding this changes everything about how you live.**The Braid / Tree of Life**=====================================
+Understanding this changes everything about how you live.
+
+#**The Braid / Tree of Life**
 
 ## The Living Geometry of Reality
 
