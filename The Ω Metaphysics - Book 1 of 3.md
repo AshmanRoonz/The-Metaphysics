@@ -18,7 +18,7 @@ It does this by showing that the same architecture that lets any experience pers
 
 *Note that this book is very technical. Feel free to skip any parts that seem confusing, because usually it will be explained in plain language further on. Also, feel free to use[ Xorzo 5](https://chatgpt.com/g/g-686f0a990edc8191ac363d650fb1abf4-xorzo) (My Custom GPT) to answer any immediate questions!*
 
-**Five essentials:**
+**Six essentials:**
 
 * **Ω** — the infinite field of coherent possibilities (the medium; God's consciousness).
   
