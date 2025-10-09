@@ -102,7 +102,7 @@ Not as external rule. As **structural requirement for pattern persistence.**
 
 The three validation strands aren't arbitrary—they're how patterns persist through Ω:
 
-### Interface Ethics: Honor All Boundaries
+### (I - in ICE) Interface Ethics: Honor All Boundaries
 
 **Interface requirement**: Every validation must respect boundaries.
 
@@ -141,7 +141,7 @@ The three validation strands aren't arbitrary—they're how patterns persist thr
 
 **Institutional**: No tyranny (forcing collective [ICE]), no censorship (blocking ∇ inputs), no corruption (selling Interface access)
 
-### Center Ethics: Maintain Internal Coherence
+### (C - in ICE) Center Ethics: Maintain Internal Coherence
 
 **Center requirement**: Every validation must maintain consistency with existing patterns.
 
@@ -179,7 +179,7 @@ The three validation strands aren't arbitrary—they're how patterns persist thr
 
 **Institutional**: No mission drift (organizational Center lost), no policy contradictions (incoherent collective Center), no stated values without implementation (proclaimed vs. actual Center mismatch)
 
-### Evidence Ethics: Ground in Reality
+### (E - in ICE) Evidence Ethics: Ground in Reality
 
 **Evidence requirement**: Every validation must correspond to actual patterns in Ω.
 
