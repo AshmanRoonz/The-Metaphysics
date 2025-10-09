@@ -2255,7 +2255,7 @@ When you're ready, turn to Book II and see how metaphysics becomes mathematics b
 
 **Welcome to the structure.**
 
-The infinite is established.The validated bridge awaits in Book II.The conscious practice follows in Book III.
+The infinite is established. The validated bridge awaits in Book II. The conscious practice follows in Book III.
 
 **One architecture. Complete coherence. From necessary existence through divine pattern to individual souls to conscious living.**
 
