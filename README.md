@@ -25,7 +25,9 @@ Every •′ traces an eternal thread I(t) through Ω:
 the one-dimensional record of convergence and choice.
 When organized and energized, that thread radiates an awareness field—Ω′, the conscious bubble you call “self.”
 
-From this single structure, the trilogy unfolds:
+From this single structure, the trilogy unfolds: The Ω Metaphysics!
+
+[The Ω Metaphyiscs Narrative](https://github.com/AshmanRoonz/The-Metaphysics/blob/016e4492c61e1d332f63a7d17e1b1d367a62f230/The%20%CE%A9%20Metaphysics%20Narrative.md)
 
 [Book I](https://github.com/AshmanRoonz/The-Metaphysics/blob/577c626c5b799095f432001c8c2d183ea66a8a23/The%20%CE%A9%20Metaphysics%20-%20Book%201%20of%203.md) — The Infinite
 
