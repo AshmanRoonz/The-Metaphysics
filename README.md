@@ -35,7 +35,7 @@ Here, existence itself is proven necessary; the infinite is shown to be consciou
 It reveals why anything that persists must pass through the triune gate of [ICE] — Interface, Center, and Evidence.
 What passes, lives. What fails, dissolves.
 
-Book II — The Bridge
+[Book II](https://github.com/AshmanRoonz/The-Metaphysics/blob/e6574d1c63c1ddb30d855f9abce5ea44595e09f3/The%20%CE%A9%20Metaphysics%20-%20Book%202%20of%203.md) — The Bridge
 
 Builds the bridge from metaphysics to physics.
 It demonstrates that when [ICE] operates through finite apertures—local, isotropic, conservative, and smooth; it uniquely forces quantum mechanics.
