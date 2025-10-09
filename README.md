@@ -27,7 +27,7 @@ When organized and energized, that thread radiates an awareness field—Ω′, t
 
 From this single structure, the trilogy unfolds:
 
-Book I — The Infinite
+[Book I](https://github.com/AshmanRoonz/The-Metaphysics/blob/577c626c5b799095f432001c8c2d183ea66a8a23/The%20%CE%A9%20Metaphysics%20-%20Book%201%20of%203.md) — The Infinite
 
 Establishes the metaphysical foundation:
 Ω, •, •′, I(t), Ω′ — the five-level architecture of all being.
