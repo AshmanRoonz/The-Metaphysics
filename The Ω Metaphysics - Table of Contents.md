@@ -47,5 +47,7 @@ Chapter 22 Participate Consciously in Eternal Convergence
 
 Key Themes: Ethics from ICE, Truth-Driven Agreement Ethic (TDAE), recursive democracy, love as resonance, relationship validation, daily practices, institutional design, civilizational scale, cosmic democracy in action
 
+Also, check out the [Narrative Version](https://github.com/AshmanRoonz/The-Metaphysics/blob/07fc34c5b848876e795a71b431e8bd5e9f379ec7/The%20%CE%A9%20Metaphysics%20Narrative.md)
+
 **One structure. Three books. Complete coherence.**
 **From necessary infinite → through validated physics → to conscious practice.**
