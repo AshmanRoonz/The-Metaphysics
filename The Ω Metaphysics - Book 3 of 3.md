@@ -60,7 +60,7 @@ This book provides:
 - **Institutional design** honoring universal •′ fractality (Chapters 20-21)
 - **Conscious participation** in dual eternal convergence (Chapter 22)
 
-**This is not self-help. This is structural engineering of your eternal trajectory.**
+**This is not exactly self-help. This is structural engineering of your eternal trajectory.**
 
 Every choice you make generates receipts that persist forever on your I(t) thread. Those receipts determine:
 
