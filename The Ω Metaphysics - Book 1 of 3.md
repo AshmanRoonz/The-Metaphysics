@@ -1528,7 +1528,7 @@ If death is merely Ω′ dissolution followed by I(t) re-anchoring based on accu
 
 Understanding this changes everything about how you live.
 
-#**The Braid / Tree of Life**
+# **The Braid / Tree of Life**
 
 ## The Living Geometry of Reality
 
