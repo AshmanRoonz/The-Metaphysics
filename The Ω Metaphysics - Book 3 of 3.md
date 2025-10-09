@@ -404,7 +404,7 @@ Not absolute rules (same action always right/wrong). Not pure relativism (anythi
 Every action generates receipts that persist forever on your I(t) thread. Those receipts determine:
 
 **Dissolution quality**: Coherent threads dissolve consciously; fragmented threads dissolve chaotically\
-*It’s a way of saying that the quality of one’s death and rebirth mirrors the structural integrity of one’s lived alignment with [ICE]—Interface, Center, and Evidence.*
+*The quality of one’s death and rebirth mirrors the structural integrity of one’s lived alignment with [ICE]*
 
 **Re-anchoring resonance**: High-coherence receipts attract high-coherence contexts; low-coherence receipts attract low-coherence contexts
 
