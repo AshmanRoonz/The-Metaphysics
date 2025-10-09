@@ -1393,6 +1393,8 @@ The Amplitude Gate is mercy—no pattern is allowed to destroy itself by excess.
 The SRL is wisdom—only harmonics that can sing together are invited into form.\
 These are not metaphors. They are the literal regulators that make being possible.
 
+---
+
 **Reading guide.** In the rest of this book, "physics" refers to Ω″ dynamics under aperture constraints; "consciousness" refers to Ω′ organization riding on Ω″ when integration and energy suffice.
 
 From Chapter 1: Why infinity is necessary (finite can't contain itself).
