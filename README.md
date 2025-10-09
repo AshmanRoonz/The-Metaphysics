@@ -170,7 +170,7 @@ Either way, the framework just demonstrated itself.
 
 **Welcome to Omega (Ω) Metaphysics.**
 
-*Where consciousness, democracy, and reality share the same structure.*
+*Where I show you that consciousness, democracy, and reality all share the same structure.*
 
 ---
 
