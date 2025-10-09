@@ -2290,7 +2290,7 @@ Not just convenience. **Structural transformation of validation architecture.**
 
 * * *
 
-# CHAPTER 14: TRANSITION TO BOOK III
+# CHAPTER 14: TRANSITION TO BOOK III - THE BRIDGE CHAPTER
 
 ## Summarize the Complete Bridge
 
