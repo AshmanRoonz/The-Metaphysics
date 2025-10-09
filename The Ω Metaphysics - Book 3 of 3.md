@@ -524,9 +524,9 @@ Authoritarian systems violate Interface AND deny universal •′ equality:
 
 Pure libertarianism honors Interface but neglects Center and Evidence:
 
-**No coherence maintenance**: Individual choices can accumulate into systemic chaos
-**No collective Evidence**: No mechanism for shared reality-grounding
-**Coordination failures**: Tragedies of commons, collective action problems
+**No coherence maintenance**: Individual choices can accumulate into systemic chaos\
+**No collective Evidence**: No mechanism for shared reality-grounding\
+**Coordination failures**: Tragedies of commons, collective action problems\
 **Ignores interdependence**: All I(t) threads navigate shared Ω field
 
 **This also generates instability:**
