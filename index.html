@@ -1149,12 +1149,45 @@
           animationRef.current = requestAnimationFrame(animate);
         }
 
+        // Add click/tap interaction to send packets
+        const handleInteraction = (clientX, clientY) => {
+          const rect = canvas.getBoundingClientRect();
+          const x = clientX - rect.left;
+          const y = clientY - rect.top;
+          
+          // Calculate angle and spawn packet at click/tap location
+          const angle = Math.atan2(y - centerY, x - centerX);
+          const hue = (angle * 57 + chaos.x * 100 + time * 0.5) % 360;
+          
+          // Create packet at click location
+          const packet = new ConvergingInput(angle, hue);
+          packet.x = x;
+          packet.y = y;
+          convergingInputs.push(packet);
+        };
+
+        const handleClick = (e) => {
+          handleInteraction(e.clientX, e.clientY);
+        };
+
+        const handleTouch = (e) => {
+          e.preventDefault();
+          for (let i = 0; i < e.touches.length; i++) {
+            handleInteraction(e.touches[i].clientX, e.touches[i].clientY);
+          }
+        };
+
+        canvas.addEventListener('click', handleClick);
+        canvas.addEventListener('touchstart', handleTouch);
+
         animate();
 
         return () => {
           if (animationRef.current) {
             cancelAnimationFrame(animationRef.current);
           }
+          canvas.removeEventListener('click', handleClick);
+          canvas.removeEventListener('touchstart', handleTouch);
         };
       }, []);
 
