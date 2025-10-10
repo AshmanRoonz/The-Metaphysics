@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const ConsciousnessFractal = () => {
     const canvasRef = useRef(null);
     const animationRef = useRef(null);
+    const [zoomLevel, setZoomLevel] = useState(1);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -13,6 +14,9 @@ const ConsciousnessFractal = () => {
         const height = canvas.height = window.innerHeight;
         const centerX = width / 2;
         const centerY = height / 2;
+
+        let currentZoom = zoomLevel;
+        let targetZoom = zoomLevel;
 
         let time = 0;
         let chaos = { x: 0.1, y: 0.1, z: 0.1 };
@@ -1188,6 +1192,10 @@ const ConsciousnessFractal = () => {
             time++;
             chaos = updateChaos(chaos);
 
+            // Smooth zoom transition
+            targetZoom = zoomLevel;
+            currentZoom += (targetZoom - currentZoom) * 0.05;
+
             ctx.fillStyle = 'rgba(5, 5, 10, 0.12)';
             ctx.fillRect(0, 0, width, height);
 
@@ -1241,10 +1249,13 @@ const ConsciousnessFractal = () => {
             apertureSize += (targetAperture - apertureSize) * adaptSpeed;
             apertureSize = Math.max(0.2, Math.min(3, apertureSize));
 
-            const zoom = 1 + Math.sin(time * 0.003) * 0.015;
+            // Apply user-controlled zoom with subtle breathing
+            const breathingZoom = 1 + Math.sin(time * 0.003) * 0.01;
+            const totalZoom = currentZoom * breathingZoom;
+            
             ctx.save();
             ctx.translate(centerX, centerY);
-            ctx.scale(zoom, zoom);
+            ctx.scale(totalZoom, totalZoom);
             ctx.translate(-centerX, -centerY);
 
             if (time >= nextSpawn) {
@@ -1382,11 +1393,56 @@ const ConsciousnessFractal = () => {
                 cancelAnimationFrame(animationRef.current);
             }
         };
-    }, []);
+    }, [zoomLevel]);
+
+    const handleZoomIn = () => {
+        setZoomLevel(prev => Math.min(prev * 1.5, 10));
+    };
+
+    const handleZoomOut = () => {
+        setZoomLevel(prev => Math.max(prev / 1.5, 0.3));
+    };
+
+    const handleReset = () => {
+        setZoomLevel(1);
+    };
 
     return (
         <div className="w-full h-screen bg-gray-900 overflow-hidden relative">
             <canvas ref={canvasRef} className="w-full h-full" />
+            
+            {/* Zoom Controls */}
+            <div className="absolute bottom-8 right-8 flex flex-col gap-2">
+                <button
+                    onClick={handleZoomIn}
+                    className="bg-gray-800/80 hover:bg-gray-700/80 text-white px-4 py-2 rounded-lg backdrop-blur-sm border border-gray-600/50 transition-colors font-mono text-sm"
+                    title="Zoom In (into the past)"
+                >
+                    + Zoom In
+                </button>
+                <button
+                    onClick={handleReset}
+                    className="bg-gray-800/80 hover:bg-gray-700/80 text-white px-4 py-2 rounded-lg backdrop-blur-sm border border-gray-600/50 transition-colors font-mono text-sm"
+                    title="Reset Zoom"
+                >
+                    Reset
+                </button>
+                <button
+                    onClick={handleZoomOut}
+                    className="bg-gray-800/80 hover:bg-gray-700/80 text-white px-4 py-2 rounded-lg backdrop-blur-sm border border-gray-600/50 transition-colors font-mono text-sm"
+                    title="Zoom Out (to the present)"
+                >
+                    - Zoom Out
+                </button>
+            </div>
+            
+            {/* Temporal Indicator */}
+            <div className="absolute top-8 left-8 text-gray-400 font-mono text-sm bg-gray-800/60 px-4 py-2 rounded-lg backdrop-blur-sm border border-gray-600/30">
+                Temporal Depth: {zoomLevel.toFixed(2)}x
+                <div className="text-xs text-gray-500 mt-1">
+                    {zoomLevel > 1.2 ? '← Past' : zoomLevel < 0.8 ? '→ Present' : '⊙ Now'}
+                </div>
+            </div>
         </div>
     );
 };
