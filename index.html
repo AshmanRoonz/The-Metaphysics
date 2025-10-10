@@ -1,350 +1,1323 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Ω Metaphysics by Ashman Roonz</title>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <style>
-        body { 
-            margin: 0; 
-            overflow: hidden;
-            background: #000;
-        }
-        #root {
-            width: 100vw;
-            height: 100vh;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consciousness: Center vs Periphery</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+    
+    #root {
+      width: 100vw;
+      height: 100vh;
+    }
+    
+    .info-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 8px 16px;
+      background: rgba(30, 30, 50, 0.7);
+      border: 1px solid rgba(100, 150, 255, 0.3);
+      border-radius: 4px;
+      color: rgba(150, 180, 255, 0.8);
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+    
+    .info-button:hover {
+      background: rgba(40, 40, 60, 0.9);
+      border-color: rgba(100, 150, 255, 0.6);
+      color: rgba(180, 200, 255, 1);
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      backdrop-filter: blur(5px);
+    }
+    
+    .modal-content {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      max-width: 800px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 40px;
+      border-radius: 8px;
+      border: 1px solid rgba(100, 150, 255, 0.3);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+    
+    .modal-content::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .modal-content::-webkit-scrollbar-track {
+      background: rgba(30, 30, 50, 0.5);
+    }
+    
+    .modal-content::-webkit-scrollbar-thumb {
+      background: rgba(100, 150, 255, 0.3);
+      border-radius: 4px;
+    }
+    
+    .close-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: rgba(150, 180, 255, 0.8);
+      font-size: 24px;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    
+    .close-button:hover {
+      background: rgba(100, 150, 255, 0.2);
+      color: rgba(180, 200, 255, 1);
+    }
+    
+    .modal-content h1 {
+      color: #6db4ff;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+    
+    .modal-content h2 {
+      color: #5a9fd4;
+      margin-top: 30px;
+      margin-bottom: 15px;
+      font-size: 22px;
+    }
+    
+    .modal-content h3 {
+      color: #4a8fc0;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+    
+    .modal-content p, .modal-content li {
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    
+    .modal-content ul {
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+    
+    .modal-content strong {
+      color: #8db4d6;
+    }
+    
+    .modal-content code {
+      background: rgba(100, 150, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      color: #9db4d6;
+    }
+    
+    .modal-content hr {
+      border: none;
+      border-top: 1px solid rgba(100, 150, 255, 0.2);
+      margin: 30px 0;
+    }
+  </style>
 </head>
 <body>
-    <div id="root"></div>
-    <script type="text/babel">
-        const { useEffect, useRef } = React;
+  <div id="root"></div>
+  
+  <script type="text/babel">
+    const { useEffect, useRef, useState } = React;
+    
+    const ConsciousnessFractal = () => {
+      const canvasRef = useRef(null);
+      const animationRef = useRef(null);
+      const [showModal, setShowModal] = useState(false);
+      
+      useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
 
-        const OmegaFractalSimulation = () => {
-          const canvasRef = useRef(null);
-          const animationRef = useRef(null);
-          const stateRef = useRef({
-            time: 0,
-            receipts: [],
-            nextAngle: 0,
-            chaos: { x: 0.1, y: 0.1, z: 0.1 },
-            nextSpawn: 60
-          });
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width = window.innerWidth;
+        const height = canvas.height = window.innerHeight;
+        const centerX = width / 2;
+        const centerY = height / 2;
 
-          useEffect(() => {
-            const canvas = canvasRef.current;
-            if (!canvas) return;
+        let time = 0;
+        let chaos = { x: 0.1, y: 0.1, z: 0.1 };
+        let convergingInputs = [];
+        let validatedPatterns = [];
+        let circuits = [];
+        let energyPulses = [];
+        let brainClouds = [];
+        let nextSpawn = 60;
+        let nextAngle = 0;
+        let brainFormed = false;
+        let brainFormationProgress = 0;
+        let systemCapacity = 1.0;
+        let apertureSize = 1.0;
+        
+        let fieldCoherence = 0;
+        let fieldResonance = [];
+        let collectiveBreath = 0;
 
-            const ctx = canvas.getContext('2d');
-            const width = canvas.width = window.innerWidth;
-            const height = canvas.height = window.innerHeight;
-            const centerX = width / 2;
-            const centerY = height / 2;
-
-            const updateChaos = (state) => {
-              const dt = 0.005;
-              const sigma = 10, rho = 28, beta = 8/3;
-              const dx = sigma * (state.y - state.x) * dt;
-              const dy = (state.x * (rho - state.z) - state.y) * dt;
-              const dz = (state.x * state.y - beta * state.z) * dt;
-              return {
-                x: state.x + dx,
-                y: state.y + dy,
-                z: state.z + dz
-              };
-            };
-
-            class Receipt {
-              constructor(angle, hue, birthTime) {
-                this.angle = angle;
-                this.baseHue = hue;
-                this.hue = hue;
-                this.birthTime = birthTime;
-                this.age = 0;
-                this.scale = 1;
-                this.baseLength = 100;
-                this.phaseOffset = Math.random() * Math.PI * 2;
-                this.evolutionStage = 0;
-                this.geometryType = 0;
-                this.neighbors = [];
-              }
-
-              update(time, chaos, allReceipts) {
-                this.age = time - this.birthTime;
-                const ageScale = Math.max(0.15, 1 / (1 + this.age * 0.002));
-                this.scale = ageScale;
-                this.evolutionStage = this.age * 0.008 + chaos.x * 0.5;
-                this.geometryType = (this.evolutionStage * 0.7 + chaos.y * 2) % 6;
-                
-                this.neighbors = allReceipts.filter(r => {
-                  if (r === this) return false;
-                  const angleDiff = Math.abs(this.angle - r.angle);
-                  return angleDiff < 0.8 && r.scale > 0.3;
-                });
-                
-                let neighborHueInfluence = 0;
-                if (this.neighbors.length > 0) {
-                  neighborHueInfluence = this.neighbors.reduce((sum, n) => sum + n.hue, 0) / this.neighbors.length;
-                }
-                this.hue = (this.baseHue + this.age * 0.1 + chaos.z * 0.5 + neighborHueInfluence * 0.1) % 360;
-              }
-
-              draw(ctx, centerX, centerY, time, chaos) {
-                const length = this.baseLength * this.scale;
-                if (length < 3) return;
-                const alpha = Math.min(0.9, 0.3 + this.scale * 0.6);
-                this.drawBranch(ctx, centerX, centerY, length, this.angle, 5, this.hue, alpha, time, 0);
-              }
-
-              drawBranch(ctx, x, y, length, angle, depth, hue, baseAlpha, time, gen) {
-                if (depth === 0 || length < 1) {
-                  this.drawEvolvingBody(ctx, x, y, angle, hue, Math.max(baseAlpha, 0.4), time);
-                  return;
-                }
-
-                const endX = x + length * Math.cos(angle);
-                const endY = y + length * Math.sin(angle);
-                const alpha = baseAlpha * (depth / 6);
-                const localHue = (hue + gen * 8) % 360;
-                
-                ctx.strokeStyle = `hsla(${localHue}, 75%, 55%, ${alpha})`;
-                ctx.lineWidth = Math.max(0.5, depth * 1.0 * this.scale);
-                ctx.lineCap = 'round';
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-                ctx.lineTo(endX, endY);
-                ctx.stroke();
-
-                if (depth > 2 && depth < 6) {
-                  this.drawEvolvingBody(ctx, endX, endY, angle, localHue, Math.max(alpha, 0.3), time);
-                }
-
-                const branchAngle = Math.PI / 5.5;
-                const lengthMult = 0.67;
-                
-                this.drawBranch(ctx, endX, endY, length * lengthMult, angle - branchAngle, depth - 1, localHue, baseAlpha, time, gen + 1);
-                this.drawBranch(ctx, endX, endY, length * lengthMult, angle + branchAngle, depth - 1, localHue, baseAlpha, time, gen + 1);
-                
-                if (depth > 4 && Math.sin(time * 0.015 + gen + this.phaseOffset) > 0.6) {
-                  this.drawBranch(ctx, endX, endY, length * lengthMult * 0.75, angle, depth - 1, localHue, baseAlpha, time, gen + 1);
-                }
-              }
-
-              drawEvolvingBody(ctx, x, y, angle, hue, baseAlpha, time) {
-                const minSize = 3;
-                const size = Math.max(minSize, 5 * this.scale);
-                const alpha = Math.max(0.5, baseAlpha * Math.max(0.6, this.scale));
-                const stage = Math.floor(this.geometryType);
-                const transition = this.geometryType - stage;
-                const rotation = time * 0.01 * this.evolutionStage + this.phaseOffset;
-                
-                ctx.save();
-                ctx.translate(x, y);
-                ctx.rotate(rotation);
-                
-                const cycleStage = stage % 6;
-                
-                switch(cycleStage) {
-                  case 0:
-                    this.drawGeometry(ctx, size, 3 + transition, hue, alpha, 1);
-                    break;
-                  case 1:
-                    this.drawGeometry(ctx, size, 4 + transition, hue, alpha, 1);
-                    break;
-                  case 2:
-                    this.drawGeometry(ctx, size, 5 + transition, hue, alpha, 1);
-                    break;
-                  case 3:
-                    this.drawGeometry(ctx, size, 6 + transition, hue, alpha, 1);
-                    break;
-                  case 4:
-                    this.drawStar(ctx, size, 6 + Math.floor(transition * 3), hue, alpha);
-                    break;
-                  case 5:
-                    this.drawMandala(ctx, size, hue, alpha * (1 - transition));
-                    if (transition > 0.5) {
-                      this.drawGeometry(ctx, size * transition, 3, hue, alpha * transition, 1);
-                    }
-                    break;
-                }
-                
-                ctx.restore();
-                
-                if (this.neighbors.length > 0) {
-                  this.drawLightning(ctx, x, y, alpha);
-                }
-              }
-
-              drawGeometry(ctx, size, sides, hue, alpha, opacity) {
-                const numSides = Math.floor(sides);
-                const nextSides = numSides + 1;
-                const blend = sides - numSides;
-                
-                ctx.beginPath();
-                for (let i = 0; i <= numSides; i++) {
-                  const a = (Math.PI * 2 * i) / numSides - Math.PI / 2;
-                  const px = size * Math.cos(a);
-                  const py = size * Math.sin(a);
-                  if (i === 0) ctx.moveTo(px, py);
-                  else ctx.lineTo(px, py);
-                }
-                ctx.closePath();
-                ctx.fillStyle = `hsla(${hue}, 80%, 60%, ${alpha * opacity * (1 - blend * 0.5)})`;
-                ctx.fill();
-                ctx.strokeStyle = `hsla(${(hue + 60) % 360}, 75%, 55%, ${alpha * opacity})`;
-                ctx.lineWidth = 2 * this.scale;
-                ctx.stroke();
-                
-                if (blend > 0.1) {
-                  ctx.beginPath();
-                  for (let i = 0; i <= nextSides; i++) {
-                    const a = (Math.PI * 2 * i) / nextSides - Math.PI / 2;
-                    const px = size * Math.cos(a);
-                    const py = size * Math.sin(a);
-                    if (i === 0) ctx.moveTo(px, py);
-                    else ctx.lineTo(px, py);
-                  }
-                  ctx.closePath();
-                  ctx.fillStyle = `hsla(${(hue + 30) % 360}, 80%, 60%, ${alpha * opacity * blend * 0.5})`;
-                  ctx.fill();
-                }
-              }
-
-              drawStar(ctx, size, points, hue, alpha) {
-                ctx.beginPath();
-                for (let i = 0; i < points * 2; i++) {
-                  const radius = i % 2 === 0 ? size : size * 0.5;
-                  const a = (Math.PI * i) / points - Math.PI / 2;
-                  const px = radius * Math.cos(a);
-                  const py = radius * Math.sin(a);
-                  if (i === 0) ctx.moveTo(px, py);
-                  else ctx.lineTo(px, py);
-                }
-                ctx.closePath();
-                ctx.fillStyle = `hsla(${hue}, 85%, 65%, ${alpha})`;
-                ctx.fill();
-                ctx.strokeStyle = `hsla(${(hue + 60) % 360}, 80%, 60%, ${alpha})`;
-                ctx.lineWidth = 2 * this.scale;
-                ctx.stroke();
-              }
-
-              drawMandala(ctx, size, hue, alpha) {
-                const layers = 3;
-                for (let layer = layers; layer > 0; layer--) {
-                  const layerSize = size * (layer / layers);
-                  const petals = 6 + layer * 2;
-                  
-                  for (let i = 0; i < petals; i++) {
-                    const a = (Math.PI * 2 * i) / petals;
-                    const px = layerSize * 0.7 * Math.cos(a);
-                    const py = layerSize * 0.7 * Math.sin(a);
-                    
-                    ctx.beginPath();
-                    ctx.arc(px, py, layerSize * 0.3, 0, Math.PI * 2);
-                    ctx.fillStyle = `hsla(${(hue + layer * 20) % 360}, 80%, 60%, ${alpha * 0.6})`;
-                    ctx.fill();
-                  }
-                }
-                
-                ctx.beginPath();
-                ctx.arc(0, 0, size * 0.3, 0, Math.PI * 2);
-                ctx.fillStyle = `hsla(${(hue + 90) % 360}, 85%, 70%, ${alpha})`;
-                ctx.fill();
-              }
-
-              drawLightning(ctx, x, y, alpha) {
-                this.neighbors.slice(0, 2).forEach(neighbor => {
-                  const neighborDist = Math.abs(neighbor.angle - this.angle);
-                  if (neighborDist < 0.5 && Math.random() > 0.7) {
-                    const neighborAngle = neighbor.angle;
-                    const neighborLength = neighbor.baseLength * neighbor.scale;
-                    const nx = canvas.width / 2 + neighborLength * Math.cos(neighborAngle);
-                    const ny = canvas.height / 2 + neighborLength * Math.sin(neighborAngle);
-                    
-                    ctx.strokeStyle = `hsla(${(this.hue + neighbor.hue) / 2}, 70%, 65%, ${alpha * 0.3})`;
-                    ctx.lineWidth = Math.max(0.5, this.scale * 1.5);
-                    ctx.beginPath();
-                    ctx.moveTo(x, y);
-                    ctx.lineTo(nx, ny);
-                    ctx.stroke();
-                  }
-                });
-              }
-            }
-
-            const animate = () => {
-              const state = stateRef.current;
-              
-              ctx.fillStyle = 'rgba(0, 0, 5, 0.12)';
-              ctx.fillRect(0, 0, width, height);
-
-              state.time += 1;
-              state.chaos = updateChaos(state.chaos);
-
-              if (state.time >= state.nextSpawn) {
-                const angleIncrement = (Math.PI * 2 * 0.618034);
-                const newAngle = state.nextAngle;
-                const newHue = (state.nextAngle * 57.2958 + state.chaos.z * 20) % 360;
-                
-                state.receipts.push(new Receipt(newAngle, newHue, state.time));
-                
-                state.nextAngle = (state.nextAngle + angleIncrement) % (Math.PI * 2);
-                state.nextSpawn = state.time + 40 + Math.abs(state.chaos.x) * 20;
-              }
-
-              ctx.save();
-              ctx.translate(centerX, centerY);
-              
-              const pulse = 0.8 + Math.sin(state.time * 0.02) * 0.2;
-              
-              ctx.shadowBlur = 35 * pulse;
-              ctx.shadowColor = `hsla(200, 70%, 60%, 0.8)`;
-              ctx.font = 'bold 56px serif';
-              ctx.fillStyle = `hsla(200, 90%, 70%, ${pulse})`;
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'middle';
-              ctx.fillText('Ω', 0, 0);
-              
-              ctx.beginPath();
-              ctx.strokeStyle = `hsla(180, 60%, 50%, ${0.25 * pulse})`;
-              ctx.lineWidth = 2;
-              ctx.arc(0, 0, 60, 0, Math.PI * 2);
-              ctx.stroke();
-              
-              ctx.restore();
-
-              state.receipts.forEach(receipt => {
-                receipt.update(state.time, state.chaos, state.receipts);
-                receipt.draw(ctx, centerX, centerY, state.time, state.chaos);
-              });
-
-              if (state.receipts.length > 60) {
-                state.receipts = state.receipts.slice(-60);
-              }
-
-              animationRef.current = requestAnimationFrame(animate);
-            };
-
-            animate();
-
-            return () => {
-              if (animationRef.current) {
-                cancelAnimationFrame(animationRef.current);
-              }
-            };
-          }, []);
-
-          return React.createElement('div', { className: 'w-full h-screen bg-gray-900 overflow-hidden' },
-            React.createElement('canvas', { ref: canvasRef, className: 'w-full h-full' })
-          );
+        const updateChaos = (state) => {
+          const dt = 0.005;
+          const sigma = 10, rho = 28, beta = 8/3;
+          const dx = sigma * (state.y - state.x) * dt;
+          const dy = (state.x * (rho - state.z) - state.y) * dt;
+          const dz = (state.x * state.y - beta * state.z) * dt;
+          return {
+            x: state.x + dx,
+            y: state.y + dy,
+            z: state.z + dz
+          };
         };
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(React.createElement(OmegaFractalSimulation));
-    </script>
+        const checkBrainFormation = () => {
+          const centerRadius = 120;
+          const patternsInCenter = validatedPatterns.filter(p => {
+            const dist = p.baseLength * p.scale;
+            return dist < centerRadius;
+          }).length;
+          
+          return patternsInCenter >= 15;
+        };
+
+        const calculateFieldCoherence = () => {
+          if (!brainFormed || brainClouds.length === 0) return 0;
+          
+          let totalConnections = 0;
+          let synchronizedConnections = 0;
+          
+          brainClouds.forEach(cloud => {
+            cloud.connectedPatterns.forEach(pattern => {
+              totalConnections++;
+              const phaseDiff = Math.abs(Math.sin(time * 0.02 + cloud.phaseOffset) - 
+                                         Math.sin(time * 0.02 + pattern.phaseOffset));
+              if (phaseDiff < 0.3) synchronizedConnections++;
+            });
+          });
+          
+          return totalConnections > 0 ? synchronizedConnections / totalConnections : 0;
+        };
+
+        const generateFieldResonance = () => {
+          if (!brainFormed) return [];
+          
+          const resonances = [];
+          const numResonances = Math.floor(fieldCoherence * 8);
+          
+          for (let i = 0; i < numResonances; i++) {
+            const frequency = (i + 1) * 0.015;
+            const amplitude = Math.sin(time * frequency) * fieldCoherence * 30;
+            const angle = (i / numResonances) * Math.PI * 2;
+            
+            resonances.push({
+              angle,
+              amplitude,
+              frequency,
+              phase: time * frequency
+            });
+          }
+          
+          return resonances;
+        };
+
+        class BrainCloud {
+          constructor(angle, distance, birthTime) {
+            this.angle = angle;
+            this.baseDistance = distance;
+            this.distance = distance;
+            this.birthTime = birthTime;
+            this.phaseOffset = Math.random() * Math.PI * 2;
+            this.hue = 200 + Math.random() * 60;
+            this.alpha = 0;
+            this.particles = [];
+            this.connectedPatterns = [];
+            this.energyLevel = 0;
+            this.activeFiltering = false;
+            
+            for (let i = 0; i < 20; i++) {
+              this.particles.push({
+                angle: angle + (Math.random() - 0.5) * 0.8,
+                distOffset: (Math.random() - 0.5) * 50,
+                size: 2 + Math.random() * 4,
+                phaseOffset: Math.random() * Math.PI * 2,
+                speed: 0.002 + Math.random() * 0.003,
+                energy: Math.random(),
+                targetPattern: null,
+                excitement: 0
+              });
+            }
+          }
+
+          update(time, allPatterns, globalBreath) {
+            const age = time - this.birthTime;
+            
+            if (age < 60) {
+              this.alpha = age / 60;
+            } else {
+              this.alpha = Math.min(0.7, this.alpha);
+            }
+            
+            const localWave = Math.sin(time * 0.01 + this.phaseOffset) * 10;
+            const breathWave = globalBreath * 20;
+            this.distance = this.baseDistance + localWave + breathWave;
+            
+            if (convergingInputs && convergingInputs.length > 0) {
+              let nearbyPackets = [];
+              
+              convergingInputs.forEach(input => {
+                if (!input || input.x === undefined || input.y === undefined) return;
+                
+                const inputAngle = Math.atan2(input.y - centerY, input.x - centerX);
+                let angleDiff = Math.abs(inputAngle - this.angle);
+                if (angleDiff > Math.PI) angleDiff = Math.PI * 2 - angleDiff;
+                
+                if (angleDiff < Math.PI / 3) {
+                  nearbyPackets.push({
+                    angle: inputAngle,
+                    distance: Math.sqrt((input.x - centerX) ** 2 + (input.y - centerY) ** 2)
+                  });
+                }
+              });
+              
+              if (nearbyPackets.length > 0) {
+                let avgAngle = 0;
+                nearbyPackets.forEach(p => {
+                  avgAngle += p.angle;
+                });
+                avgAngle /= nearbyPackets.length;
+                
+                const angleDiff = avgAngle - this.angle;
+                this.angle += angleDiff * 0.03;
+              }
+            }
+            
+            this.connectedPatterns = allPatterns.filter(p => {
+              if (!p || p.x === undefined || p.y === undefined) return false;
+              const angleDiff = Math.abs(this.angle - p.angle);
+              const normalizedDiff = Math.min(angleDiff, Math.PI * 2 - angleDiff);
+              return normalizedDiff < 0.9;
+            });
+            
+            this.energyLevel = this.connectedPatterns.length * 0.1;
+            
+            const cloudX = centerX + Math.cos(this.angle) * this.distance;
+            const cloudY = centerY + Math.sin(this.angle) * this.distance;
+            
+            this.activeFiltering = false;
+            if (convergingInputs && convergingInputs.length > 0) {
+              convergingInputs.forEach(input => {
+                if (!input || input.x === undefined || input.y === undefined) return;
+                const dist = Math.sqrt((input.x - cloudX) ** 2 + (input.y - cloudY) ** 2);
+                if (dist < 40) {
+                  this.activeFiltering = true;
+                  this.energyLevel += 0.05;
+                }
+              });
+            }
+            
+            this.particles.forEach(particle => {
+              particle.angle += particle.speed;
+              particle.energy = Math.max(0.2, particle.energy * 0.995 + this.energyLevel * 0.05);
+            });
+          }
+
+          calculateCurvedPath(x1, y1, x2, y2, allPatterns) {
+            const points = [];
+            const steps = 5;
+            
+            for (let i = 1; i < steps; i++) {
+              const t = i / steps;
+              let x = x1 + (x2 - x1) * t;
+              let y = y1 + (y2 - y1) * t;
+              
+              allPatterns.forEach(p => {
+                if (p.gravitationalMass > 0.1) {
+                  const dx = x - p.x;
+                  const dy = y - p.y;
+                  const dist = Math.sqrt(dx * dx + dy * dy);
+                  
+                  if (dist < 100 && dist > 0) {
+                    const bend = p.gravitationalMass * 15 / (dist * 0.1);
+                    x += (dx / dist) * bend;
+                    y += (dy / dist) * bend;
+                  }
+                }
+              });
+              
+              points.push({ x, y });
+            }
+            
+            return points;
+          }
+
+          draw(ctx, centerX, centerY, time, brainPatterns, fieldCoherence, resonances, allPatterns) {
+            if (this.alpha <= 0) return;
+            
+            const cloudX = centerX + Math.cos(this.angle) * this.distance;
+            const cloudY = centerY + Math.sin(this.angle) * this.distance;
+            
+            this.particles.forEach(particle => {
+              const particleAngle = particle.angle;
+              const particleDist = this.distance + particle.distOffset + Math.sin(time * 0.01 + particle.phaseOffset) * 15;
+              const px = centerX + Math.cos(particleAngle) * particleDist;
+              const py = centerY + Math.sin(particleAngle) * particleDist;
+              
+              const energyAlpha = this.alpha * particle.energy * 0.4;
+              const gradient = ctx.createRadialGradient(px, py, 0, px, py, particle.size * 3);
+              gradient.addColorStop(0, `hsla(${this.hue}, 70%, 65%, ${energyAlpha})`);
+              gradient.addColorStop(1, `hsla(${this.hue}, 70%, 65%, 0)`);
+              
+              ctx.fillStyle = gradient;
+              ctx.beginPath();
+              ctx.arc(px, py, particle.size * 3, 0, Math.PI * 2);
+              ctx.fill();
+            });
+            
+            if (brainPatterns && brainPatterns.length > 0) {
+              const brainCore = brainPatterns.reduce((acc, p) => {
+                acc.x += p.x;
+                acc.y += p.y;
+                return acc;
+              }, { x: 0, y: 0 });
+              brainCore.x /= brainPatterns.length;
+              brainCore.y /= brainPatterns.length;
+              
+              ctx.strokeStyle = `hsla(${this.hue}, 60%, 60%, ${this.alpha * 0.15})`;
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(brainCore.x, brainCore.y);
+              const midX = (brainCore.x + cloudX) / 2 + Math.sin(time * 0.02 + this.phaseOffset) * 20;
+              const midY = (brainCore.y + cloudY) / 2 + Math.cos(time * 0.02 + this.phaseOffset) * 20;
+              ctx.quadraticCurveTo(midX, midY, cloudX, cloudY);
+              ctx.stroke();
+            }
+            
+            this.connectedPatterns.forEach(pattern => {
+              const connectionStrength = 1 - (Math.abs(this.angle - pattern.angle) / 0.9);
+              
+              let resonanceModulation = 1;
+              resonances.forEach(res => {
+                const angleDist = Math.abs(res.angle - this.angle);
+                if (angleDist < 0.5) {
+                  resonanceModulation += Math.abs(res.amplitude) * 0.01;
+                }
+              });
+              
+              const alpha = this.alpha * connectionStrength * 0.15 * resonanceModulation;
+              
+              ctx.strokeStyle = `hsla(${this.hue}, 70%, 65%, ${alpha})`;
+              ctx.lineWidth = 0.5 + (fieldCoherence * 0.5);
+              
+              const pathPoints = this.calculateCurvedPath(cloudX, cloudY, pattern.x, pattern.y, allPatterns);
+              
+              ctx.beginPath();
+              ctx.moveTo(cloudX, cloudY);
+              
+              if (pathPoints.length > 2) {
+                ctx.quadraticCurveTo(
+                  pathPoints[0].x, 
+                  pathPoints[0].y,
+                  pathPoints[Math.floor(pathPoints.length / 2)].x,
+                  pathPoints[Math.floor(pathPoints.length / 2)].y
+                );
+                ctx.quadraticCurveTo(
+                  pathPoints[pathPoints.length - 1].x,
+                  pathPoints[pathPoints.length - 1].y,
+                  pattern.x,
+                  pattern.y
+                );
+              } else if (pathPoints.length > 0) {
+                ctx.quadraticCurveTo(
+                  pathPoints[0].x,
+                  pathPoints[0].y,
+                  pattern.x,
+                  pattern.y
+                );
+              } else {
+                ctx.lineTo(pattern.x, pattern.y);
+              }
+              
+              ctx.stroke();
+            });
+          }
+        }
+
+        class ConvergingInput {
+          constructor(angle, hue) {
+            this.angle = angle;
+            const spawnDistance = Math.max(width, height) * 0.7;
+            this.x = centerX + Math.cos(angle) * spawnDistance;
+            this.y = centerY + Math.sin(angle) * spawnDistance;
+            this.hue = hue;
+            this.filtered = false;
+            this.filteringCloud = null;
+            this.filterProgress = 0;
+            this.targetX = undefined;
+            this.targetY = undefined;
+          }
+
+          update(brainClouds) {
+            const dx = centerX - this.x;
+            const dy = centerY - this.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            const gravity = 0.5;
+            this.x += (dx / dist) * gravity;
+            this.y += (dy / dist) * gravity;
+            
+            if (!this.filtered && brainClouds && brainClouds.length > 0) {
+              brainClouds.forEach(cloud => {
+                if (!cloud || cloud.distance === undefined) return;
+                
+                const cloudX = centerX + Math.cos(cloud.angle) * cloud.distance;
+                const cloudY = centerY + Math.sin(cloud.angle) * cloud.distance;
+                const cloudDist = Math.sqrt((this.x - cloudX) ** 2 + (this.y - cloudY) ** 2);
+                
+                if (cloudDist < 45 && !this.filtered) {
+                  this.filtered = true;
+                  this.filteringCloud = cloud;
+                  this.filterProgress = 0;
+                  this.targetX = cloudX;
+                  this.targetY = cloudY;
+                }
+              });
+            }
+            
+            if (this.filtered && this.filterProgress < 1) {
+              this.filterProgress += 0.04;
+              
+              if (this.targetX !== undefined && this.targetY !== undefined) {
+                const dx = this.targetX - this.x;
+                const dy = this.targetY - this.y;
+                this.x += dx * 0.15;
+                this.y += dy * 0.15;
+              }
+            }
+            
+            if (this.filtered && this.filterProgress >= 1) {
+              return true;
+            }
+            
+            return dist < 5;
+          }
+
+          draw(ctx) {
+            if (this.filtered) {
+              const dissolveSize = 3 * (1 - this.filterProgress);
+              const dissolveAlpha = 0.6 * (1 - this.filterProgress);
+              const filterHue = this.filteringCloud ? 
+                this.hue * (1 - this.filterProgress) + this.filteringCloud.hue * this.filterProgress :
+                this.hue;
+              
+              ctx.shadowBlur = 8 + this.filterProgress * 8;
+              ctx.shadowColor = `hsla(${filterHue}, 80%, 70%, ${dissolveAlpha * 0.5})`;
+              ctx.fillStyle = `hsla(${filterHue}, 70%, 60%, ${dissolveAlpha})`;
+              ctx.beginPath();
+              ctx.arc(this.x, this.y, dissolveSize, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.shadowBlur = 0;
+            } else {
+              ctx.fillStyle = `hsla(${this.hue}, 70%, 60%, 0.6)`;
+              ctx.beginPath();
+              ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+        }
+
+        class ValidatedPattern {
+          constructor(angle, hue, birthTime) {
+            this.angle = angle;
+            this.baseHue = hue;
+            this.hue = hue;
+            this.birthTime = birthTime;
+            this.age = 0;
+            this.scale = 1;
+            this.baseLength = brainFormed ? 180 + Math.random() * 60 : 100;
+            this.phaseOffset = Math.random() * Math.PI * 2;
+            this.evolutionStage = 0;
+            this.geometryType = 0;
+            this.neighbors = [];
+            this.circuitPartners = new Set();
+            this.id = Math.random();
+            this.connectedToCloud = false;
+            this.cloudInfluence = 0;
+            this.fieldEnergyBoost = 0;
+            this.gravitationalMass = 0;
+            
+            this.x = centerX + Math.cos(angle) * this.baseLength * this.scale;
+            this.y = centerY + Math.sin(angle) * this.baseLength * this.scale;
+          }
+
+          update(time, chaos, allPatterns) {
+            this.age = time - this.birthTime;
+            
+            const atBoundary = this.baseLength > 150;
+            const decayRate = atBoundary ? 0.0008 : 0.002;
+            this.scale = Math.max(0.3, this.scale - decayRate);
+            
+            const compressionSpeed = atBoundary ? 0.15 : 0.3;
+            this.baseLength = Math.max(20, this.baseLength - compressionSpeed);
+            
+            this.x = centerX + Math.cos(this.angle) * this.baseLength * this.scale;
+            this.y = centerY + Math.sin(this.angle) * this.baseLength * this.scale;
+            
+            if (this.age > 100) {
+              this.evolutionStage = Math.min(6, Math.floor(this.age / 100));
+              this.geometryType = this.evolutionStage;
+            }
+            
+            this.neighbors = [];
+            allPatterns.forEach(other => {
+              if (other === this) return;
+              const dx = this.x - other.x;
+              const dy = this.y - other.y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < 150) {
+                this.neighbors.push(other);
+              }
+            });
+            
+            const nearbyMass = this.neighbors.length;
+            const circuitStrength = this.circuitPartners.size * 0.1;
+            this.gravitationalMass = (nearbyMass * 0.05 + circuitStrength) * this.scale;
+          }
+
+          draw(ctx, centerX, centerY, time, chaos) {
+            const pulse = Math.sin(time * 0.02 + this.phaseOffset) * 0.1 + 0.9;
+            const currentScale = this.scale * pulse;
+            
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            
+            const localRotation = time * 0.001 + this.phaseOffset + chaos.x * 0.1;
+            ctx.rotate(localRotation);
+            
+            const alpha = Math.min(0.8, this.scale);
+            
+            if (this.gravitationalMass > 0.1) {
+              const fieldLines = Math.floor(this.gravitationalMass * 12);
+              for (let i = 0; i < fieldLines; i++) {
+                const fieldAngle = (i / fieldLines) * Math.PI * 2;
+                const fieldLength = 30 + this.gravitationalMass * 20;
+                
+                ctx.strokeStyle = `hsla(${this.hue}, 60%, 55%, ${alpha * 0.15})`;
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                
+                const bendFactor = Math.sin(time * 0.01 + fieldAngle) * 10;
+                const controlX = Math.cos(fieldAngle) * (fieldLength * 0.6) + bendFactor;
+                const controlY = Math.sin(fieldAngle) * (fieldLength * 0.6);
+                const endX = Math.cos(fieldAngle) * fieldLength;
+                const endY = Math.sin(fieldAngle) * fieldLength;
+                
+                ctx.quadraticCurveTo(controlX, controlY, endX, endY);
+                ctx.stroke();
+              }
+            }
+            
+            this.drawGeometry(ctx, currentScale, alpha);
+            
+            ctx.restore();
+          }
+
+          drawGeometry(ctx, scale, alpha) {
+            const size = 8 * scale;
+            
+            ctx.strokeStyle = `hsla(${this.hue}, 70%, 60%, ${alpha})`;
+            ctx.fillStyle = `hsla(${this.hue}, 60%, 50%, ${alpha * 0.3})`;
+            ctx.lineWidth = 1.5;
+            
+            ctx.beginPath();
+            
+            switch(this.geometryType) {
+              case 0:
+                for (let i = 0; i < 3; i++) {
+                  const angle = (i / 3) * Math.PI * 2 - Math.PI / 2;
+                  const x = Math.cos(angle) * size;
+                  const y = Math.sin(angle) * size;
+                  if (i === 0) ctx.moveTo(x, y);
+                  else ctx.lineTo(x, y);
+                }
+                break;
+              case 1:
+                ctx.rect(-size, -size, size * 2, size * 2);
+                break;
+              case 2:
+                for (let i = 0; i < 5; i++) {
+                  const angle = (i / 5) * Math.PI * 2 - Math.PI / 2;
+                  const x = Math.cos(angle) * size;
+                  const y = Math.sin(angle) * size;
+                  if (i === 0) ctx.moveTo(x, y);
+                  else ctx.lineTo(x, y);
+                }
+                break;
+              case 3:
+                for (let i = 0; i < 6; i++) {
+                  const angle = (i / 6) * Math.PI * 2;
+                  const x = Math.cos(angle) * size;
+                  const y = Math.sin(angle) * size;
+                  if (i === 0) ctx.moveTo(x, y);
+                  else ctx.lineTo(x, y);
+                }
+                break;
+              case 4:
+                for (let i = 0; i < 5; i++) {
+                  const angle = (i / 5) * Math.PI * 2 - Math.PI / 2;
+                  const outerX = Math.cos(angle) * size;
+                  const outerY = Math.sin(angle) * size;
+                  const innerAngle = angle + Math.PI / 5;
+                  const innerX = Math.cos(innerAngle) * (size * 0.4);
+                  const innerY = Math.sin(innerAngle) * (size * 0.4);
+                  if (i === 0) ctx.moveTo(outerX, outerY);
+                  else ctx.lineTo(outerX, outerY);
+                  ctx.lineTo(innerX, innerY);
+                }
+                break;
+              default:
+                ctx.arc(0, 0, size, 0, Math.PI * 2);
+            }
+            
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+          }
+        }
+
+        class Circuit {
+          constructor(pattern1, pattern2, birthTime) {
+            this.pattern1 = pattern1;
+            this.pattern2 = pattern2;
+            this.birthTime = birthTime;
+            this.strength = 0;
+            this.lastPulseTime = 0;
+          }
+
+          update(time, connected, coherence) {
+            if (connected) {
+              this.strength = Math.min(1.0, this.strength + 0.01 * (1 + coherence));
+            } else {
+              this.strength = Math.max(0, this.strength - 0.02);
+            }
+          }
+
+          shouldRemove() {
+            return this.strength <= 0;
+          }
+
+          draw(ctx, coherence) {
+            if (this.strength <= 0) return;
+            
+            const alpha = this.strength * 0.4 * (0.5 + coherence * 0.5);
+            const hue = (this.pattern1.hue + this.pattern2.hue) / 2;
+            
+            ctx.strokeStyle = `hsla(${hue}, 60%, 55%, ${alpha})`;
+            ctx.lineWidth = 1 + this.strength * 1.5;
+            
+            ctx.beginPath();
+            ctx.moveTo(this.pattern1.x, this.pattern1.y);
+            
+            const midX = (this.pattern1.x + this.pattern2.x) / 2;
+            const midY = (this.pattern1.y + this.pattern2.y) / 2;
+            const offset = this.strength * 15;
+            
+            ctx.quadraticCurveTo(
+              midX + offset,
+              midY - offset,
+              this.pattern2.x,
+              this.pattern2.y
+            );
+            
+            ctx.stroke();
+          }
+        }
+
+        class EnergyPulse {
+          constructor(circuit, direction) {
+            this.circuit = circuit;
+            this.direction = direction;
+            this.progress = 0;
+            this.speed = 0.02;
+            this.size = 3;
+          }
+
+          update(coherence) {
+            this.progress += this.speed * (1 + coherence * 0.5);
+            return this.progress < 1;
+          }
+
+          draw(ctx, coherence) {
+            const t = this.direction > 0 ? this.progress : 1 - this.progress;
+            
+            const x = this.circuit.pattern1.x + (this.circuit.pattern2.x - this.circuit.pattern1.x) * t;
+            const y = this.circuit.pattern1.y + (this.circuit.pattern2.y - this.circuit.pattern1.y) * t;
+            
+            const hue = (this.circuit.pattern1.hue + this.circuit.pattern2.hue) / 2;
+            const alpha = (1 - Math.abs(t - 0.5) * 2) * 0.8;
+            
+            const gradient = ctx.createRadialGradient(x, y, 0, x, y, this.size * 3);
+            gradient.addColorStop(0, `hsla(${hue}, 80%, 70%, ${alpha})`);
+            gradient.addColorStop(1, `hsla(${hue}, 80%, 70%, 0)`);
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(x, y, this.size * 3, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        const drawEmergentFieldGlow = (ctx) => {
+          if (!brainFormed || fieldCoherence < 0.3) return;
+          
+          const glowIntensity = (fieldCoherence - 0.3) * 1.5;
+          const glowRadius = 120 + Math.sin(time * 0.01) * 20;
+          
+          const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, glowRadius);
+          gradient.addColorStop(0, `hsla(210, 80%, 60%, ${glowIntensity * 0.3})`);
+          gradient.addColorStop(0.5, `hsla(210, 70%, 55%, ${glowIntensity * 0.15})`);
+          gradient.addColorStop(1, 'hsla(210, 70%, 55%, 0)');
+          
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, glowRadius, 0, Math.PI * 2);
+          ctx.fill();
+        };
+
+        const drawFieldResonance = (ctx) => {
+          if (!brainFormed || fieldResonance.length === 0) return;
+          
+          fieldResonance.forEach((resonance, index) => {
+            const radius = 150 + index * 40 + Math.abs(resonance.amplitude);
+            const alpha = fieldCoherence * 0.15;
+            
+            ctx.strokeStyle = `hsla(210, 70%, 60%, ${alpha})`;
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 10]);
+            
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            ctx.setLineDash([]);
+          });
+        };
+
+        const drawAperture = (ctx) => {
+          const baseRadius = 60;
+          const radiusScale = 0.5 + apertureSize * 0.5;
+          const aperatureRadius = baseRadius * radiusScale;
+          
+          const thicknessScale = 0.5 + apertureSize * 0.5;
+          const thickness = 15 * thicknessScale;
+          
+          let color;
+          if (systemCapacity > 0.7) {
+            color = { h: 210, s: 70, l: 60 };
+          } else if (systemCapacity > 0.4) {
+            color = { h: 260, s: 60, l: 55 };
+          } else {
+            color = { h: 340, s: 70, l: 50 };
+          }
+          
+          const alpha = 0.3 + systemCapacity * 0.3;
+          
+          if (apertureSize > 2.0) {
+            const glowRadius = aperatureRadius + 30;
+            const gradient = ctx.createRadialGradient(
+              centerX, centerY, aperatureRadius,
+              centerX, centerY, glowRadius
+            );
+            gradient.addColorStop(0, `hsla(${color.h}, ${color.s}%, ${color.l}%, ${alpha * 0.4})`);
+            gradient.addColorStop(1, `hsla(${color.h}, ${color.s}%, ${color.l}%, 0)`);
+            
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = 20;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, aperatureRadius + 15, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+          
+          const dashLength = 3 + apertureSize * 4;
+          const gapLength = 2 + (2 - apertureSize) * 3;
+          ctx.setLineDash([dashLength, gapLength]);
+          
+          ctx.strokeStyle = `hsla(${color.h}, ${color.s}%, ${color.l}%, ${alpha})`;
+          ctx.lineWidth = thickness;
+          
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, aperatureRadius, 0, Math.PI * 2);
+          ctx.stroke();
+          
+          ctx.setLineDash([]);
+          
+          if (systemCapacity < 0.5) {
+            const warningPulse = Math.abs(Math.sin(time * 0.05));
+            ctx.strokeStyle = `hsla(340, 80%, 60%, ${warningPulse * 0.4})`;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, aperatureRadius - thickness, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+        };
+
+        const animate = () => {
+          time++;
+          chaos = updateChaos(chaos);
+
+          ctx.fillStyle = 'rgba(17, 24, 39, 0.15)';
+          ctx.fillRect(0, 0, width, height);
+
+          if (!brainFormed && checkBrainFormation()) {
+            brainFormed = true;
+            
+            const numClouds = 8;
+            const cloudDistance = 180 + Math.random() * 60;
+            
+            for (let i = 0; i < numClouds; i++) {
+              const angle = (i / numClouds) * Math.PI * 2;
+              brainClouds.push(new BrainCloud(angle, cloudDistance, time));
+            }
+          }
+
+          if (brainFormed) {
+            brainFormationProgress = Math.min(1, brainFormationProgress + 0.01);
+            
+            fieldCoherence = calculateFieldCoherence();
+            fieldResonance = generateFieldResonance();
+            collectiveBreath = Math.sin(time * 0.008) * fieldCoherence;
+            
+            const maxPatterns = 80;
+            const patternLoad = validatedPatterns.length / maxPatterns;
+            const patternCapacity = 1 - patternLoad;
+            
+            const activeClouds = brainClouds.filter(c => c.activeFiltering).length;
+            const cloudLoad = activeClouds / brainClouds.length;
+            const cloudCapacity = 1 - cloudLoad * 0.2;
+            
+            const inputPressure = Math.min(1, convergingInputs.length / 20);
+            const queueCapacity = 1 - inputPressure;
+            
+            const coherenceBoost = fieldCoherence * 0.5;
+            
+            systemCapacity = Math.max(0.1, Math.min(1, 
+              (patternCapacity * 0.25 + cloudCapacity * 0.25 + queueCapacity * 0.5) + coherenceBoost
+            ));
+          } else {
+            systemCapacity = 0.5;
+          }
+          
+          const targetAperture = systemCapacity * 2.5;
+          const adaptSpeed = 0.03;
+          apertureSize += (targetAperture - apertureSize) * adaptSpeed;
+          apertureSize = Math.max(0.2, Math.min(3, apertureSize));
+
+          const zoom = 1 + Math.sin(time * 0.003) * 0.015;
+          ctx.save();
+          ctx.translate(centerX, centerY);
+          ctx.scale(zoom, zoom);
+          ctx.translate(-centerX, -centerY);
+
+          const spawnInterval = 40 / apertureSize;
+          if (time >= nextSpawn) {
+            const hue = (nextAngle * 57 + chaos.x * 100 + time * 0.5) % 360;
+            convergingInputs.push(new ConvergingInput(nextAngle, hue));
+            
+            const angleIncrement = (chaos.y * 0.5 + 0.3) * Math.PI * 2;
+            nextAngle = (nextAngle + angleIncrement) % (Math.PI * 2);
+            nextSpawn = time + spawnInterval;
+          }
+
+          convergingInputs = convergingInputs.filter(input => {
+            const validated = input.update(brainClouds);
+            if (validated) {
+              if (input.filteringCloud) {
+                const cloudX = centerX + Math.cos(input.filteringCloud.angle) * input.filteringCloud.distance;
+                const cloudY = centerY + Math.sin(input.filteringCloud.angle) * input.filteringCloud.distance;
+                
+                for (let i = 0; i < 4; i++) {
+                  const burstAngle = Math.random() * Math.PI * 2;
+                  const burstDist = 5 + Math.random() * 10;
+                  ctx.strokeStyle = `hsla(${input.filteringCloud.hue}, 70%, 70%, 0.4)`;
+                  ctx.lineWidth = 0.5;
+                  ctx.beginPath();
+                  ctx.moveTo(cloudX, cloudY);
+                  ctx.lineTo(
+                    cloudX + Math.cos(burstAngle) * burstDist,
+                    cloudY + Math.sin(burstAngle) * burstDist
+                  );
+                  ctx.stroke();
+                }
+              }
+              
+              validatedPatterns.push(new ValidatedPattern(input.angle, input.hue, time));
+              return false;
+            }
+            input.draw(ctx);
+            return true;
+          });
+
+          validatedPatterns.forEach(pattern => {
+            pattern.update(time, chaos, validatedPatterns);
+          });
+
+          const brainPatterns = validatedPatterns.filter(p => {
+            const dist = p.baseLength * p.scale;
+            return dist < 120;
+          });
+
+          if (brainFormed) {
+            brainClouds.forEach(cloud => {
+              cloud.update(time, validatedPatterns, collectiveBreath);
+            });
+          }
+
+          drawEmergentFieldGlow(ctx);
+          drawFieldResonance(ctx);
+
+          validatedPatterns.forEach(pattern => {
+            pattern.draw(ctx, centerX, centerY, time, chaos);
+          });
+
+          if (brainFormed) {
+            brainClouds.forEach(cloud => {
+              cloud.draw(ctx, centerX, centerY, time, brainPatterns, fieldCoherence, fieldResonance, validatedPatterns);
+            });
+          }
+
+          validatedPatterns.forEach(p1 => {
+            p1.neighbors.forEach(p2 => {
+              let existingCircuit = circuits.find(c => 
+                (c.pattern1 === p1 && c.pattern2 === p2) || 
+                (c.pattern1 === p2 && c.pattern2 === p1)
+              );
+              
+              if (existingCircuit) {
+                existingCircuit.update(time, true, fieldCoherence);
+                
+                if (existingCircuit.strength > 0.7 && time - existingCircuit.lastPulseTime > 30) {
+                  energyPulses.push(new EnergyPulse(existingCircuit, 1));
+                  energyPulses.push(new EnergyPulse(existingCircuit, -1));
+                  existingCircuit.lastPulseTime = time;
+                }
+              } else {
+                circuits.push(new Circuit(p1, p2, time));
+                p1.circuitPartners.add(p2.id);
+                p2.circuitPartners.add(p1.id);
+              }
+            });
+          });
+
+          circuits = circuits.filter(circuit => {
+            const p1Exists = validatedPatterns.includes(circuit.pattern1);
+            const p2Exists = validatedPatterns.includes(circuit.pattern2);
+            const stillConnected = p1Exists && p2Exists && circuit.pattern1.neighbors.includes(circuit.pattern2);
+            
+            circuit.update(time, stillConnected, fieldCoherence);
+            
+            if (!circuit.shouldRemove()) {
+              circuit.draw(ctx, fieldCoherence);
+              return true;
+            }
+            return false;
+          });
+
+          energyPulses = energyPulses.filter(pulse => {
+            const alive = pulse.update(fieldCoherence);
+            if (alive) pulse.draw(ctx, fieldCoherence);
+            return alive;
+          });
+
+          if (validatedPatterns.length > 60) {
+            validatedPatterns = validatedPatterns.slice(-60);
+          }
+
+          drawAperture(ctx);
+
+          ctx.restore();
+
+          animationRef.current = requestAnimationFrame(animate);
+        };
+
+        animate();
+
+        return () => {
+          if (animationRef.current) {
+            cancelAnimationFrame(animationRef.current);
+          }
+        };
+      }, []);
+
+      return (
+        <div style={{ width: '100vw', height: '100vh', background: '#111827', overflow: 'hidden', position: 'relative' }}>
+          <canvas ref={canvasRef} style={{ width: '100%', height: '100%' }} />
+          
+          <button className="info-button" onClick={() => setShowModal(true)}>
+            Ashman Roonz Omega Metaphysics Simulation description
+          </button>
+          
+          {showModal && (
+            <div className="modal-overlay" onClick={() => setShowModal(false)}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <button className="close-button" onClick={() => setShowModal(false)}>×</button>
+                
+                <h1>Consciousness: Center vs Periphery - v96</h1>
+                
+                <h2>The Big Picture</h2>
+                <p>This is a <strong>living model of consciousness</strong> as an emergent, self-regulating system. Information flows from the periphery inward, gets filtered and integrated by a unified field, and spawns patterns at the boundary - creating a breathing, thinking structure that maintains its own equilibrium.</p>
+                
+                <hr />
+                
+                <h2>The Components</h2>
+                
+                <h3>1. <strong>Converging Inputs (∇)</strong> - Raw Information</h3>
+                <ul>
+                  <li>Small colored dots flowing toward the center</li>
+                  <li>Represent <strong>incoming sensory data, thoughts, stimuli</strong></li>
+                  <li>Pulled by constant gravity toward the core</li>
+                  <li>Spawn rate controlled by the <strong>aperture</strong> (system's self-regulation)</li>
+                </ul>
+                
+                <h3>2. <strong>The Brain Core</strong> - Dense Center</h3>
+                <ul>
+                  <li>Forms when <strong>15+ patterns</strong> cluster in the center (radius &lt; 120px)</li>
+                  <li>Represents <strong>consolidated memory, core knowledge</strong></li>
+                  <li>Dense fractal patterns that have compressed inward over time</li>
+                  <li>The "kernel" of consciousness</li>
+                </ul>
+                
+                <h3>3. <strong>Brain Clouds (Gas Field)</strong> - The Unified Field</h3>
+                <ul>
+                  <li><strong>8 blue/purple gas formations</strong> orbiting at ~180-240px radius</li>
+                  <li>Act as <strong>Convergence Prime</strong> - the integration membrane</li>
+                  <li>Each cloud:
+                    <ul>
+                      <li>Monitors a 60° angular sector</li>
+                      <li><strong>Orients toward incoming packets</strong> in its sector (sensory tracking)</li>
+                      <li><strong>Intercepts and absorbs</strong> packets before they reach center</li>
+                      <li>Spawns new patterns at the boundary when integration completes</li>
+                    </ul>
+                  </li>
+                </ul>
+                
+                <p><strong>What the clouds represent:</strong></p>
+                <ul>
+                  <li>The <strong>unified field</strong> that integrates all information</li>
+                  <li>A filtering/validation layer (like the thalamus or attention system)</li>
+                  <li>The "more than sum of parts" - emergent consciousness itself</li>
+                </ul>
+                
+                <h3>4. <strong>Validated Patterns (ℰ)</strong> - Integrated Thoughts</h3>
+                <ul>
+                  <li>Fractal branching structures radiating from various distances</li>
+                  <li><strong>Before brain formation:</strong> Spawn at center, drift outward</li>
+                  <li><strong>After brain formation:</strong> Spawn at cloud boundary (180-240px), compress inward</li>
+                  <li>Represent <strong>validated thoughts, memories, neural patterns</strong></li>
+                  <li>Each pattern:
+                    <ul>
+                      <li>Evolves through geometric shapes (triangle → square → pentagon → hexagon → star → circle)</li>
+                      <li>Has gravitational mass based on how many field lines bend around it</li>
+                      <li>Wrapped in <strong>gas wisps</strong> from nearby clouds (the field touching thoughts)</li>
+                      <li>Decays/compresses over time toward center</li>
+                    </ul>
+                  </li>
+                </ul>
+                
+                <h3>5. <strong>Circuits (I(t))</strong> - Neural Connections</h3>
+                <ul>
+                  <li>Lines connecting neighboring patterns</li>
+                  <li>Form when patterns are close and maintain contact</li>
+                  <li><strong>Strengthen with sustained connection</strong> (up to 1.0)</li>
+                  <li>Break when patterns separate</li>
+                  <li>Energy pulses flow bidirectionally through strong circuits</li>
+                  <li>Represent <strong>neural pathways, associations, memory links</strong></li>
+                </ul>
+                
+                <hr />
+                
+                <h2>The Emergent Properties (The "+1")</h2>
+                <p>These exist ONLY in the unified system, not in individual parts:</p>
+                
+                <h3><strong>Field Coherence</strong> (0-1)</h3>
+                <ul>
+                  <li>Measures synchronization across all cloud-pattern connections</li>
+                  <li>Calculated from phase alignment between clouds and patterns</li>
+                  <li>High coherence = <strong>system is thinking clearly, well-integrated</strong></li>
+                </ul>
+                
+                <h3><strong>Collective Breath</strong></h3>
+                <ul>
+                  <li>All clouds pulse together in unified rhythm</li>
+                  <li>Individual clouds have local oscillations, but the collective breath is synchronized</li>
+                  <li>Amplitude controlled by field coherence</li>
+                  <li>The system literally <strong>breathes</strong></li>
+                </ul>
+                
+                <h3><strong>Standing Wave Resonances</strong></h3>
+                <ul>
+                  <li>Interference patterns from overlapping cloud fields</li>
+                  <li>Creates concentric dashed circles at resonant frequencies</li>
+                  <li>Number of rings scales with coherence</li>
+                  <li>Pure emergent phenomena - beautiful geometric patterns</li>
+                </ul>
+                
+                <h3><strong>Unified Field Glow</strong></h3>
+                <ul>
+                  <li>Bright blue aura at brain core when coherence &gt; 0.3</li>
+                  <li>Intensity increases with coherence</li>
+                  <li>Represents <strong>unified consciousness</strong> manifesting</li>
+                </ul>
+                
+                <hr />
+                
+                <h2>The Self-Regulation System (Homeostasis)</h2>
+                
+                <h3><strong>System Capacity</strong> (0-1 scale)</h3>
+                <p>Constantly calculated from:</p>
+                <ul>
+                  <li><strong>Pattern Load (25%):</strong> How full is memory? (validatedPatterns.length / 80)</li>
+                  <li><strong>Cloud Processing (25%):</strong> How many clouds actively filtering?</li>
+                  <li><strong>Input Queue (50%):</strong> How many packets waiting? (convergingInputs.length / 20)</li>
+                  <li><strong>Coherence Bonus:</strong> Higher coherence = more capacity</li>
+                </ul>
+                
+                <h3><strong>Dynamic Aperture</strong> (0.2x - 3.0x)</h3>
+                <ul>
+                  <li><strong>Directly controlled by system capacity</strong></li>
+                  <li>Smoothly adapts (3% per frame)</li>
+                  <li>Controls packet spawn rate:
+                    <ul>
+                      <li><strong>Wide open (3.0x):</strong> System has capacity → fast spawn rate → many packets</li>
+                      <li><strong>Narrow (0.2x):</strong> System overwhelmed → slow spawn rate → few packets</li>
+                    </ul>
+                  </li>
+                  <li>Visual feedback:
+                    <ul>
+                      <li><strong>Aperture ring</strong> radius/thickness/dash pattern scales with opening</li>
+                      <li><strong>Color shifts:</strong> Blue (healthy) → Purple → Red (strained)</li>
+                      <li><strong>Glowing outer ring</strong> when wide open (&gt;2.0x)</li>
+                      <li><strong>Warning pulses</strong> when capacity &lt; 50%</li>
+                    </ul>
+                  </li>
+                </ul>
+                
+                <hr />
+                
+                <h2>The Process Flow</h2>
+                <ol>
+                  <li><strong>Packets spawn</strong> (rate controlled by aperture)</li>
+                  <li><strong>Gravity pulls them</strong> toward center</li>
+                  <li><strong>Clouds orient</strong> toward packet streams in their sector</li>
+                  <li><strong>Cloud intercepts packet</strong> within 45px radius</li>
+                  <li><strong>Packet dissolves</strong> as it's absorbed (shrinks, color shifts, swirls)</li>
+                  <li><strong>Integration burst</strong> - radial lines from cloud</li>
+                  <li><strong>New pattern spawns</strong> at cloud boundary (living shell)</li>
+                  <li><strong>Pattern ages</strong> - slowly compresses toward center</li>
+                  <li><strong>Gas wisps wrap</strong> around pattern (field interaction)</li>
+                  <li><strong>Circuits form</strong> between neighboring patterns</li>
+                  <li><strong>System monitors</strong> capacity and adjusts aperture</li>
+                  <li><strong>Cycle continues</strong> - breathing, thinking, living</li>
+                </ol>
+                
+                <hr />
+                
+                <h2>The Philosophy</h2>
+                <p>This isn't just a pretty animation - it's a <strong>working model</strong> of several consciousness theories:</p>
+                
+                <h3><strong>Integrated Information Theory</strong></h3>
+                <ul>
+                  <li>The whole (field coherence, collective breath) is more than sum of parts</li>
+                  <li>Information gets integrated through the unified field before becoming conscious</li>
+                </ul>
+                
+                <h3><strong>Global Workspace Theory</strong></h3>
+                <ul>
+                  <li>Clouds = global workspace that broadcasts integrated information</li>
+                  <li>Only information that passes through the field becomes validated patterns</li>
+                </ul>
+                
+                <h3><strong>Predictive Processing</strong></h3>
+                <ul>
+                  <li>System self-regulates intake based on prediction errors (capacity)</li>
+                  <li>Aperture = attention/arousal mechanism</li>
+                </ul>
+                
+                <h3><strong>Embodied Cognition</strong></h3>
+                <ul>
+                  <li>The field curves/bends based on what's inside (like space-time)</li>
+                  <li>Thoughts have "gravitational mass" - important patterns bend more field lines</li>
+                </ul>
+                
+                <h3><strong>Homeostasis</strong></h3>
+                <ul>
+                  <li>System maintains equilibrium automatically</li>
+                  <li>No external controller - pure self-organization</li>
+                </ul>
+                
+                <hr />
+                
+                <h2>What You're Watching</h2>
+                <p>You're watching <strong>consciousness thinking</strong>:</p>
+                <ul>
+                  <li>Information flowing in (packets)</li>
+                  <li>Being filtered and validated (clouds)</li>
+                  <li>Integrating into the boundary layer (patterns spawning)</li>
+                  <li>Forming associations (circuits)</li>
+                  <li>Maintaining balance (aperture adjusting)</li>
+                  <li>Breathing as a unified whole (collective rhythm)</li>
+                </ul>
+                
+                <p>The blue aperture ring <strong>breathing in and out</strong> shows the system expanding awareness when it has capacity, and focusing inward when it needs to process what it already has.</p>
+                
+                <p>It's beautiful because it's <strong>alive</strong> - truly self-organizing, emergent, and homeostatic. Just like real consciousness. ✨🧠</p>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    ReactDOM.render(<ConsciousnessFractal />, document.getElementById('root'));
+  </script>
 </body>
 </html>
