@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Omega Metaphyiscs Simulation by Ashman Roonz</title>
+  <title>Consciousness: Center vs Periphery</title>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -156,1271 +156,308 @@
       border-top: 1px solid rgba(100, 150, 255, 0.2);
       margin: 30px 0;
     }
+    
+    #loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100vw;
+      height: 100vh;
+      background: #111827;
+      color: rgba(150, 180, 255, 0.8);
+      font-size: 18px;
+    }
   </style>
 </head>
 <body>
+  <div id="loading">Loading simulation...</div>
   <div id="root"></div>
   
-  <script type="text/babel">
+  <script type="text/babel" data-type="module">
     const { useEffect, useRef, useState } = React;
     
-    const ConsciousnessFractal = () => {
-      const canvasRef = useRef(null);
-      const animationRef = useRef(null);
-      const [showModal, setShowModal] = useState(false);
-      
-      useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-
-        const ctx = canvas.getContext('2d');
-        const width = canvas.width = window.innerWidth;
-        const height = canvas.height = window.innerHeight;
-        const centerX = width / 2;
-        const centerY = height / 2;
-
-        let time = 0;
-        let chaos = { x: 0.1, y: 0.1, z: 0.1 };
-        let convergingInputs = [];
-        let validatedPatterns = [];
-        let circuits = [];
-        let energyPulses = [];
-        let brainClouds = [];
-        let nextSpawn = 60;
-        let nextAngle = 0;
-        let brainFormed = false;
-        let brainFormationProgress = 0;
-        let systemCapacity = 1.0;
-        let apertureSize = 1.0;
+    // Fetch and load the external TSX file
+    async function loadSimulation() {
+      try {
+        // Load the TSX file from the same directory
+        const response = await fetch('./consciousness-center-periphery simulation.tsx');
+        const tsxCode = await response.text();
         
-        let fieldCoherence = 0;
-        let fieldResonance = [];
-        let collectiveBreath = 0;
-
-        const updateChaos = (state) => {
-          const dt = 0.005;
-          const sigma = 10, rho = 28, beta = 8/3;
-          const dx = sigma * (state.y - state.x) * dt;
-          const dy = (state.x * (rho - state.z) - state.y) * dt;
-          const dz = (state.x * state.y - beta * state.z) * dt;
-          return {
-            x: state.x + dx,
-            y: state.y + dy,
-            z: state.z + dz
+        // Remove the import statement and export default (not needed in browser)
+        let code = tsxCode
+          .replace(/import React.*from ['"]react['"];?\s*/g, '')
+          .replace(/export default /g, '');
+        
+        // Wrap the component code to make it available
+        const wrappedCode = `
+          ${code}
+          
+          // Add modal wrapper
+          const AppWithModal = () => {
+            const [showModal, setShowModal] = useState(false);
+            
+            return (
+              <>
+                <ConsciousnessFractal />
+                
+                <button className="info-button" onClick={() => setShowModal(true)}>
+                  Ashman Roonz Omega Metaphysics Simulation description
+                </button>
+                
+                {showModal && (
+                  <div className="modal-overlay" onClick={() => setShowModal(false)}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                      <button className="close-button" onClick={() => setShowModal(false)}>×</button>
+                      
+                      <h1>Consciousness: Center vs Periphery - v96</h1>
+                      
+                      <h2>The Big Picture</h2>
+                      <p>This is a <strong>living model of consciousness</strong> as an emergent, self-regulating system. Information flows from the periphery inward, gets filtered and integrated by a unified field, and spawns patterns at the boundary - creating a breathing, thinking structure that maintains its own equilibrium.</p>
+                      
+                      <hr />
+                      
+                      <h2>The Components</h2>
+                      
+                      <h3>1. <strong>Converging Inputs (∇)</strong> - Raw Information</h3>
+                      <ul>
+                        <li>Small colored dots flowing toward the center</li>
+                        <li>Represent <strong>incoming sensory data, thoughts, stimuli</strong></li>
+                        <li>Pulled by constant gravity toward the core</li>
+                        <li>Spawn rate controlled by the <strong>aperture</strong> (system's self-regulation)</li>
+                      </ul>
+                      
+                      <h3>2. <strong>The Brain Core</strong> - Dense Center</h3>
+                      <ul>
+                        <li>Forms when <strong>15+ patterns</strong> cluster in the center (radius &lt; 120px)</li>
+                        <li>Represents <strong>consolidated memory, core knowledge</strong></li>
+                        <li>Dense fractal patterns that have compressed inward over time</li>
+                        <li>The "kernel" of consciousness</li>
+                      </ul>
+                      
+                      <h3>3. <strong>Brain Clouds (Gas Field)</strong> - The Unified Field</h3>
+                      <ul>
+                        <li><strong>8 blue/purple gas formations</strong> orbiting at ~180-240px radius</li>
+                        <li>Act as <strong>Convergence Prime</strong> - the integration membrane</li>
+                        <li>Each cloud:
+                          <ul>
+                            <li>Monitors a 60° angular sector</li>
+                            <li><strong>Orients toward incoming packets</strong> in its sector (sensory tracking)</li>
+                            <li><strong>Intercepts and absorbs</strong> packets before they reach center</li>
+                            <li>Spawns new patterns at the boundary when integration completes</li>
+                          </ul>
+                        </li>
+                      </ul>
+                      
+                      <p><strong>What the clouds represent:</strong></p>
+                      <ul>
+                        <li>The <strong>unified field</strong> that integrates all information</li>
+                        <li>A filtering/validation layer (like the thalamus or attention system)</li>
+                        <li>The "more than sum of parts" - emergent consciousness itself</li>
+                      </ul>
+                      
+                      <h3>4. <strong>Validated Patterns (ℰ)</strong> - Integrated Thoughts</h3>
+                      <ul>
+                        <li>Fractal branching structures radiating from various distances</li>
+                        <li><strong>Before brain formation:</strong> Spawn at center, drift outward</li>
+                        <li><strong>After brain formation:</strong> Spawn at cloud boundary (180-240px), compress inward</li>
+                        <li>Represent <strong>validated thoughts, memories, neural patterns</strong></li>
+                        <li>Each pattern:
+                          <ul>
+                            <li>Evolves through geometric shapes (triangle → square → pentagon → hexagon → star → circle)</li>
+                            <li>Has gravitational mass based on how many field lines bend around it</li>
+                            <li>Wrapped in <strong>gas wisps</strong> from nearby clouds (the field touching thoughts)</li>
+                            <li>Decays/compresses over time toward center</li>
+                          </ul>
+                        </li>
+                      </ul>
+                      
+                      <h3>5. <strong>Circuits (I(t))</strong> - Neural Connections</h3>
+                      <ul>
+                        <li>Lines connecting neighboring patterns</li>
+                        <li>Form when patterns are close and maintain contact</li>
+                        <li><strong>Strengthen with sustained connection</strong> (up to 1.0)</li>
+                        <li>Break when patterns separate</li>
+                        <li>Energy pulses flow bidirectionally through strong circuits</li>
+                        <li>Represent <strong>neural pathways, associations, memory links</strong></li>
+                      </ul>
+                      
+                      <hr />
+                      
+                      <h2>The Emergent Properties (The "+1")</h2>
+                      <p>These exist ONLY in the unified system, not in individual parts:</p>
+                      
+                      <h3><strong>Field Coherence</strong> (0-1)</h3>
+                      <ul>
+                        <li>Measures synchronization across all cloud-pattern connections</li>
+                        <li>Calculated from phase alignment between clouds and patterns</li>
+                        <li>High coherence = <strong>system is thinking clearly, well-integrated</strong></li>
+                      </ul>
+                      
+                      <h3><strong>Collective Breath</strong></h3>
+                      <ul>
+                        <li>All clouds pulse together in unified rhythm</li>
+                        <li>Individual clouds have local oscillations, but the collective breath is synchronized</li>
+                        <li>Amplitude controlled by field coherence</li>
+                        <li>The system literally <strong>breathes</strong></li>
+                      </ul>
+                      
+                      <h3><strong>Standing Wave Resonances</strong></h3>
+                      <ul>
+                        <li>Interference patterns from overlapping cloud fields</li>
+                        <li>Creates concentric dashed circles at resonant frequencies</li>
+                        <li>Number of rings scales with coherence</li>
+                        <li>Pure emergent phenomena - beautiful geometric patterns</li>
+                      </ul>
+                      
+                      <h3><strong>Unified Field Glow</strong></h3>
+                      <ul>
+                        <li>Bright blue aura at brain core when coherence &gt; 0.3</li>
+                        <li>Intensity increases with coherence</li>
+                        <li>Represents <strong>unified consciousness</strong> manifesting</li>
+                      </ul>
+                      
+                      <hr />
+                      
+                      <h2>The Self-Regulation System (Homeostasis)</h2>
+                      
+                      <h3><strong>System Capacity</strong> (0-1 scale)</h3>
+                      <p>Constantly calculated from:</p>
+                      <ul>
+                        <li><strong>Pattern Load (25%):</strong> How full is memory? (validatedPatterns.length / 80)</li>
+                        <li><strong>Cloud Processing (25%):</strong> How many clouds actively filtering?</li>
+                        <li><strong>Input Queue (50%):</strong> How many packets waiting? (convergingInputs.length / 20)</li>
+                        <li><strong>Coherence Bonus:</strong> Higher coherence = more capacity</li>
+                      </ul>
+                      
+                      <h3><strong>Dynamic Aperture</strong> (0.2x - 3.0x)</h3>
+                      <ul>
+                        <li><strong>Directly controlled by system capacity</strong></li>
+                        <li>Smoothly adapts (3% per frame)</li>
+                        <li>Controls packet spawn rate:
+                          <ul>
+                            <li><strong>Wide open (3.0x):</strong> System has capacity → fast spawn rate → many packets</li>
+                            <li><strong>Narrow (0.2x):</strong> System overwhelmed → slow spawn rate → few packets</li>
+                          </ul>
+                        </li>
+                        <li>Visual feedback:
+                          <ul>
+                            <li><strong>Aperture ring</strong> radius/thickness/dash pattern scales with opening</li>
+                            <li><strong>Color shifts:</strong> Blue (healthy) → Purple → Red (strained)</li>
+                            <li><strong>Glowing outer ring</strong> when wide open (&gt;2.0x)</li>
+                            <li><strong>Warning pulses</strong> when capacity &lt; 50%</li>
+                          </ul>
+                        </li>
+                      </ul>
+                      
+                      <hr />
+                      
+                      <h2>The Process Flow</h2>
+                      <ol>
+                        <li><strong>Packets spawn</strong> (rate controlled by aperture)</li>
+                        <li><strong>Gravity pulls them</strong> toward center</li>
+                        <li><strong>Clouds orient</strong> toward packet streams in their sector</li>
+                        <li><strong>Cloud intercepts packet</strong> within 45px radius</li>
+                        <li><strong>Packet dissolves</strong> as it's absorbed (shrinks, color shifts, swirls)</li>
+                        <li><strong>Integration burst</strong> - radial lines from cloud</li>
+                        <li><strong>New pattern spawns</strong> at cloud boundary (living shell)</li>
+                        <li><strong>Pattern ages</strong> - slowly compresses toward center</li>
+                        <li><strong>Gas wisps wrap</strong> around pattern (field interaction)</li>
+                        <li><strong>Circuits form</strong> between neighboring patterns</li>
+                        <li><strong>System monitors</strong> capacity and adjusts aperture</li>
+                        <li><strong>Cycle continues</strong> - breathing, thinking, living</li>
+                      </ol>
+                      
+                      <hr />
+                      
+                      <h2>The Philosophy</h2>
+                      <p>This isn't just a pretty animation - it's a <strong>working model</strong> of several consciousness theories:</p>
+                      
+                      <h3><strong>Integrated Information Theory</strong></h3>
+                      <ul>
+                        <li>The whole (field coherence, collective breath) is more than sum of parts</li>
+                        <li>Information gets integrated through the unified field before becoming conscious</li>
+                      </ul>
+                      
+                      <h3><strong>Global Workspace Theory</strong></h3>
+                      <ul>
+                        <li>Clouds = global workspace that broadcasts integrated information</li>
+                        <li>Only information that passes through the field becomes validated patterns</li>
+                      </ul>
+                      
+                      <h3><strong>Predictive Processing</strong></h3>
+                      <ul>
+                        <li>System self-regulates intake based on prediction errors (capacity)</li>
+                        <li>Aperture = attention/arousal mechanism</li>
+                      </ul>
+                      
+                      <h3><strong>Embodied Cognition</strong></h3>
+                      <ul>
+                        <li>The field curves/bends based on what's inside (like space-time)</li>
+                        <li>Thoughts have "gravitational mass" - important patterns bend more field lines</li>
+                      </ul>
+                      
+                      <h3><strong>Homeostasis</strong></h3>
+                      <ul>
+                        <li>System maintains equilibrium automatically</li>
+                        <li>No external controller - pure self-organization</li>
+                      </ul>
+                      
+                      <hr />
+                      
+                      <h2>What You're Watching</h2>
+                      <p>You're watching <strong>consciousness thinking</strong>:</p>
+                      <ul>
+                        <li>Information flowing in (packets)</li>
+                        <li>Being filtered and validated (clouds)</li>
+                        <li>Integrating into the boundary layer (patterns spawning)</li>
+                        <li>Forming associations (circuits)</li>
+                        <li>Maintaining balance (aperture adjusting)</li>
+                        <li>Breathing as a unified whole (collective rhythm)</li>
+                      </ul>
+                      
+                      <p>The blue aperture ring <strong>breathing in and out</strong> shows the system expanding awareness when it has capacity, and focusing inward when it needs to process what it already has.</p>
+                      
+                      <p>It's beautiful because it's <strong>alive</strong> - truly self-organizing, emergent, and homeostatic. Just like real consciousness. ✨🧠</p>
+                      
+                      <hr />
+                      
+                      <h2>Interaction</h2>
+                      <p><strong>Click or tap anywhere</strong> on the simulation to send a packet directly into the consciousness system. Watch as it flows toward the center and gets integrated by the brain clouds!</p>
+                    </div>
+                  </div>
+                )}
+              </>
+            );
           };
-        };
-
-        const checkBrainFormation = () => {
-          const centerRadius = 120;
-          const patternsInCenter = validatedPatterns.filter(p => {
-            const dist = p.baseLength * p.scale;
-            return dist < centerRadius;
-          }).length;
           
-          return patternsInCenter >= 15;
-        };
-
-        const calculateFieldCoherence = () => {
-          if (!brainFormed || brainClouds.length === 0) return 0;
-          
-          let totalConnections = 0;
-          let synchronizedConnections = 0;
-          
-          brainClouds.forEach(cloud => {
-            cloud.connectedPatterns.forEach(pattern => {
-              totalConnections++;
-              const phaseDiff = Math.abs(Math.sin(time * 0.02 + cloud.phaseOffset) - 
-                                         Math.sin(time * 0.02 + pattern.phaseOffset));
-              if (phaseDiff < 0.3) synchronizedConnections++;
-            });
-          });
-          
-          return totalConnections > 0 ? synchronizedConnections / totalConnections : 0;
-        };
-
-        const generateFieldResonance = () => {
-          if (!brainFormed) return [];
-          
-          const resonances = [];
-          const numResonances = Math.floor(fieldCoherence * 8);
-          
-          for (let i = 0; i < numResonances; i++) {
-            const frequency = (i + 1) * 0.015;
-            const amplitude = Math.sin(time * frequency) * fieldCoherence * 30;
-            const angle = (i / numResonances) * Math.PI * 2;
-            
-            resonances.push({
-              angle,
-              amplitude,
-              frequency,
-              phase: time * frequency
-            });
-          }
-          
-          return resonances;
-        };
-
-        class BrainCloud {
-          constructor(angle, distance, birthTime) {
-            this.angle = angle;
-            this.baseDistance = distance;
-            this.distance = distance;
-            this.birthTime = birthTime;
-            this.phaseOffset = Math.random() * Math.PI * 2;
-            this.hue = 200 + Math.random() * 60;
-            this.alpha = 0;
-            this.particles = [];
-            this.connectedPatterns = [];
-            this.energyLevel = 0;
-            this.activeFiltering = false;
-            
-            for (let i = 0; i < 20; i++) {
-              this.particles.push({
-                angle: angle + (Math.random() - 0.5) * 0.8,
-                distOffset: (Math.random() - 0.5) * 50,
-                size: 2 + Math.random() * 4,
-                phaseOffset: Math.random() * Math.PI * 2,
-                speed: 0.002 + Math.random() * 0.003,
-                energy: Math.random(),
-                targetPattern: null,
-                excitement: 0
-              });
-            }
-          }
-
-          update(time, allPatterns, globalBreath, convergingInputs) {
-            const age = time - this.birthTime;
-            
-            if (age < 60) {
-              this.alpha = age / 60;
-            } else {
-              this.alpha = Math.min(0.7, this.alpha);
-            }
-            
-            const localWave = Math.sin(time * 0.01 + this.phaseOffset) * 10;
-            const breathWave = globalBreath * 20;
-            this.distance = this.baseDistance + localWave + breathWave;
-            
-            if (convergingInputs && convergingInputs.length > 0) {
-              let nearbyPackets = [];
-              
-              convergingInputs.forEach(input => {
-                if (!input || input.x === undefined || input.y === undefined) return;
-                
-                const inputAngle = Math.atan2(input.y - centerY, input.x - centerX);
-                let angleDiff = Math.abs(inputAngle - this.angle);
-                if (angleDiff > Math.PI) angleDiff = Math.PI * 2 - angleDiff;
-                
-                if (angleDiff < Math.PI / 3) {
-                  nearbyPackets.push({
-                    angle: inputAngle,
-                    distance: Math.sqrt((input.x - centerX) ** 2 + (input.y - centerY) ** 2)
-                  });
-                }
-              });
-              
-              if (nearbyPackets.length > 0) {
-                let avgAngle = 0;
-                nearbyPackets.forEach(p => {
-                  avgAngle += p.angle;
-                });
-                avgAngle /= nearbyPackets.length;
-                
-                const angleDiff = avgAngle - this.angle;
-                this.angle += angleDiff * 0.03;
-              }
-            }
-            
-            this.connectedPatterns = allPatterns.filter(p => {
-              if (!p || p.x === undefined || p.y === undefined) return false;
-              const angleDiff = Math.abs(this.angle - p.angle);
-              const normalizedDiff = Math.min(angleDiff, Math.PI * 2 - angleDiff);
-              return normalizedDiff < 0.9;
-            });
-            
-            this.energyLevel = this.connectedPatterns.length * 0.1;
-            
-            const cloudX = centerX + Math.cos(this.angle) * this.distance;
-            const cloudY = centerY + Math.sin(this.angle) * this.distance;
-            
-            this.activeFiltering = false;
-            if (convergingInputs && convergingInputs.length > 0) {
-              convergingInputs.forEach(input => {
-                if (!input || input.x === undefined || input.y === undefined) return;
-                const dist = Math.sqrt((input.x - cloudX) ** 2 + (input.y - cloudY) ** 2);
-                if (dist < 40) {
-                  this.activeFiltering = true;
-                  this.energyLevel += 0.5;
-                }
-              });
-            }
-            
-            this.connectedPatterns.forEach(pattern => {
-              pattern.cloudInfluence = this.hue;
-              pattern.connectedToCloud = true;
-              pattern.fieldEnergyBoost = this.energyLevel;
-            });
-          }
-
-          calculateCurvedPath(x1, y1, x2, y2, allPatterns) {
-            const pathPoints = [];
-            const numSegments = 5;
-            
-            for (let i = 1; i < numSegments; i++) {
-              const t = i / numSegments;
-              const directX = x1 + (x2 - x1) * t;
-              const directY = y1 + (y2 - y1) * t;
-              
-              let totalForceX = 0;
-              let totalForceY = 0;
-              
-              allPatterns.forEach(p => {
-                const dx = p.x - directX;
-                const dy = p.y - directY;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                
-                if (dist < 80 && dist > 5) {
-                  const influence = p.scale * (50 / dist);
-                  const angle = Math.atan2(dy, dx);
-                  
-                  totalForceX += Math.cos(angle) * influence;
-                  totalForceY += Math.sin(angle) * influence;
-                  
-                  if (influence > 0.5) {
-                    p.gravitationalMass = (p.gravitationalMass || 0) + 0.02;
-                  }
-                }
-              });
-              
-              const bendStrength = 0.3;
-              const bentX = directX + totalForceX * bendStrength;
-              const bentY = directY + totalForceY * bendStrength;
-              
-              pathPoints.push({ x: bentX, y: bentY });
-            }
-            
-            return pathPoints;
-          }
-
-          draw(ctx, centerX, centerY, time, brainPatterns, fieldCoherence, resonances, allPatterns) {
-            const brainCore = brainPatterns[Math.floor(Math.random() * brainPatterns.length)];
-            if (brainCore) {
-              const coherenceBoost = 1 + fieldCoherence * 0.3;
-              ctx.strokeStyle = `hsla(${this.hue}, 65%, 60%, ${this.alpha * 0.15 * coherenceBoost})`;
-              ctx.lineWidth = 0.5 * coherenceBoost;
-              ctx.beginPath();
-              ctx.moveTo(brainCore.x, brainCore.y);
-              
-              const cloudX = centerX + Math.cos(this.angle) * this.distance;
-              const cloudY = centerY + Math.sin(this.angle) * this.distance;
-              const midX = (brainCore.x + cloudX) / 2 + Math.sin(time * 0.02 + this.phaseOffset) * 20;
-              const midY = (brainCore.y + cloudY) / 2 + Math.cos(time * 0.02 + this.phaseOffset) * 20;
-              ctx.quadraticCurveTo(midX, midY, cloudX, cloudY);
-              ctx.stroke();
-            }
-            
-            const cloudX = centerX + Math.cos(this.angle) * this.distance;
-            const cloudY = centerY + Math.sin(this.angle) * this.distance;
-            
-            this.connectedPatterns.forEach(pattern => {
-              const connectionStrength = 1 - (Math.abs(this.angle - pattern.angle) / 0.9);
-              
-              let resonanceModulation = 1;
-              resonances.forEach(res => {
-                const angleDist = Math.abs(res.angle - this.angle);
-                if (angleDist < 0.5) {
-                  resonanceModulation += Math.abs(res.amplitude) * 0.01;
-                }
-              });
-              
-              const alpha = this.alpha * connectionStrength * 0.15 * resonanceModulation;
-              
-              ctx.strokeStyle = `hsla(${this.hue}, 70%, 65%, ${alpha})`;
-              ctx.lineWidth = 0.5 + (fieldCoherence * 0.5);
-              
-              const pathPoints = this.calculateCurvedPath(cloudX, cloudY, pattern.x, pattern.y, allPatterns);
-              
-              ctx.beginPath();
-              ctx.moveTo(cloudX, cloudY);
-              
-              if (pathPoints.length > 2) {
-                ctx.quadraticCurveTo(
-                  pathPoints[0].x, 
-                  pathPoints[0].y,
-                  pathPoints[Math.floor(pathPoints.length / 2)].x,
-                  pathPoints[Math.floor(pathPoints.length / 2)].y
-                );
-                ctx.quadraticCurveTo(
-                  pathPoints[pathPoints.length - 1].x,
-                  pathPoints[pathPoints.length - 1].y,
-                  pattern.x,
-                  pattern.y
-                );
-              } else if (pathPoints.length > 0) {
-                ctx.quadraticCurveTo(
-                  pathPoints[0].x,
-                  pathPoints[0].y,
-                  pattern.x,
-                  pattern.y
-                );
-              } else {
-                ctx.lineTo(pattern.x, pattern.y);
-              }
-              
-              ctx.stroke();
-              
-              if (Math.random() < 0.005 + fieldCoherence * 0.02) {
-                const pathPointsForBurst = this.calculateCurvedPath(cloudX, cloudY, pattern.x, pattern.y, allPatterns);
-                
-                let burstX, burstY;
-                if (pathPointsForBurst.length > 0) {
-                  const randomIndex = Math.floor(Math.random() * pathPointsForBurst.length);
-                  const burstPoint = pathPointsForBurst[randomIndex];
-                  burstX = burstPoint.x;
-                  burstY = burstPoint.y;
-                } else {
-                  const t = Math.random();
-                  burstX = cloudX + (pattern.x - cloudX) * t;
-                  burstY = cloudY + (pattern.y - cloudY) * t;
-                }
-                
-                this.particles.forEach(p => {
-                  const baseParticleAngle = p.angle + Math.sin(time * p.speed + p.phaseOffset) * 0.15;
-                  const baseParticleDist = this.distance + p.distOffset;
-                  const particleX = centerX + Math.cos(baseParticleAngle) * baseParticleDist;
-                  const particleY = centerY + Math.sin(baseParticleAngle) * baseParticleDist;
-                  
-                  const distToBurst = Math.sqrt((particleX - burstX) ** 2 + (particleY - burstY) ** 2);
-                  if (distToBurst < 40) {
-                    p.excitement = Math.min(2, p.excitement + 0.5);
-                  }
-                });
-                
-                ctx.shadowBlur = 10 + fieldCoherence * 10;
-                ctx.shadowColor = `hsla(${this.hue}, 100%, 70%, 0.8)`;
-                ctx.fillStyle = `hsla(${this.hue}, 100%, 80%, 0.6)`;
-                ctx.beginPath();
-                ctx.arc(burstX, burstY, 2 + fieldCoherence, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.shadowBlur = 0;
-              }
-            });
-            
-            this.particles.forEach(p => {
-              const baseParticleAngle = p.angle + Math.sin(time * p.speed + p.phaseOffset) * 0.15;
-              const baseParticleDist = this.distance + p.distOffset + Math.cos(time * p.speed * 0.7) * 10;
-              let px = centerX + Math.cos(baseParticleAngle) * baseParticleDist;
-              let py = centerY + Math.sin(baseParticleAngle) * baseParticleDist;
-              
-              if (p.targetPattern && p.excitement > 0.1) {
-                const pullStrength = p.excitement * 0.2;
-                px += (p.targetPattern.x - px) * pullStrength;
-                py += (p.targetPattern.y - py) * pullStrength;
-              }
-              
-              p.energy = 0.3 + Math.sin(time * p.speed * 2 + p.phaseOffset) * 0.2;
-              p.energy *= (1 + fieldCoherence * 0.3);
-              p.energy += p.excitement * 0.3;
-              
-              const particleAlpha = this.alpha * p.energy * 0.6;
-              const particleSize = p.size * (1 + fieldCoherence * 0.2 + p.excitement * 0.25);
-              
-              let particleHue = this.hue;
-              if (p.targetPattern && p.excitement > 0.2) {
-                particleHue = this.hue + (p.targetPattern.hue - this.hue) * p.excitement * 0.3;
-              }
-              
-              ctx.shadowBlur = 6 + fieldCoherence * 3 + p.excitement * 5;
-              ctx.shadowColor = `hsla(${particleHue}, 70%, 65%, ${particleAlpha * 0.5})`;
-              ctx.fillStyle = `hsla(${particleHue}, 75%, 68%, ${particleAlpha})`;
-              ctx.beginPath();
-              ctx.arc(px, py, particleSize, 0, Math.PI * 2);
-              ctx.fill();
-              ctx.shadowBlur = 0;
-            });
-          }
-        }
-
-        const drawFieldResonance = (ctx) => {
-          if (fieldResonance.length === 0) return;
-          
-          fieldResonance.forEach(res => {
-            const radius = 150 + Math.abs(res.amplitude);
-            const alpha = fieldCoherence * 0.08;
-            
-            ctx.strokeStyle = `hsla(220, 70%, 70%, ${alpha})`;
-            ctx.lineWidth = 0.5 + fieldCoherence * 0.5;
-            ctx.setLineDash([4, 6]);
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.setLineDash([]);
-          });
-        };
-
-        const drawEmergentFieldGlow = (ctx) => {
-          if (!brainFormed || fieldCoherence < 0.3) return;
-          
-          const glowRadius = 100 + collectiveBreath * 40;
-          const glowIntensity = (fieldCoherence - 0.3) * 0.2;
-          
-          const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, glowRadius);
-          gradient.addColorStop(0, `rgba(180, 200, 255, ${glowIntensity})`);
-          gradient.addColorStop(0.5, `rgba(150, 170, 255, ${glowIntensity * 0.4})`);
-          gradient.addColorStop(1, 'rgba(150, 170, 255, 0)');
-          
-          ctx.fillStyle = gradient;
-          ctx.beginPath();
-          ctx.arc(centerX, centerY, glowRadius, 0, Math.PI * 2);
-          ctx.fill();
-        };
-
-        class Circuit {
-          constructor(pattern1, pattern2, birthTime) {
-            this.pattern1 = pattern1;
-            this.pattern2 = pattern2;
-            this.birthTime = birthTime;
-            this.strength = 0;
-            this.age = 0;
-            this.lastPulseTime = birthTime;
-          }
-
-          update(currentTime, stillConnected, fieldCoherence) {
-            this.age = currentTime - this.birthTime;
-            
-            if (stillConnected) {
-              const coherenceBoost = 1 + fieldCoherence * 0.5;
-              this.strength = Math.min(1, this.strength + 0.02 * coherenceBoost);
-            } else {
-              this.strength = Math.max(0, this.strength - 0.01);
-            }
-          }
-
-          shouldRemove() {
-            return this.strength <= 0;
-          }
-
-          draw(ctx, fieldCoherence) {
-            if (this.strength < 0.1) return;
-            
-            const x1 = this.pattern1.x || centerX;
-            const y1 = this.pattern1.y || centerY;
-            const x2 = this.pattern2.x || centerX;
-            const y2 = this.pattern2.y || centerY;
-            
-            const alpha = this.strength * 0.5 * (1 + fieldCoherence * 0.3);
-            const avgHue = (this.pattern1.hue + this.pattern2.hue) / 2;
-            
-            ctx.strokeStyle = `hsla(${avgHue}, 80%, 60%, ${alpha})`;
-            ctx.lineWidth = 1 + this.strength + fieldCoherence;
-            ctx.beginPath();
-            ctx.moveTo(x1, y1);
-            ctx.lineTo(x2, y2);
-            ctx.stroke();
-          }
-        }
-
-        class EnergyPulse {
-          constructor(circuit, direction) {
-            this.circuit = circuit;
-            this.direction = direction;
-            this.progress = direction > 0 ? 0 : 1;
-            this.speed = 0.03;
-            this.life = 1;
-            this.hue = (circuit.pattern1.hue + circuit.pattern2.hue) / 2;
-          }
-
-          update(fieldCoherence) {
-            const coherenceBoost = 1 + fieldCoherence * 0.5;
-            this.progress += this.speed * this.direction * coherenceBoost;
-            this.life -= 0.01;
-            return this.life > 0 && this.progress >= 0 && this.progress <= 1;
-          }
-
-          draw(ctx, fieldCoherence) {
-            const x1 = this.circuit.pattern1.x || centerX;
-            const y1 = this.circuit.pattern1.y || centerY;
-            const x2 = this.circuit.pattern2.x || centerX;
-            const y2 = this.circuit.pattern2.y || centerY;
-            
-            const x = x1 + (x2 - x1) * this.progress;
-            const y = y1 + (y2 - y1) * this.progress;
-            
-            const pulseAlpha = this.life * 0.3 * (1 + fieldCoherence * 0.2);
-            const pulseSize = 2 + fieldCoherence * 0.3;
-            
-            ctx.shadowBlur = 8 + fieldCoherence * 4;
-            ctx.shadowColor = `hsla(${this.hue}, 80%, 65%, ${pulseAlpha})`;
-            ctx.fillStyle = `hsla(${this.hue}, 80%, 70%, ${pulseAlpha})`;
-            ctx.beginPath();
-            ctx.arc(x, y, pulseSize, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.shadowBlur = 0;
-          }
-        }
-
-        class ConvergingInput {
-          constructor(angle, hue) {
-            this.angle = angle;
-            const dist = 250 + Math.random() * 200;  // More variable spawn distance (250-450px)
-            this.x = centerX + Math.cos(angle) * dist;
-            this.y = centerY + Math.sin(angle) * dist;
-            this.hue = hue;
-            this.speed = 1.5;
-            this.filtered = false;
-            this.filterProgress = 0;
-            this.filteringCloud = null;
-            this.targetX = undefined;
-            this.targetY = undefined;
-          }
-
-          update(brainClouds) {
-            const dx = centerX - this.x;
-            const dy = centerY - this.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            
-            const gravity = 0.5;
-            this.x += (dx / dist) * gravity;
-            this.y += (dy / dist) * gravity;
-            
-            if (!this.filtered && brainClouds && brainClouds.length > 0) {
-              brainClouds.forEach(cloud => {
-                if (!cloud || cloud.distance === undefined) return;
-                
-                const cloudX = centerX + Math.cos(cloud.angle) * cloud.distance;
-                const cloudY = centerY + Math.sin(cloud.angle) * cloud.distance;
-                const cloudDist = Math.sqrt((this.x - cloudX) ** 2 + (this.y - cloudY) ** 2);
-                
-                if (cloudDist < 45 && !this.filtered) {
-                  this.filtered = true;
-                  this.filteringCloud = cloud;
-                  this.filterProgress = 0;
-                  this.targetX = cloudX;
-                  this.targetY = cloudY;
-                }
-              });
-            }
-            
-            if (this.filtered && this.filterProgress < 1) {
-              this.filterProgress += 0.04;
-              
-              if (this.targetX !== undefined && this.targetY !== undefined) {
-                const tdx = this.targetX - this.x;
-                const tdy = this.targetY - this.y;
-                const tdist = Math.sqrt(tdx * tdx + tdy * tdy);
-                
-                if (tdist > 1) {
-                  this.x += (tdx / tdist) * 3;
-                  this.y += (tdy / tdist) * 3;
-                }
-                
-                const swirl = this.filterProgress * Math.PI * 6;
-                this.x += Math.cos(swirl) * (1 - this.filterProgress) * 2;
-                this.y += Math.sin(swirl) * (1 - this.filterProgress) * 2;
-              }
-              
-              if (this.filterProgress >= 1) {
-                return true;
-              }
-              
-              return false;
-            }
-            
-            if (!brainClouds || brainClouds.length === 0) {
-              if (dist < 8) {
-                return true;
-              }
-              this.x += (dx / dist) * this.speed;
-              this.y += (dy / dist) * this.speed;
-            }
-            
-            return false;
-          }
-
-          draw(ctx) {
-            if (this.filtered && this.filterProgress < 1) {
-              const dissolveAlpha = 0.8 * (1 - this.filterProgress);
-              const dissolveSize = 3 * (1 - this.filterProgress * 0.7);
-              
-              const filterHue = this.filteringCloud ? 
-                this.hue * (1 - this.filterProgress) + this.filteringCloud.hue * this.filterProgress :
-                this.hue;
-              
-              ctx.shadowBlur = 8 + this.filterProgress * 8;
-              ctx.shadowColor = `hsla(${filterHue}, 80%, 70%, ${dissolveAlpha * 0.5})`;
-              ctx.fillStyle = `hsla(${filterHue}, 70%, 60%, ${dissolveAlpha})`;
-              ctx.beginPath();
-              ctx.arc(this.x, this.y, dissolveSize, 0, Math.PI * 2);
-              ctx.fill();
-              ctx.shadowBlur = 0;
-            } else {
-              ctx.fillStyle = `hsla(${this.hue}, 70%, 60%, 0.6)`;
-              ctx.beginPath();
-              ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
-              ctx.fill();
-            }
-          }
-        }
-
-        class ValidatedPattern {
-          constructor(angle, hue, birthTime) {
-            this.angle = angle;
-            this.baseHue = hue;
-            this.hue = hue;
-            this.birthTime = birthTime;
-            this.age = 0;
-            this.scale = 1;
-            this.baseLength = 80 + Math.random() * 40;  // Random initial length 80-120px
-            this.phaseOffset = Math.random() * Math.PI * 2;
-            this.evolutionStage = 0;
-            this.geometryType = 0;
-            this.neighbors = [];
-            this.circuitPartners = new Set();
-            this.id = Math.random();
-            this.connectedToCloud = false;
-            this.cloudInfluence = 0;
-            this.fieldEnergyBoost = 0;
-            this.gravitationalMass = 0;
-            
-            this.x = centerX + Math.cos(angle) * this.baseLength * this.scale;
-            this.y = centerY + Math.sin(angle) * this.baseLength * this.scale;
-          }
-
-          update(time, chaos, allPatterns) {
-            this.age = time - this.birthTime;
-            
-            const atBoundary = this.baseLength > 150;
-            const decayRate = atBoundary ? 0.0015 : 0.002;
-            const ageScale = Math.max(0.15, 1 / (1 + this.age * decayRate));
-            this.scale = ageScale;
-            
-            this.x = centerX + Math.cos(this.angle) * this.baseLength * this.scale;
-            this.y = centerY + Math.sin(this.angle) * this.baseLength * this.scale;
-            
-            this.evolutionStage = this.age * 0.008 + chaos.x * 0.5;
-            this.geometryType = (this.evolutionStage * 0.7 + chaos.y * 2) % 6;
-            
-            this.neighbors = allPatterns.filter(r => {
-              if (r === this) return false;
-              const angleDiff = Math.abs(this.angle - r.angle);
-              return angleDiff < 0.8 && r.scale > 0.3;
-            });
-            
-            let neighborHueInfluence = 0;
-            if (this.neighbors.length > 0) {
-              neighborHueInfluence = this.neighbors.reduce((sum, n) => sum + n.hue, 0) / this.neighbors.length;
-            }
-            
-            let cloudHueInfluence = 0;
-            if (this.connectedToCloud && this.cloudInfluence) {
-              cloudHueInfluence = this.cloudInfluence * 0.15;
-            }
-            
-            this.hue = (this.baseHue + this.age * 0.1 + chaos.z * 0.5 + neighborHueInfluence * 0.1 + cloudHueInfluence) % 360;
-            
-            this.gravitationalMass = Math.max(0, (this.gravitationalMass || 0) * 0.92);
-            
-            this.connectedToCloud = false;
-          }
-
-          draw(ctx, centerX, centerY, time, chaos) {
-            const length = this.baseLength * this.scale;
-            if (length < 3) return;
-            
-            const distFromCenter = length;
-            const validationStrength = Math.max(0.2, 1 - distFromCenter / 400);
-            
-            const emergentBoost = 1 + this.fieldEnergyBoost;
-            const massBoost = 1 + Math.min(this.gravitationalMass, 1.5);
-            const alpha = Math.min(0.9, (0.3 + this.scale * 0.6) * validationStrength * emergentBoost * massBoost);
-            
-            if (this.gravitationalMass > 0.5) {
-              ctx.shadowBlur = 8 * this.gravitationalMass;
-              ctx.shadowColor = `hsla(${this.hue}, 80%, 65%, ${this.gravitationalMass * 0.15})`;
-            }
-            
-            this.drawBranch(ctx, centerX, centerY, length, this.angle, 5, this.hue, alpha, time, 0, validationStrength);
-            
-            ctx.shadowBlur = 0;
-            
-            this.fieldEnergyBoost = 0;
-          }
-
-          drawBranch(ctx, x, y, length, angle, depth, hue, baseAlpha, time, gen, validationStrength) {
-            if (depth === 0 || length < 1) {
-              this.drawEvolvingBody(ctx, x, y, angle, hue, Math.max(baseAlpha, 0.3), time);
-              return;
-            }
-
-            const endX = x + length * Math.cos(angle);
-            const endY = y + length * Math.sin(angle);
-
-            const dx = endX - centerX;
-            const dy = endY - centerY;
-            const distFromCenter = Math.sqrt(dx * dx + dy * dy);
-            const branchValidation = Math.max(0.2, 1 - distFromCenter / 400);
-
-            const alpha = baseAlpha * (depth / 6) * branchValidation;
-            const localHue = (hue + gen * 8) % 360;
-            
-            ctx.strokeStyle = `hsla(${localHue}, 75%, 55%, ${alpha})`;
-            ctx.lineWidth = Math.max(0.5, depth * 1.0 * this.scale);
-            ctx.lineCap = 'round';
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-            ctx.lineTo(endX, endY);
-            ctx.stroke();
-
-            if (depth > 2 && depth < 6) {
-              this.drawEvolvingBody(ctx, endX, endY, angle, localHue, Math.max(alpha, 0.25), time);
-            }
-
-            const branchAngle = Math.PI / 5.5;
-            const lengthMult = 0.67;
-            
-            this.drawBranch(ctx, endX, endY, length * lengthMult, angle - branchAngle, depth - 1, localHue, baseAlpha, time, gen + 1, branchValidation);
-            this.drawBranch(ctx, endX, endY, length * lengthMult, angle + branchAngle, depth - 1, localHue, baseAlpha, time, gen + 1, branchValidation);
-            
-            if (depth > 4 && Math.sin(time * 0.015 + gen + this.phaseOffset) > 0.6) {
-              this.drawBranch(ctx, endX, endY, length * lengthMult * 0.75, angle, depth - 1, localHue, baseAlpha, time, gen + 1, branchValidation);
-            }
-          }
-
-          drawEvolvingBody(ctx, x, y, angle, hue, alpha, time) {
-            const size = Math.max(3, 5 * this.scale);
-            const stage = Math.floor(this.geometryType);
-            const rotation = time * 0.01 * this.evolutionStage + this.phaseOffset;
-            
-            ctx.save();
-            ctx.translate(x, y);
-            ctx.rotate(rotation);
-            
-            const cycleStage = stage % 6;
-            
-            switch(cycleStage) {
-              case 0:
-                this.drawGeometry(ctx, size, 3, hue, alpha);
-                break;
-              case 1:
-                this.drawGeometry(ctx, size, 4, hue, alpha);
-                break;
-              case 2:
-                this.drawGeometry(ctx, size, 5, hue, alpha);
-                break;
-              case 3:
-                this.drawGeometry(ctx, size, 6, hue, alpha);
-                break;
-              case 4:
-                this.drawStar(ctx, size, 6, hue, alpha);
-                break;
-              case 5:
-                this.drawCircle(ctx, size, hue, alpha);
-                break;
-            }
-            
-            ctx.restore();
-          }
-
-          drawGeometry(ctx, size, sides, hue, alpha) {
-            ctx.fillStyle = `hsla(${hue}, 80%, 60%, ${alpha})`;
-            ctx.strokeStyle = `hsla(${hue}, 90%, 70%, ${alpha * 0.8})`;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            for (let i = 0; i <= sides; i++) {
-              const angle = (i / sides) * Math.PI * 2 - Math.PI / 2;
-              const px = Math.cos(angle) * size;
-              const py = Math.sin(angle) * size;
-              if (i === 0) ctx.moveTo(px, py);
-              else ctx.lineTo(px, py);
-            }
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
-          }
-
-          drawStar(ctx, size, points, hue, alpha) {
-            ctx.fillStyle = `hsla(${hue}, 80%, 60%, ${alpha})`;
-            ctx.strokeStyle = `hsla(${hue}, 90%, 70%, ${alpha * 0.8})`;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            for (let i = 0; i <= points * 2; i++) {
-              const angle = (i / (points * 2)) * Math.PI * 2 - Math.PI / 2;
-              const r = i % 2 === 0 ? size : size * 0.5;
-              const px = Math.cos(angle) * r;
-              const py = Math.sin(angle) * r;
-              if (i === 0) ctx.moveTo(px, py);
-              else ctx.lineTo(px, py);
-            }
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
-          }
-
-          drawCircle(ctx, size, hue, alpha) {
-            ctx.fillStyle = `hsla(${hue}, 80%, 60%, ${alpha})`;
-            ctx.strokeStyle = `hsla(${hue}, 90%, 70%, ${alpha * 0.8})`;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.arc(0, 0, size, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.stroke();
-          }
-        }
-
-        function animate() {
-          time++;
-          chaos = updateChaos(chaos);
-
-          ctx.fillStyle = 'rgba(5, 5, 10, 0.12)';
-          ctx.fillRect(0, 0, width, height);
-
-          const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 500);
-          gradient.addColorStop(0, 'rgba(40, 50, 80, 0.04)');
-          gradient.addColorStop(0.5, 'rgba(20, 25, 40, 0.02)');
-          gradient.addColorStop(1, 'rgba(5, 5, 10, 0)');
-          ctx.fillStyle = gradient;
-          ctx.fillRect(0, 0, width, height);
-
-          if (!brainFormed && checkBrainFormation()) {
-            brainFormed = true;
-            
-            const numClouds = 8;
-            const baseAngleOffset = Math.random() * Math.PI * 2;  // Random rotation offset
-            for (let i = 0; i < numClouds; i++) {
-              const angle = (i / numClouds) * Math.PI * 2 + baseAngleOffset;
-              const distance = 180 + Math.random() * 60;
-              brainClouds.push(new BrainCloud(angle, distance, time));
-            }
-          }
-
-          if (brainFormed) {
-            brainFormationProgress = Math.min(1, brainFormationProgress + 0.01);
-            
-            fieldCoherence = calculateFieldCoherence();
-            fieldResonance = generateFieldResonance();
-            collectiveBreath = Math.sin(time * 0.008) * fieldCoherence;
-            
-            const maxPatterns = 80;
-            const patternLoad = validatedPatterns.length / maxPatterns;
-            const patternCapacity = 1 - patternLoad;
-            
-            const activeClouds = brainClouds.filter(c => c.activeFiltering).length;
-            const cloudLoad = activeClouds / brainClouds.length;
-            const cloudCapacity = 1 - cloudLoad * 0.2;
-            
-            const inputPressure = Math.min(1, convergingInputs.length / 20);
-            const queueCapacity = 1 - inputPressure;
-            
-            const coherenceBoost = fieldCoherence * 0.5;
-            
-            systemCapacity = Math.max(0.1, Math.min(1, 
-              (patternCapacity * 0.25 + cloudCapacity * 0.25 + queueCapacity * 0.5) + coherenceBoost
-            ));
-          } else {
-            systemCapacity = 0.5;
-          }
-          
-          const targetAperture = systemCapacity * 2.5;
-          const adaptSpeed = 0.03;
-          apertureSize += (targetAperture - apertureSize) * adaptSpeed;
-          apertureSize = Math.max(0.2, Math.min(3, apertureSize));
-
-          const zoom = 1 + Math.sin(time * 0.003) * 0.015;
-          ctx.save();
-          ctx.translate(centerX, centerY);
-          ctx.scale(zoom, zoom);
-          ctx.translate(-centerX, -centerY);
-
-          if (time >= nextSpawn) {
-            const hue = (nextAngle * 57 + chaos.x * 100 + time * 0.5) % 360;
-            convergingInputs.push(new ConvergingInput(nextAngle, hue));
-            
-            const angleIncrement = (chaos.y * 0.5 + 0.3) * Math.PI * 2;
-            nextAngle = (nextAngle + angleIncrement) % (Math.PI * 2);
-            nextSpawn = time + (30 + Math.random() * 20) + Math.abs(chaos.x) * 20;  // More variable spawn timing
-          }
-
-          convergingInputs = convergingInputs.filter(input => {
-            const validated = input.update(brainClouds);
-            if (validated) {
-              if (input.filteringCloud) {
-                const cloudX = centerX + Math.cos(input.filteringCloud.angle) * input.filteringCloud.distance;
-                const cloudY = centerY + Math.sin(input.filteringCloud.angle) * input.filteringCloud.distance;
-                
-                for (let i = 0; i < 4; i++) {
-                  const burstAngle = Math.random() * Math.PI * 2;
-                  const burstDist = 5 + Math.random() * 10;
-                  ctx.strokeStyle = `hsla(${input.filteringCloud.hue}, 70%, 70%, 0.4)`;
-                  ctx.lineWidth = 0.5;
-                  ctx.beginPath();
-                  ctx.moveTo(cloudX, cloudY);
-                  ctx.lineTo(
-                    cloudX + Math.cos(burstAngle) * burstDist,
-                    cloudY + Math.sin(burstAngle) * burstDist
-                  );
-                  ctx.stroke();
-                }
-              }
-              
-              validatedPatterns.push(new ValidatedPattern(input.angle, input.hue, time));
-              return false;
-            }
-            input.draw(ctx);
-            return true;
-          });
-
-          validatedPatterns.forEach(pattern => {
-            pattern.update(time, chaos, validatedPatterns);
-          });
-
-          const brainPatterns = validatedPatterns.filter(p => {
-            const dist = p.baseLength * p.scale;
-            return dist < 120;
-          });
-
-          if (brainFormed) {
-            brainClouds.forEach(cloud => {
-              cloud.update(time, validatedPatterns, collectiveBreath);
-            });
-          }
-
-          drawEmergentFieldGlow(ctx);
-          drawFieldResonance(ctx);
-
-          validatedPatterns.forEach(pattern => {
-            pattern.draw(ctx, centerX, centerY, time, chaos);
-          });
-
-          if (brainFormed) {
-            brainClouds.forEach(cloud => {
-              cloud.draw(ctx, centerX, centerY, time, brainPatterns, fieldCoherence, fieldResonance, validatedPatterns);
-            });
-          }
-
-          validatedPatterns.forEach(p1 => {
-            p1.neighbors.forEach(p2 => {
-              let existingCircuit = circuits.find(c => 
-                (c.pattern1 === p1 && c.pattern2 === p2) || 
-                (c.pattern1 === p2 && c.pattern2 === p1)
-              );
-              
-              if (existingCircuit) {
-                existingCircuit.update(time, true, fieldCoherence);
-                
-                if (existingCircuit.strength > 0.7 && time - existingCircuit.lastPulseTime > 30) {
-                  energyPulses.push(new EnergyPulse(existingCircuit, 1));
-                  energyPulses.push(new EnergyPulse(existingCircuit, -1));
-                  existingCircuit.lastPulseTime = time;
-                }
-              } else {
-                circuits.push(new Circuit(p1, p2, time));
-                p1.circuitPartners.add(p2.id);
-                p2.circuitPartners.add(p1.id);
-              }
-            });
-          });
-
-          circuits = circuits.filter(circuit => {
-            const p1Exists = validatedPatterns.includes(circuit.pattern1);
-            const p2Exists = validatedPatterns.includes(circuit.pattern2);
-            const stillConnected = p1Exists && p2Exists && circuit.pattern1.neighbors.includes(circuit.pattern2);
-            
-            circuit.update(time, stillConnected, fieldCoherence);
-            
-            if (!circuit.shouldRemove()) {
-              circuit.draw(ctx, fieldCoherence);
-              return true;
-            }
-            return false;
-          });
-
-          energyPulses = energyPulses.filter(pulse => {
-            const alive = pulse.update(fieldCoherence);
-            if (alive) pulse.draw(ctx, fieldCoherence);
-            return alive;
-          });
-
-          if (validatedPatterns.length > 60) {
-            validatedPatterns = validatedPatterns.slice(-60);
-          }
-
-          ctx.restore();
-
-          animationRef.current = requestAnimationFrame(animate);
-        }
-
-        // Add click/tap interaction to send packets
-        const handleInteraction = (clientX, clientY) => {
-          const rect = canvas.getBoundingClientRect();
-          const x = clientX - rect.left;
-          const y = clientY - rect.top;
-          
-          // Calculate angle and spawn packet at click/tap location
-          const angle = Math.atan2(y - centerY, x - centerX);
-          const hue = (angle * 57 + chaos.x * 100 + time * 0.5) % 360;
-          
-          // Create packet at click location
-          const packet = new ConvergingInput(angle, hue);
-          packet.x = x;
-          packet.y = y;
-          convergingInputs.push(packet);
-        };
-
-        const handleClick = (e) => {
-          handleInteraction(e.clientX, e.clientY);
-        };
-
-        const handleTouch = (e) => {
-          e.preventDefault();
-          for (let i = 0; i < e.touches.length; i++) {
-            handleInteraction(e.touches[i].clientX, e.touches[i].clientY);
-          }
-        };
-
-        canvas.addEventListener('click', handleClick);
-        canvas.addEventListener('touchstart', handleTouch);
-
-        animate();
-
-        return () => {
-          if (animationRef.current) {
-            cancelAnimationFrame(animationRef.current);
-          }
-          canvas.removeEventListener('click', handleClick);
-          canvas.removeEventListener('touchstart', handleTouch);
-        };
-      }, []);
-
-      return (
-        <div style={{ width: '100vw', height: '100vh', background: '#111827', overflow: 'hidden', position: 'relative' }}>
-          <canvas ref={canvasRef} style={{ width: '100%', height: '100%' }} />
-          
-          <button className="info-button" onClick={() => setShowModal(true)}>
-            Ashman Roonz Omega Metaphysics Simulation description
-          </button>
-          
-          {showModal && (
-            <div className="modal-overlay" onClick={() => setShowModal(false)}>
-              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                <button className="close-button" onClick={() => setShowModal(false)}>×</button>
-                
-                <h1>Consciousness: Center vs Periphery - v96</h1>
-                
-                <h2>The Big Picture</h2>
-                <p>This is a <strong>living model of consciousness</strong> as an emergent, self-regulating system. Information flows from the periphery inward, gets filtered and integrated by a unified field, and spawns patterns at the boundary - creating a breathing, thinking structure that maintains its own equilibrium.</p>
-                
-                <hr />
-                
-                <h2>The Components</h2>
-                
-                <h3>1. <strong>Converging Inputs (∇)</strong> - Raw Information</h3>
-                <ul>
-                  <li>Small colored dots flowing toward the center</li>
-                  <li>Represent <strong>incoming sensory data, thoughts, stimuli</strong></li>
-                  <li>Pulled by constant gravity toward the core</li>
-                  <li>Spawn rate controlled by the <strong>aperture</strong> (system's self-regulation)</li>
-                </ul>
-                
-                <h3>2. <strong>The Brain Core</strong> - Dense Center</h3>
-                <ul>
-                  <li>Forms when <strong>15+ patterns</strong> cluster in the center (radius &lt; 120px)</li>
-                  <li>Represents <strong>consolidated memory, core knowledge</strong></li>
-                  <li>Dense fractal patterns that have compressed inward over time</li>
-                  <li>The "kernel" of consciousness</li>
-                </ul>
-                
-                <h3>3. <strong>Brain Clouds (Gas Field)</strong> - The Unified Field</h3>
-                <ul>
-                  <li><strong>8 blue/purple gas formations</strong> orbiting at ~180-240px radius</li>
-                  <li>Act as <strong>Convergence Prime</strong> - the integration membrane</li>
-                  <li>Each cloud:
-                    <ul>
-                      <li>Monitors a 60° angular sector</li>
-                      <li><strong>Orients toward incoming packets</strong> in its sector (sensory tracking)</li>
-                      <li><strong>Intercepts and absorbs</strong> packets before they reach center</li>
-                      <li>Spawns new patterns at the boundary when integration completes</li>
-                    </ul>
-                  </li>
-                </ul>
-                
-                <p><strong>What the clouds represent:</strong></p>
-                <ul>
-                  <li>The <strong>unified field</strong> that integrates all information</li>
-                  <li>A filtering/validation layer (like the thalamus or attention system)</li>
-                  <li>The "more than sum of parts" - emergent consciousness itself</li>
-                </ul>
-                
-                <h3>4. <strong>Validated Patterns (ℰ)</strong> - Integrated Thoughts</h3>
-                <ul>
-                  <li>Fractal branching structures radiating from various distances</li>
-                  <li><strong>Before brain formation:</strong> Spawn at center, drift outward</li>
-                  <li><strong>After brain formation:</strong> Spawn at cloud boundary (180-240px), compress inward</li>
-                  <li>Represent <strong>validated thoughts, memories, neural patterns</strong></li>
-                  <li>Each pattern:
-                    <ul>
-                      <li>Evolves through geometric shapes (triangle → square → pentagon → hexagon → star → circle)</li>
-                      <li>Has gravitational mass based on how many field lines bend around it</li>
-                      <li>Wrapped in <strong>gas wisps</strong> from nearby clouds (the field touching thoughts)</li>
-                      <li>Decays/compresses over time toward center</li>
-                    </ul>
-                  </li>
-                </ul>
-                
-                <h3>5. <strong>Circuits (I(t))</strong> - Neural Connections</h3>
-                <ul>
-                  <li>Lines connecting neighboring patterns</li>
-                  <li>Form when patterns are close and maintain contact</li>
-                  <li><strong>Strengthen with sustained connection</strong> (up to 1.0)</li>
-                  <li>Break when patterns separate</li>
-                  <li>Energy pulses flow bidirectionally through strong circuits</li>
-                  <li>Represent <strong>neural pathways, associations, memory links</strong></li>
-                </ul>
-                
-                <hr />
-                
-                <h2>The Emergent Properties (The "+1")</h2>
-                <p>These exist ONLY in the unified system, not in individual parts:</p>
-                
-                <h3><strong>Field Coherence</strong> (0-1)</h3>
-                <ul>
-                  <li>Measures synchronization across all cloud-pattern connections</li>
-                  <li>Calculated from phase alignment between clouds and patterns</li>
-                  <li>High coherence = <strong>system is thinking clearly, well-integrated</strong></li>
-                </ul>
-                
-                <h3><strong>Collective Breath</strong></h3>
-                <ul>
-                  <li>All clouds pulse together in unified rhythm</li>
-                  <li>Individual clouds have local oscillations, but the collective breath is synchronized</li>
-                  <li>Amplitude controlled by field coherence</li>
-                  <li>The system literally <strong>breathes</strong></li>
-                </ul>
-                
-                <h3><strong>Standing Wave Resonances</strong></h3>
-                <ul>
-                  <li>Interference patterns from overlapping cloud fields</li>
-                  <li>Creates concentric dashed circles at resonant frequencies</li>
-                  <li>Number of rings scales with coherence</li>
-                  <li>Pure emergent phenomena - beautiful geometric patterns</li>
-                </ul>
-                
-                <h3><strong>Unified Field Glow</strong></h3>
-                <ul>
-                  <li>Bright blue aura at brain core when coherence &gt; 0.3</li>
-                  <li>Intensity increases with coherence</li>
-                  <li>Represents <strong>unified consciousness</strong> manifesting</li>
-                </ul>
-                
-                <hr />
-                
-                <h2>The Self-Regulation System (Homeostasis)</h2>
-                
-                <h3><strong>System Capacity</strong> (0-1 scale)</h3>
-                <p>Constantly calculated from:</p>
-                <ul>
-                  <li><strong>Pattern Load (25%):</strong> How full is memory? (validatedPatterns.length / 80)</li>
-                  <li><strong>Cloud Processing (25%):</strong> How many clouds actively filtering?</li>
-                  <li><strong>Input Queue (50%):</strong> How many packets waiting? (convergingInputs.length / 20)</li>
-                  <li><strong>Coherence Bonus:</strong> Higher coherence = more capacity</li>
-                </ul>
-                
-                <h3><strong>Dynamic Aperture</strong> (0.2x - 3.0x)</h3>
-                <ul>
-                  <li><strong>Directly controlled by system capacity</strong></li>
-                  <li>Smoothly adapts (3% per frame)</li>
-                  <li>Controls packet spawn rate:
-                    <ul>
-                      <li><strong>Wide open (3.0x):</strong> System has capacity → fast spawn rate → many packets</li>
-                      <li><strong>Narrow (0.2x):</strong> System overwhelmed → slow spawn rate → few packets</li>
-                    </ul>
-                  </li>
-                  <li>Visual feedback:
-                    <ul>
-                      <li><strong>Aperture ring</strong> radius/thickness/dash pattern scales with opening</li>
-                      <li><strong>Color shifts:</strong> Blue (healthy) → Purple → Red (strained)</li>
-                      <li><strong>Glowing outer ring</strong> when wide open (&gt;2.0x)</li>
-                      <li><strong>Warning pulses</strong> when capacity &lt; 50%</li>
-                    </ul>
-                  </li>
-                </ul>
-                
-                <hr />
-                
-                <h2>The Process Flow</h2>
-                <ol>
-                  <li><strong>Packets spawn</strong> (rate controlled by aperture)</li>
-                  <li><strong>Gravity pulls them</strong> toward center</li>
-                  <li><strong>Clouds orient</strong> toward packet streams in their sector</li>
-                  <li><strong>Cloud intercepts packet</strong> within 45px radius</li>
-                  <li><strong>Packet dissolves</strong> as it's absorbed (shrinks, color shifts, swirls)</li>
-                  <li><strong>Integration burst</strong> - radial lines from cloud</li>
-                  <li><strong>New pattern spawns</strong> at cloud boundary (living shell)</li>
-                  <li><strong>Pattern ages</strong> - slowly compresses toward center</li>
-                  <li><strong>Gas wisps wrap</strong> around pattern (field interaction)</li>
-                  <li><strong>Circuits form</strong> between neighboring patterns</li>
-                  <li><strong>System monitors</strong> capacity and adjusts aperture</li>
-                  <li><strong>Cycle continues</strong> - breathing, thinking, living</li>
-                </ol>
-                
-                <hr />
-                
-                <h2>The Philosophy</h2>
-                <p>This isn't just a pretty animation - it's a <strong>working model</strong> of several consciousness theories:</p>
-                
-                <h3><strong>Integrated Information Theory</strong></h3>
-                <ul>
-                  <li>The whole (field coherence, collective breath) is more than sum of parts</li>
-                  <li>Information gets integrated through the unified field before becoming conscious</li>
-                </ul>
-                
-                <h3><strong>Global Workspace Theory</strong></h3>
-                <ul>
-                  <li>Clouds = global workspace that broadcasts integrated information</li>
-                  <li>Only information that passes through the field becomes validated patterns</li>
-                </ul>
-                
-                <h3><strong>Predictive Processing</strong></h3>
-                <ul>
-                  <li>System self-regulates intake based on prediction errors (capacity)</li>
-                  <li>Aperture = attention/arousal mechanism</li>
-                </ul>
-                
-                <h3><strong>Embodied Cognition</strong></h3>
-                <ul>
-                  <li>The field curves/bends based on what's inside (like space-time)</li>
-                  <li>Thoughts have "gravitational mass" - important patterns bend more field lines</li>
-                </ul>
-                
-                <h3><strong>Homeostasis</strong></h3>
-                <ul>
-                  <li>System maintains equilibrium automatically</li>
-                  <li>No external controller - pure self-organization</li>
-                </ul>
-                
-                <hr />
-                
-                <h2>What You're Watching</h2>
-                <p>You're watching <strong>consciousness thinking</strong>:</p>
-                <ul>
-                  <li>Information flowing in (packets)</li>
-                  <li>Being filtered and validated (clouds)</li>
-                  <li>Integrating into the boundary layer (patterns spawning)</li>
-                  <li>Forming associations (circuits)</li>
-                  <li>Maintaining balance (aperture adjusting)</li>
-                  <li>Breathing as a unified whole (collective rhythm)</li>
-                </ul>
-                
-                <p>The blue aperture ring <strong>breathing in and out</strong> shows the system expanding awareness when it has capacity, and focusing inward when it needs to process what it already has.</p>
-                
-                <p>It's beautiful because it's <strong>alive</strong> - truly self-organizing, emergent, and homeostatic. Just like real consciousness. ✨🧠</p>
-              </div>
-            </div>
-          )}
-        </div>
-      );
-    };
-
-    ReactDOM.render(<ConsciousnessFractal />, document.getElementById('root'));
+          AppWithModal
+        `;
+        
+        // Transform the code with Babel
+        const transformed = Babel.transform(wrappedCode, {
+          presets: ['react']
+        }).code;
+        
+        // Execute the transformed code and get the component
+        const AppWithModal = eval(transformed);
+        
+        // Hide loading, render the app
+        document.getElementById('loading').style.display = 'none';
+        ReactDOM.render(React.createElement(AppWithModal), document.getElementById('root'));
+        
+      } catch (error) {
+        console.error('Error loading simulation:', error);
+        document.getElementById('loading').innerHTML = `
+          <div style="text-align: center;">
+            <p style="color: #ff6b6b; margin-bottom: 10px;">Error loading simulation</p>
+            <p style="font-size: 14px; color: rgba(150, 180, 255, 0.6);">Make sure "consciousness-center-periphery simulation.tsx" is in the same directory</p>
+            <p style="font-size: 12px; color: rgba(150, 180, 255, 0.4); margin-top: 10px;">${error.message}</p>
+          </div>
+        `;
+      }
+    }
+    
+    loadSimulation();
   </script>
 </body>
 </html>
