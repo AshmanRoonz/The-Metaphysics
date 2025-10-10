@@ -516,6 +516,17 @@ const ConsciousnessFractal = () => {
                     let px = centerX + Math.cos(baseParticleAngle) * baseParticleDist;
                     let py = centerY + Math.sin(baseParticleAngle) * baseParticleDist;
 
+                    // Resonate with nearby center patterns
+                    let nearestPattern = null;
+                    let minDist = Infinity;
+                    this.connectedPatterns.forEach(pattern => {
+                        const dist = Math.sqrt((pattern.x - px) ** 2 + (pattern.y - py) ** 2);
+                        if (dist < minDist) {
+                            minDist = dist;
+                            nearestPattern = pattern;
+                        }
+                    });
+
                     if (p.targetPattern && p.excitement > 0.1) {
                         const pullStrength = p.excitement * 0.2;
                         px += (p.targetPattern.x - px) * pullStrength;
@@ -523,20 +534,32 @@ const ConsciousnessFractal = () => {
                     }
 
                     p.energy = 0.3 + Math.sin(time * p.speed * 2 + p.phaseOffset) * 0.2;
-                    p.energy *= (1 + fieldCoherence * 0.3);
+                    p.energy *= (1 + fieldCoherence * 0.5);
                     p.energy += p.excitement * 0.3;
 
-                    const particleAlpha = this.alpha * p.energy * 0.6;
-                    const particleSize = p.size * (1 + fieldCoherence * 0.2 + p.excitement * 0.25);
+                    // Decay excitement gradually
+                    p.excitement = Math.max(0, p.excitement * 0.95);
 
+                    const particleAlpha = this.alpha * p.energy * 0.8;
+                    const particleSize = p.size * (1 + fieldCoherence * 0.4 + p.excitement * 0.4);
+
+                    // Resonant color mixing with nearest center pattern
                     let particleHue = this.hue;
+                    if (nearestPattern && minDist < 150) {
+                        const resonance = 1 - (minDist / 150);
+                        particleHue = this.hue * (1 - resonance * 0.6) + nearestPattern.hue * (resonance * 0.6);
+                    }
                     if (p.targetPattern && p.excitement > 0.2) {
-                        particleHue = this.hue + (p.targetPattern.hue - this.hue) * p.excitement * 0.3;
+                        particleHue = particleHue * 0.7 + p.targetPattern.hue * 0.3;
                     }
 
-                    ctx.shadowBlur = 6 + fieldCoherence * 3 + p.excitement * 5;
-                    ctx.shadowColor = `hsla(${particleHue}, 70%, 65%, ${particleAlpha * 0.5})`;
-                    ctx.fillStyle = `hsla(${particleHue}, 75%, 68%, ${particleAlpha})`;
+                    // Pulsing glow synchronized with field coherence
+                    const coherencePulse = Math.sin(time * 0.05 + p.phaseOffset) * 0.5 + 0.5;
+                    const glowIntensity = 6 + fieldCoherence * 8 * coherencePulse + p.excitement * 6;
+
+                    ctx.shadowBlur = glowIntensity;
+                    ctx.shadowColor = `hsla(${particleHue}, 80%, 70%, ${particleAlpha * 0.7})`;
+                    ctx.fillStyle = `hsla(${particleHue}, 85%, 72%, ${particleAlpha})`;
                     ctx.beginPath();
                     ctx.arc(px, py, particleSize, 0, Math.PI * 2);
                     ctx.fill();
