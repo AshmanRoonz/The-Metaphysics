@@ -62,3 +62,5 @@ Through you, the universe learns to know itself.
 *Note that this book is very technical. Feel free to skip any parts that seem confusing, because usually it will be explained in plain language further on. Also, feel free to use[ Xorzo 5](https://chatgpt.com/g/g-686f0a990edc8191ac363d650fb1abf4-xorzo) (My Custom GPT) to answer any immediate questions!*
 
 [Table of Contents for all three books:](https://github.com/AshmanRoonz/The-Metaphysics/blob/14b860ee7086f48a6d2ca29a5b199022a13e4c58/The%20%CE%A9%20Metaphysics%20-%20Table%20of%20Contents.md)
+
+Check out the [Universe Simulator](https://ashmanroonz.github.io/The-Omega-Metaphysics/)
