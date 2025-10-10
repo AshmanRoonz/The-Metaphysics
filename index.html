@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The-Omega-Metaphysics Simulation by Ashman Roonz</title>
+  <title>The Omega Metaphyiscs Simulation by Ashman Roonz</title>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -662,7 +662,7 @@
         class ConvergingInput {
           constructor(angle, hue) {
             this.angle = angle;
-            const dist = 200 + Math.random() * 150;
+            const dist = 250 + Math.random() * 200;  // More variable spawn distance (250-450px)
             this.x = centerX + Math.cos(angle) * dist;
             this.y = centerY + Math.sin(angle) * dist;
             this.hue = hue;
@@ -770,7 +770,7 @@
             this.birthTime = birthTime;
             this.age = 0;
             this.scale = 1;
-            this.baseLength = 100;
+            this.baseLength = 80 + Math.random() * 40;  // Random initial length 80-120px
             this.phaseOffset = Math.random() * Math.PI * 2;
             this.evolutionStage = 0;
             this.geometryType = 0;
@@ -985,8 +985,9 @@
             brainFormed = true;
             
             const numClouds = 8;
+            const baseAngleOffset = Math.random() * Math.PI * 2;  // Random rotation offset
             for (let i = 0; i < numClouds; i++) {
-              const angle = (i / numClouds) * Math.PI * 2;
+              const angle = (i / numClouds) * Math.PI * 2 + baseAngleOffset;
               const distance = 180 + Math.random() * 60;
               brainClouds.push(new BrainCloud(angle, distance, time));
             }
@@ -1036,7 +1037,7 @@
             
             const angleIncrement = (chaos.y * 0.5 + 0.3) * Math.PI * 2;
             nextAngle = (nextAngle + angleIncrement) % (Math.PI * 2);
-            nextSpawn = time + 40 + Math.abs(chaos.x) * 20;
+            nextSpawn = time + (30 + Math.random() * 20) + Math.abs(chaos.x) * 20;  // More variable spawn timing
           }
 
           convergingInputs = convergingInputs.filter(input => {
