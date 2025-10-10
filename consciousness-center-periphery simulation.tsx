@@ -232,7 +232,11 @@ const ConsciousnessFractal = () => {
                         speed: 0.002 + Math.random() * 0.003,
                         energy: Math.random(),
                         targetPattern: null,
-                        excitement: 0
+                        excitement: 0,
+                        shape: 0,
+                        targetShape: 0,
+                        rotation: Math.random() * Math.PI * 2,
+                        rotationSpeed: (Math.random() - 0.5) * 0.02
                     });
                 }
             }
@@ -336,6 +340,83 @@ const ConsciousnessFractal = () => {
                         expandingCells.push(new ExpandingCell(this, time));
                     }
                 }
+            }
+
+            drawParticleShape(ctx, x, y, size, shapeIndex, rotation, hue, alpha) {
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(rotation);
+
+                const baseShape = Math.floor(shapeIndex) % 6;
+                const morphProgress = shapeIndex - baseShape; // 0-1 for smooth morphing
+
+                ctx.fillStyle = `hsla(${hue}, 90%, 75%, ${alpha})`;
+                ctx.strokeStyle = `hsla(${hue}, 95%, 80%, ${alpha * 0.9})`;
+                ctx.lineWidth = 1;
+
+                ctx.beginPath();
+
+                // Morph between shapes
+                switch (baseShape) {
+                    case 0: // Triangle
+                        for (let i = 0; i <= 3; i++) {
+                            const angle = (i / 3) * Math.PI * 2 - Math.PI / 2;
+                            const r = size * (1 + morphProgress * 0.3);
+                            const px = Math.cos(angle) * r;
+                            const py = Math.sin(angle) * r;
+                            if (i === 0) ctx.moveTo(px, py);
+                            else ctx.lineTo(px, py);
+                        }
+                        break;
+
+                    case 1: // Square
+                        const sqSize = size * (1 + morphProgress * 0.2);
+                        ctx.rect(-sqSize, -sqSize, sqSize * 2, sqSize * 2);
+                        break;
+
+                    case 2: // Pentagon
+                        for (let i = 0; i <= 5; i++) {
+                            const angle = (i / 5) * Math.PI * 2 - Math.PI / 2;
+                            const r = size * (1 - morphProgress * 0.1);
+                            const px = Math.cos(angle) * r;
+                            const py = Math.sin(angle) * r;
+                            if (i === 0) ctx.moveTo(px, py);
+                            else ctx.lineTo(px, py);
+                        }
+                        break;
+
+                    case 3: // Hexagon
+                        for (let i = 0; i <= 6; i++) {
+                            const angle = (i / 6) * Math.PI * 2 - Math.PI / 2;
+                            const r = size * (1 + morphProgress * 0.15);
+                            const px = Math.cos(angle) * r;
+                            const py = Math.sin(angle) * r;
+                            if (i === 0) ctx.moveTo(px, py);
+                            else ctx.lineTo(px, py);
+                        }
+                        break;
+
+                    case 4: // Star
+                        for (let i = 0; i <= 10; i++) {
+                            const angle = (i / 10) * Math.PI * 2 - Math.PI / 2;
+                            const r = i % 2 === 0 ? size : size * (0.5 - morphProgress * 0.2);
+                            const px = Math.cos(angle) * r;
+                            const py = Math.sin(angle) * r;
+                            if (i === 0) ctx.moveTo(px, py);
+                            else ctx.lineTo(px, py);
+                        }
+                        break;
+
+                    case 5: // Circle
+                        ctx.arc(0, 0, size * (1 - morphProgress * 0.1), 0, Math.PI * 2);
+                        break;
+                }
+
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.restore();
             }
 
             calculateCurvedPath(x1, y1, x2, y2, allPatterns) {
@@ -516,7 +597,7 @@ const ConsciousnessFractal = () => {
                     let px = centerX + Math.cos(baseParticleAngle) * baseParticleDist;
                     let py = centerY + Math.sin(baseParticleAngle) * baseParticleDist;
 
-                    // Resonate with nearby center patterns
+                    // Find nearest center pattern for color AND shape resonance
                     let nearestPattern = null;
                     let minDist = Infinity;
                     this.connectedPatterns.forEach(pattern => {
@@ -540,17 +621,37 @@ const ConsciousnessFractal = () => {
                     // Decay excitement gradually
                     p.excitement = Math.max(0, p.excitement * 0.95);
 
+                    // Shape morphing based on nearest pattern
+                    if (nearestPattern && minDist < 200) {
+                        const resonance = 1 - (minDist / 200);
+                        // Adopt the pattern's geometry type
+                        p.targetShape = Math.floor(nearestPattern.geometryType) % 6;
+                    } else {
+                        // When isolated, cycle through shapes based on field coherence
+                        p.targetShape = Math.floor(time * 0.01 + p.phaseOffset * 3 + fieldCoherence * 2) % 6;
+                    }
+
+                    // Smooth shape transition
+                    const shapeDiff = p.targetShape - p.shape;
+                    p.shape += shapeDiff * 0.08;
+
+                    // Rotation
+                    p.rotation += p.rotationSpeed * (1 + fieldCoherence);
+
                     const particleAlpha = this.alpha * p.energy * 0.8;
                     const particleSize = p.size * (1 + fieldCoherence * 0.4 + p.excitement * 0.4);
 
-                    // Resonant color mixing with nearest center pattern
-                    let particleHue = this.hue;
-                    if (nearestPattern && minDist < 150) {
-                        const resonance = 1 - (minDist / 150);
-                        particleHue = this.hue * (1 - resonance * 0.6) + nearestPattern.hue * (resonance * 0.6);
+                    // STRONG color resonance - particles take on center pattern colors
+                    let particleHue;
+                    if (nearestPattern && minDist < 200) {
+                        const resonance = 1 - (minDist / 200);
+                        particleHue = this.hue * (1 - resonance * 0.9) + nearestPattern.hue * (resonance * 0.9);
+                    } else {
+                        particleHue = (this.hue + time * 0.2 + p.phaseOffset * 50) % 360;
                     }
+                    
                     if (p.targetPattern && p.excitement > 0.2) {
-                        particleHue = particleHue * 0.7 + p.targetPattern.hue * 0.3;
+                        particleHue = particleHue * 0.4 + p.targetPattern.hue * 0.6;
                     }
 
                     // Pulsing glow synchronized with field coherence
@@ -558,11 +659,11 @@ const ConsciousnessFractal = () => {
                     const glowIntensity = 6 + fieldCoherence * 8 * coherencePulse + p.excitement * 6;
 
                     ctx.shadowBlur = glowIntensity;
-                    ctx.shadowColor = `hsla(${particleHue}, 80%, 70%, ${particleAlpha * 0.7})`;
-                    ctx.fillStyle = `hsla(${particleHue}, 85%, 72%, ${particleAlpha})`;
-                    ctx.beginPath();
-                    ctx.arc(px, py, particleSize, 0, Math.PI * 2);
-                    ctx.fill();
+                    ctx.shadowColor = `hsla(${particleHue}, 85%, 70%, ${particleAlpha * 0.7})`;
+                    
+                    // Draw morphing shape
+                    this.drawParticleShape(ctx, px, py, particleSize, p.shape, p.rotation, particleHue, particleAlpha);
+                    
                     ctx.shadowBlur = 0;
                 });
             }
