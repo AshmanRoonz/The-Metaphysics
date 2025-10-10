@@ -4,6 +4,7 @@ const ConsciousnessFractal = () => {
     const canvasRef = useRef(null);
     const animationRef = useRef(null);
     const [zoomLevel, setZoomLevel] = useState(1);
+    const zoomRef = useRef(1);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -1192,8 +1193,8 @@ const ConsciousnessFractal = () => {
             time++;
             chaos = updateChaos(chaos);
 
-            // Smooth zoom transition
-            targetZoom = zoomLevel;
+            // Smooth zoom transition using ref
+            targetZoom = zoomRef.current;
             currentZoom += (targetZoom - currentZoom) * 0.05;
 
             ctx.fillStyle = 'rgba(5, 5, 10, 0.12)';
@@ -1393,7 +1394,7 @@ const ConsciousnessFractal = () => {
                 cancelAnimationFrame(animationRef.current);
             }
         };
-    }, [zoomLevel]);
+    }, []);
 
     const handleZoomIn = () => {
         setZoomLevel(prev => Math.min(prev * 1.5, 10));
@@ -1406,6 +1407,11 @@ const ConsciousnessFractal = () => {
     const handleReset = () => {
         setZoomLevel(1);
     };
+
+    // Keep zoomRef in sync with zoomLevel state
+    useEffect(() => {
+        zoomRef.current = zoomLevel;
+    }, [zoomLevel]);
 
     return (
         <div className="w-full h-screen bg-gray-900 overflow-hidden relative">
