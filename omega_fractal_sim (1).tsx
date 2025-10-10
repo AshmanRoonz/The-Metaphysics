@@ -1,0 +1,352 @@
+import React, { useEffect, useRef } from 'react';
+
+const OmegaFractalSimulation = () => {
+  const canvasRef = useRef(null);
+  const animationRef = useRef(null);
+  const stateRef = useRef({
+    time: 0,
+    receipts: [],
+    nextAngle: 0,
+    chaos: { x: 0.1, y: 0.1, z: 0.1 },
+    nextSpawn: 60
+  });
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width = window.innerWidth;
+    const height = canvas.height = window.innerHeight;
+    const centerX = width / 2;
+    const centerY = height / 2;
+
+    const updateChaos = (state) => {
+      const dt = 0.005;
+      const sigma = 10, rho = 28, beta = 8/3;
+      const dx = sigma * (state.y - state.x) * dt;
+      const dy = (state.x * (rho - state.z) - state.y) * dt;
+      const dz = (state.x * state.y - beta * state.z) * dt;
+      return {
+        x: state.x + dx,
+        y: state.y + dy,
+        z: state.z + dz
+      };
+    };
+
+    class Receipt {
+      constructor(angle, hue, birthTime) {
+        this.angle = angle;
+        this.baseHue = hue;
+        this.hue = hue;
+        this.birthTime = birthTime;
+        this.age = 0;
+        this.scale = 1;
+        this.baseLength = 100;
+        this.phaseOffset = Math.random() * Math.PI * 2;
+        this.evolutionStage = 0; // 0-5+, continuously evolving
+        this.geometryType = 0; // Changes over time
+        this.neighbors = []; // Nearby patterns influence evolution
+      }
+
+      update(time, chaos, allReceipts) {
+        this.age = time - this.birthTime;
+        
+        // Fractal compression
+        const ageScale = Math.max(0.15, 1 / (1 + this.age * 0.002));
+        this.scale = ageScale;
+        
+        // Evolution stage grows continuously
+        this.evolutionStage = this.age * 0.008 + chaos.x * 0.5;
+        
+        // Geometry type cycles through different forms
+        this.geometryType = (this.evolutionStage * 0.7 + chaos.y * 2) % 6;
+        
+        // Find nearby receipts to influence evolution
+        this.neighbors = allReceipts.filter(r => {
+          if (r === this) return false;
+          const angleDiff = Math.abs(this.angle - r.angle);
+          return angleDiff < 0.8 && r.scale > 0.3; // Close in angle and visible
+        });
+        
+        // Hue evolution influenced by neighbors
+        let neighborHueInfluence = 0;
+        if (this.neighbors.length > 0) {
+          neighborHueInfluence = this.neighbors.reduce((sum, n) => sum + n.hue, 0) / this.neighbors.length;
+        }
+        this.hue = (this.baseHue + this.age * 0.1 + chaos.z * 0.5 + neighborHueInfluence * 0.1) % 360;
+      }
+
+      draw(ctx, centerX, centerY, time, chaos) {
+        const length = this.baseLength * this.scale;
+        if (length < 3) return;
+        
+        const alpha = Math.min(0.9, 0.3 + this.scale * 0.6);
+        
+        this.drawBranch(ctx, centerX, centerY, length, this.angle, 5, this.hue, alpha, time, 0);
+      }
+
+      drawBranch(ctx, x, y, length, angle, depth, hue, baseAlpha, time, gen) {
+        if (depth === 0 || length < 1) {
+          // Always draw evolved body at branch tip - never disappear
+          this.drawEvolvingBody(ctx, x, y, angle, hue, Math.max(baseAlpha, 0.4), time);
+          return;
+        }
+
+        const endX = x + length * Math.cos(angle);
+        const endY = y + length * Math.sin(angle);
+
+        const alpha = baseAlpha * (depth / 6);
+        const localHue = (hue + gen * 8) % 360;
+        
+        ctx.strokeStyle = `hsla(${localHue}, 75%, 55%, ${alpha})`;
+        ctx.lineWidth = Math.max(0.5, depth * 1.0 * this.scale);
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(endX, endY);
+        ctx.stroke();
+
+        // Evolving body structures at nodes - always visible
+        if (depth > 2 && depth < 6) {
+          this.drawEvolvingBody(ctx, endX, endY, angle, localHue, Math.max(alpha, 0.3), time);
+        }
+
+        // Recursive branches
+        const branchAngle = Math.PI / 5.5;
+        const lengthMult = 0.67;
+        
+        this.drawBranch(ctx, endX, endY, length * lengthMult, angle - branchAngle, depth - 1, localHue, baseAlpha, time, gen + 1);
+        this.drawBranch(ctx, endX, endY, length * lengthMult, angle + branchAngle, depth - 1, localHue, baseAlpha, time, gen + 1);
+        
+        if (depth > 4 && Math.sin(time * 0.015 + gen + this.phaseOffset) > 0.6) {
+          this.drawBranch(ctx, endX, endY, length * lengthMult * 0.75, angle, depth - 1, localHue, baseAlpha, time, gen + 1);
+        }
+      }
+
+      drawEvolvingBody(ctx, x, y, angle, hue, baseAlpha, time) {
+        // Ensure bodies always visible with minimum size and alpha
+        const minSize = 3;
+        const size = Math.max(minSize, 5 * this.scale);
+        const alpha = Math.max(0.5, baseAlpha * Math.max(0.6, this.scale));
+        const stage = Math.floor(this.geometryType);
+        const transition = this.geometryType - stage;
+        
+        // Rotation based on time and evolution
+        const rotation = time * 0.01 * this.evolutionStage + this.phaseOffset;
+        
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(rotation);
+        
+        // Continuously cycle through geometries - never stopping
+        const cycleStage = stage % 6;
+        
+        switch(cycleStage) {
+          case 0: // Triangle
+            this.drawGeometry(ctx, size, 3 + transition, hue, alpha, 1);
+            break;
+          case 1: // Square
+            this.drawGeometry(ctx, size, 4 + transition, hue, alpha, 1);
+            break;
+          case 2: // Pentagon
+            this.drawGeometry(ctx, size, 5 + transition, hue, alpha, 1);
+            break;
+          case 3: // Hexagon
+            this.drawGeometry(ctx, size, 6 + transition, hue, alpha, 1);
+            break;
+          case 4: // Star
+            this.drawStar(ctx, size, 6 + Math.floor(transition * 3), hue, alpha);
+            break;
+          case 5: // Mandala → back to Triangle (continuous cycle)
+            this.drawMandala(ctx, size, hue, alpha * (1 - transition));
+            if (transition > 0.5) {
+              this.drawGeometry(ctx, size * transition, 3, hue, alpha * transition, 1);
+            }
+            break;
+        }
+        
+        ctx.restore();
+        
+        // Draw lightning-like connections to nearby neighbors
+        if (this.neighbors.length > 0) {
+          this.drawLightning(ctx, x, y, alpha);
+        }
+      }
+
+      drawGeometry(ctx, size, sides, hue, alpha, opacity) {
+        const numSides = Math.floor(sides);
+        const nextSides = numSides + 1;
+        const blend = sides - numSides;
+        
+        // Draw current geometry
+        ctx.beginPath();
+        for (let i = 0; i <= numSides; i++) {
+          const a = (Math.PI * 2 * i) / numSides - Math.PI / 2;
+          const px = size * Math.cos(a);
+          const py = size * Math.sin(a);
+          if (i === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+        ctx.fillStyle = `hsla(${hue}, 80%, 60%, ${alpha * opacity * (1 - blend * 0.5)})`;
+        ctx.fill();
+        ctx.strokeStyle = `hsla(${(hue + 60) % 360}, 75%, 55%, ${alpha * opacity})`;
+        ctx.lineWidth = 2 * this.scale;
+        ctx.stroke();
+        
+        // Blend with next geometry
+        if (blend > 0.1) {
+          ctx.beginPath();
+          for (let i = 0; i <= nextSides; i++) {
+            const a = (Math.PI * 2 * i) / nextSides - Math.PI / 2;
+            const px = size * Math.cos(a);
+            const py = size * Math.sin(a);
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+          }
+          ctx.closePath();
+          ctx.fillStyle = `hsla(${(hue + 30) % 360}, 80%, 60%, ${alpha * opacity * blend * 0.5})`;
+          ctx.fill();
+        }
+      }
+
+      drawStar(ctx, size, points, hue, alpha) {
+        ctx.beginPath();
+        for (let i = 0; i < points * 2; i++) {
+          const radius = i % 2 === 0 ? size : size * 0.5;
+          const a = (Math.PI * i) / points - Math.PI / 2;
+          const px = radius * Math.cos(a);
+          const py = radius * Math.sin(a);
+          if (i === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+        ctx.fillStyle = `hsla(${hue}, 85%, 65%, ${alpha})`;
+        ctx.fill();
+        ctx.strokeStyle = `hsla(${(hue + 60) % 360}, 80%, 60%, ${alpha})`;
+        ctx.lineWidth = 2 * this.scale;
+        ctx.stroke();
+      }
+
+      drawMandala(ctx, size, hue, alpha) {
+        const layers = 3;
+        for (let layer = layers; layer > 0; layer--) {
+          const layerSize = size * (layer / layers);
+          const petals = 6 + layer * 2;
+          
+          for (let i = 0; i < petals; i++) {
+            const a = (Math.PI * 2 * i) / petals;
+            const px = layerSize * 0.7 * Math.cos(a);
+            const py = layerSize * 0.7 * Math.sin(a);
+            
+            ctx.beginPath();
+            ctx.arc(px, py, layerSize * 0.3, 0, Math.PI * 2);
+            ctx.fillStyle = `hsla(${(hue + layer * 20) % 360}, 80%, 60%, ${alpha * 0.6})`;
+            ctx.fill();
+          }
+        }
+        
+        // Center
+        ctx.beginPath();
+        ctx.arc(0, 0, size * 0.3, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${(hue + 90) % 360}, 85%, 70%, ${alpha})`;
+        ctx.fill();
+      }
+
+      drawLightning(ctx, x, y, alpha) {
+        // Simple glowing connection lines - much lighter on performance
+        this.neighbors.slice(0, 2).forEach(neighbor => {
+          const neighborDist = Math.abs(neighbor.angle - this.angle);
+          if (neighborDist < 0.5 && Math.random() > 0.7) { // Only sometimes
+            // Calculate neighbor position
+            const neighborAngle = neighbor.angle;
+            const neighborLength = neighbor.baseLength * neighbor.scale;
+            const nx = canvas.width / 2 + neighborLength * Math.cos(neighborAngle);
+            const ny = canvas.height / 2 + neighborLength * Math.sin(neighborAngle);
+            
+            // Simple straight line with subtle glow
+            ctx.strokeStyle = `hsla(${(this.hue + neighbor.hue) / 2}, 70%, 65%, ${alpha * 0.3})`;
+            ctx.lineWidth = Math.max(0.5, this.scale * 1.5);
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(nx, ny);
+            ctx.stroke();
+          }
+        });
+      }
+    }
+
+    const animate = () => {
+      const state = stateRef.current;
+      
+      ctx.fillStyle = 'rgba(0, 0, 5, 0.12)';
+      ctx.fillRect(0, 0, width, height);
+
+      state.time += 1;
+      state.chaos = updateChaos(state.chaos);
+
+      // Spawn new pattern at NEW angle
+      if (state.time >= state.nextSpawn) {
+        const angleIncrement = (Math.PI * 2 * 0.618034);
+        const newAngle = state.nextAngle;
+        const newHue = (state.nextAngle * 57.2958 + state.chaos.z * 20) % 360;
+        
+        state.receipts.push(new Receipt(newAngle, newHue, state.time));
+        
+        state.nextAngle = (state.nextAngle + angleIncrement) % (Math.PI * 2);
+        state.nextSpawn = state.time + 40 + Math.abs(state.chaos.x) * 20;
+      }
+
+      // Draw central Ω (no rotation, just pulsing)
+      ctx.save();
+      ctx.translate(centerX, centerY);
+      
+      const pulse = 0.8 + Math.sin(state.time * 0.02) * 0.2;
+      
+      ctx.shadowBlur = 35 * pulse;
+      ctx.shadowColor = `hsla(200, 70%, 60%, 0.8)`;
+      ctx.font = 'bold 56px serif';
+      ctx.fillStyle = `hsla(200, 90%, 70%, ${pulse})`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('Ω', 0, 0);
+      
+      ctx.beginPath();
+      ctx.strokeStyle = `hsla(180, 60%, 50%, ${0.25 * pulse})`;
+      ctx.lineWidth = 2;
+      ctx.arc(0, 0, 60, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      ctx.restore();
+
+      // Update and draw all receipts
+      state.receipts.forEach(receipt => {
+        receipt.update(state.time, state.chaos, state.receipts);
+        receipt.draw(ctx, centerX, centerY, state.time, state.chaos);
+      });
+
+      if (state.receipts.length > 60) {
+        state.receipts = state.receipts.slice(-60);
+      }
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <div className="w-full h-screen bg-gray-900 overflow-hidden">
+      <canvas ref={canvasRef} className="w-full h-full" />
+    </div>
+  );
+};
+
+export default OmegaFractalSimulation;
