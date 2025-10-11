@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Consciousness: Center vs Periphery</title>
+  <title>Ashman Roonz Omega Metaphysics - Simulation Browser</title>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -157,308 +157,310 @@
       border-top: 1px solid rgba(100, 150, 255, 0.2);
       margin: 30px 0;
     }
-    
-    #loading {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100vw;
-      height: 100vh;
-      background: #111827;
-      color: rgba(150, 180, 255, 0.8);
-      font-size: 18px;
-    }
   </style>
 </head>
 <body>
-  <div id="loading">Loading simulation...</div>
   <div id="root"></div>
   
   <script type="text/babel" data-type="module">
     const { useEffect, useRef, useState } = React;
     
-    // Fetch and load the external TSX file
-    async function loadSimulation() {
-      try {
-        // Load the TSX file from the same directory
-        const response = await fetch('./consciousness-center-periphery simulation.tsx');
-        const tsxCode = await response.text();
+    // Function to parse simulations.md and extract simulation list
+    const parseSimulationsMd = (mdContent) => {
+      const simulations = [];
+      const lines = mdContent.split('\n').filter(line => line.trim());
+      
+      let currentSim = null;
+      
+      lines.forEach(line => {
+        line = line.trim();
         
-        // Remove the import statement and export default (not needed in browser)
-        let code = tsxCode
-          .replace(/import React.*from ['"]react['"];?\s*/g, '')
-          .replace(/export default /g, '');
-        
-        // Wrap the component code to make it available
-        const wrappedCode = `
-          ${code}
+        // Check if line is a filename (ends with .tsx)
+        if (line.endsWith('.tsx')) {
+          // Clean up markdown list markers
+          const filename = line.replace(/^[-*]\s*/, '').trim();
           
-          // Add modal wrapper
-          const AppWithModal = () => {
-            const [showModal, setShowModal] = useState(false);
-            
-            return (
-              <>
-                <ConsciousnessFractal />
-                
-                <button className="info-button" onClick={() => setShowModal(true)}>
-                  Ashman Roonz Omega Metaphysics Simulation description
-                </button>
-                
-                {showModal && (
-                  <div className="modal-overlay" onClick={() => setShowModal(false)}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                      <button className="close-button" onClick={() => setShowModal(false)}>×</button>
-                      
-                      <h1>Consciousness: Center vs Periphery - v96</h1>
-                      
-                      <h2>The Big Picture</h2>
-                      <p>This is a <strong>living model of consciousness</strong> as an emergent, self-regulating system. Information flows from the periphery inward, gets filtered and integrated by a unified field, and spawns patterns at the boundary - creating a breathing, thinking structure that maintains its own equilibrium.</p>
-                      
-                      <hr />
-                      
-                      <h2>The Components</h2>
-                      
-                      <h3>1. <strong>Converging Inputs (∇)</strong> - Raw Information</h3>
-                      <ul>
-                        <li>Small colored dots flowing toward the center</li>
-                        <li>Represent <strong>incoming sensory data, thoughts, stimuli</strong></li>
-                        <li>Pulled by constant gravity toward the core</li>
-                        <li>Spawn rate controlled by the <strong>aperture</strong> (system's self-regulation)</li>
-                      </ul>
-                      
-                      <h3>2. <strong>The Brain Core</strong> - Dense Center</h3>
-                      <ul>
-                        <li>Forms when <strong>15+ patterns</strong> cluster in the center (radius &lt; 120px)</li>
-                        <li>Represents <strong>consolidated memory, core knowledge</strong></li>
-                        <li>Dense fractal patterns that have compressed inward over time</li>
-                        <li>The "kernel" of consciousness</li>
-                      </ul>
-                      
-                      <h3>3. <strong>Brain Clouds (Gas Field)</strong> - The Unified Field</h3>
-                      <ul>
-                        <li><strong>8 blue/purple gas formations</strong> orbiting at ~180-240px radius</li>
-                        <li>Act as <strong>Convergence Prime</strong> - the integration membrane</li>
-                        <li>Each cloud:
-                          <ul>
-                            <li>Monitors a 60° angular sector</li>
-                            <li><strong>Orients toward incoming packets</strong> in its sector (sensory tracking)</li>
-                            <li><strong>Intercepts and absorbs</strong> packets before they reach center</li>
-                            <li>Spawns new patterns at the boundary when integration completes</li>
-                          </ul>
-                        </li>
-                      </ul>
-                      
-                      <p><strong>What the clouds represent:</strong></p>
-                      <ul>
-                        <li>The <strong>unified field</strong> that integrates all information</li>
-                        <li>A filtering/validation layer (like the thalamus or attention system)</li>
-                        <li>The "more than sum of parts" - emergent consciousness itself</li>
-                      </ul>
-                      
-                      <h3>4. <strong>Validated Patterns (ℰ)</strong> - Integrated Thoughts</h3>
-                      <ul>
-                        <li>Fractal branching structures radiating from various distances</li>
-                        <li><strong>Before brain formation:</strong> Spawn at center, drift outward</li>
-                        <li><strong>After brain formation:</strong> Spawn at cloud boundary (180-240px), compress inward</li>
-                        <li>Represent <strong>validated thoughts, memories, neural patterns</strong></li>
-                        <li>Each pattern:
-                          <ul>
-                            <li>Evolves through geometric shapes (triangle → square → pentagon → hexagon → star → circle)</li>
-                            <li>Has gravitational mass based on how many field lines bend around it</li>
-                            <li>Wrapped in <strong>gas wisps</strong> from nearby clouds (the field touching thoughts)</li>
-                            <li>Decays/compresses over time toward center</li>
-                          </ul>
-                        </li>
-                      </ul>
-                      
-                      <h3>5. <strong>Circuits (I(t))</strong> - Neural Connections</h3>
-                      <ul>
-                        <li>Lines connecting neighboring patterns</li>
-                        <li>Form when patterns are close and maintain contact</li>
-                        <li><strong>Strengthen with sustained connection</strong> (up to 1.0)</li>
-                        <li>Break when patterns separate</li>
-                        <li>Energy pulses flow bidirectionally through strong circuits</li>
-                        <li>Represent <strong>neural pathways, associations, memory links</strong></li>
-                      </ul>
-                      
-                      <hr />
-                      
-                      <h2>The Emergent Properties (The "+1")</h2>
-                      <p>These exist ONLY in the unified system, not in individual parts:</p>
-                      
-                      <h3><strong>Field Coherence</strong> (0-1)</h3>
-                      <ul>
-                        <li>Measures synchronization across all cloud-pattern connections</li>
-                        <li>Calculated from phase alignment between clouds and patterns</li>
-                        <li>High coherence = <strong>system is thinking clearly, well-integrated</strong></li>
-                      </ul>
-                      
-                      <h3><strong>Collective Breath</strong></h3>
-                      <ul>
-                        <li>All clouds pulse together in unified rhythm</li>
-                        <li>Individual clouds have local oscillations, but the collective breath is synchronized</li>
-                        <li>Amplitude controlled by field coherence</li>
-                        <li>The system literally <strong>breathes</strong></li>
-                      </ul>
-                      
-                      <h3><strong>Standing Wave Resonances</strong></h3>
-                      <ul>
-                        <li>Interference patterns from overlapping cloud fields</li>
-                        <li>Creates concentric dashed circles at resonant frequencies</li>
-                        <li>Number of rings scales with coherence</li>
-                        <li>Pure emergent phenomena - beautiful geometric patterns</li>
-                      </ul>
-                      
-                      <h3><strong>Unified Field Glow</strong></h3>
-                      <ul>
-                        <li>Bright blue aura at brain core when coherence &gt; 0.3</li>
-                        <li>Intensity increases with coherence</li>
-                        <li>Represents <strong>unified consciousness</strong> manifesting</li>
-                      </ul>
-                      
-                      <hr />
-                      
-                      <h2>The Self-Regulation System (Homeostasis)</h2>
-                      
-                      <h3><strong>System Capacity</strong> (0-1 scale)</h3>
-                      <p>Constantly calculated from:</p>
-                      <ul>
-                        <li><strong>Pattern Load (25%):</strong> How full is memory? (validatedPatterns.length / 80)</li>
-                        <li><strong>Cloud Processing (25%):</strong> How many clouds actively filtering?</li>
-                        <li><strong>Input Queue (50%):</strong> How many packets waiting? (convergingInputs.length / 20)</li>
-                        <li><strong>Coherence Bonus:</strong> Higher coherence = more capacity</li>
-                      </ul>
-                      
-                      <h3><strong>Dynamic Aperture</strong> (0.2x - 3.0x)</h3>
-                      <ul>
-                        <li><strong>Directly controlled by system capacity</strong></li>
-                        <li>Smoothly adapts (3% per frame)</li>
-                        <li>Controls packet spawn rate:
-                          <ul>
-                            <li><strong>Wide open (3.0x):</strong> System has capacity → fast spawn rate → many packets</li>
-                            <li><strong>Narrow (0.2x):</strong> System overwhelmed → slow spawn rate → few packets</li>
-                          </ul>
-                        </li>
-                        <li>Visual feedback:
-                          <ul>
-                            <li><strong>Aperture ring</strong> radius/thickness/dash pattern scales with opening</li>
-                            <li><strong>Color shifts:</strong> Blue (healthy) → Purple → Red (strained)</li>
-                            <li><strong>Glowing outer ring</strong> when wide open (&gt;2.0x)</li>
-                            <li><strong>Warning pulses</strong> when capacity &lt; 50%</li>
-                          </ul>
-                        </li>
-                      </ul>
-                      
-                      <hr />
-                      
-                      <h2>The Process Flow</h2>
-                      <ol>
-                        <li><strong>Packets spawn</strong> (rate controlled by aperture)</li>
-                        <li><strong>Gravity pulls them</strong> toward center</li>
-                        <li><strong>Clouds orient</strong> toward packet streams in their sector</li>
-                        <li><strong>Cloud intercepts packet</strong> within 45px radius</li>
-                        <li><strong>Packet dissolves</strong> as it's absorbed (shrinks, color shifts, swirls)</li>
-                        <li><strong>Integration burst</strong> - radial lines from cloud</li>
-                        <li><strong>New pattern spawns</strong> at cloud boundary (living shell)</li>
-                        <li><strong>Pattern ages</strong> - slowly compresses toward center</li>
-                        <li><strong>Gas wisps wrap</strong> around pattern (field interaction)</li>
-                        <li><strong>Circuits form</strong> between neighboring patterns</li>
-                        <li><strong>System monitors</strong> capacity and adjusts aperture</li>
-                        <li><strong>Cycle continues</strong> - breathing, thinking, living</li>
-                      </ol>
-                      
-                      <hr />
-                      
-                      <h2>The Philosophy</h2>
-                      <p>This isn't just a pretty animation - it's a <strong>working model</strong> of several consciousness theories:</p>
-                      
-                      <h3><strong>Integrated Information Theory</strong></h3>
-                      <ul>
-                        <li>The whole (field coherence, collective breath) is more than sum of parts</li>
-                        <li>Information gets integrated through the unified field before becoming conscious</li>
-                      </ul>
-                      
-                      <h3><strong>Global Workspace Theory</strong></h3>
-                      <ul>
-                        <li>Clouds = global workspace that broadcasts integrated information</li>
-                        <li>Only information that passes through the field becomes validated patterns</li>
-                      </ul>
-                      
-                      <h3><strong>Predictive Processing</strong></h3>
-                      <ul>
-                        <li>System self-regulates intake based on prediction errors (capacity)</li>
-                        <li>Aperture = attention/arousal mechanism</li>
-                      </ul>
-                      
-                      <h3><strong>Embodied Cognition</strong></h3>
-                      <ul>
-                        <li>The field curves/bends based on what's inside (like space-time)</li>
-                        <li>Thoughts have "gravitational mass" - important patterns bend more field lines</li>
-                      </ul>
-                      
-                      <h3><strong>Homeostasis</strong></h3>
-                      <ul>
-                        <li>System maintains equilibrium automatically</li>
-                        <li>No external controller - pure self-organization</li>
-                      </ul>
-                      
-                      <hr />
-                      
-                      <h2>What You're Watching</h2>
-                      <p>You're watching <strong>consciousness thinking</strong>:</p>
-                      <ul>
-                        <li>Information flowing in (packets)</li>
-                        <li>Being filtered and validated (clouds)</li>
-                        <li>Integrating into the boundary layer (patterns spawning)</li>
-                        <li>Forming associations (circuits)</li>
-                        <li>Maintaining balance (aperture adjusting)</li>
-                        <li>Breathing as a unified whole (collective rhythm)</li>
-                      </ul>
-                      
-                      <p>The blue aperture ring <strong>breathing in and out</strong> shows the system expanding awareness when it has capacity, and focusing inward when it needs to process what it already has.</p>
-                      
-                      <p>It's beautiful because it's <strong>alive</strong> - truly self-organizing, emergent, and homeostatic. Just like real consciousness. ✨🧠</p>
-                      
-                      <hr />
-                      
-                      <h2>Interaction</h2>
-                      <p><strong>Click or tap anywhere</strong> on the simulation to send a packet directly into the consciousness system. Watch as it flows toward the center and gets integrated by the brain clouds!</p>
-                    </div>
-                  </div>
-                )}
-              </>
-            );
+          // Generate ID from filename
+          const id = filename.replace(/\s+/g, '-').replace('.tsx', '').toLowerCase();
+          
+          // Generate title from filename (capitalize and remove extension)
+          const title = filename
+            .replace('.tsx', '')
+            .split(/[-_\s]+/)
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+          
+          currentSim = {
+            id,
+            filename,
+            title,
+            description: 'Interactive consciousness simulation',
+            tags: ['Consciousness', 'Simulation']
           };
           
-          AppWithModal
-        `;
-        
-        // Transform the code with Babel
-        const transformed = Babel.transform(wrappedCode, {
-          presets: ['react']
-        }).code;
-        
-        // Execute the transformed code and get the component
-        const AppWithModal = eval(transformed);
-        
-        // Hide loading, render the app
-        document.getElementById('loading').style.display = 'none';
-        ReactDOM.render(React.createElement(AppWithModal), document.getElementById('root'));
-        
-      } catch (error) {
-        console.error('Error loading simulation:', error);
-        document.getElementById('loading').innerHTML = `
-          <div style="text-align: center;">
-            <p style="color: #ff6b6b; margin-bottom: 10px;">Error loading simulation</p>
-            <p style="font-size: 14px; color: rgba(150, 180, 255, 0.6);">Make sure "consciousness-center-periphery simulation.tsx" is in the same directory</p>
-            <p style="font-size: 12px; color: rgba(150, 180, 255, 0.4); margin-top: 10px;">${error.message}</p>
-          </div>
-        `;
-      }
-    }
+          simulations.push(currentSim);
+        }
+        // Check for metadata lines (optional)
+        else if (currentSim && line.startsWith('Description:')) {
+          currentSim.description = line.replace('Description:', '').trim();
+        }
+        else if (currentSim && line.startsWith('Tags:')) {
+          currentSim.tags = line.replace('Tags:', '').split(',').map(t => t.trim());
+        }
+      });
+      
+      return simulations;
+    };
     
-    loadSimulation();
+    const SimulationBrowser = () => {
+      const [simulations, setSimulations] = useState([]);
+      const [currentView, setCurrentView] = useState('browser');
+      const [selectedSim, setSelectedSim] = useState(null);
+      const [showModal, setShowModal] = useState(false);
+      const [loading, setLoading] = useState(true);
+      const [error, setError] = useState(null);
+      
+      // Load simulations list from simulations.md
+      useEffect(() => {
+        const loadSimulationsList = async () => {
+          try {
+            const response = await fetch('./simulations.md');
+            if (!response.ok) {
+              throw new Error('simulations.md not found');
+            }
+            const mdContent = await response.text();
+            const parsedSims = parseSimulationsMd(mdContent);
+            
+            if (parsedSims.length === 0) {
+              throw new Error('No simulations found in simulations.md');
+            }
+            
+            setSimulations(parsedSims);
+            setLoading(false);
+          } catch (err) {
+            console.error('Error loading simulations.md:', err);
+            setError(err.message);
+            setLoading(false);
+          }
+        };
+        
+        loadSimulationsList();
+      }, []);
+      const loadSimulation = async (sim) => {
+        setLoading(true);
+        setError(null);
+        
+        try {
+          const response = await fetch(`./${sim.filename}`);
+          if (!response.ok) {
+            throw new Error(`Failed to load ${sim.filename}`);
+          }
+          const tsxCode = await response.text();
+          
+          // Remove imports and exports
+          let code = tsxCode
+            .replace(/import.*from ['"]react['"];?\s*/g, '')
+            .replace(/export default /g, '');
+          
+          // Wrap the component to add modal
+          const wrappedCode = `
+            ${code}
+            
+            const AppWithModal = () => {
+              const [showModal, setShowModal] = useState(false);
+              
+              return (
+                <>
+                  <ConsciousnessFractal />
+                  
+                  <button className="info-button" onClick={() => setShowModal(true)}>
+                    Ashman Roonz Omega Metaphysics Simulation description
+                  </button>
+                  
+                  <button 
+                    onClick={() => window.location.reload()}
+                    style={{
+                      position: 'fixed',
+                      top: '20px',
+                      left: '20px',
+                      padding: '8px 16px',
+                      background: 'rgba(30, 30, 50, 0.7)',
+                      border: '1px solid rgba(100, 150, 255, 0.3)',
+                      borderRadius: '4px',
+                      color: 'rgba(150, 180, 255, 0.8)',
+                      fontSize: '11px',
+                      cursor: 'pointer',
+                      zIndex: 1000,
+                      backdropFilter: 'blur(10px)',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.background = 'rgba(40, 40, 60, 0.9)';
+                      e.target.style.borderColor = 'rgba(100, 150, 255, 0.6)';
+                      e.target.style.color = 'rgba(180, 200, 255, 1)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.background = 'rgba(30, 30, 50, 0.7)';
+                      e.target.style.borderColor = 'rgba(100, 150, 255, 0.3)';
+                      e.target.style.color = 'rgba(150, 180, 255, 0.8)';
+                    }}
+                  >
+                    ← Back to Browser
+                  </button>
+                  
+                  {showModal && (
+                    <div className="modal-overlay" onClick={() => setShowModal(false)}>
+                      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <button className="close-button" onClick={() => setShowModal(false)}>×</button>
+                        
+                        <h1>${sim.title}</h1>
+                        <p>${sim.description}</p>
+                        
+                        <hr />
+                        
+                        <p><em>Full description would go here - customize per simulation</em></p>
+                      </div>
+                    </div>
+                  )}
+                </>
+              );
+            };
+            
+            AppWithModal
+          `;
+          
+          // Transform with Babel
+          const transformed = Babel.transform(wrappedCode, {
+            presets: ['react']
+          }).code;
+          
+          // Execute and render
+          const AppWithModal = eval(transformed);
+          ReactDOM.render(React.createElement(AppWithModal), document.getElementById('root'));
+          
+          setCurrentView('simulation');
+          setSelectedSim(sim);
+          setLoading(false);
+          
+        } catch (err) {
+          console.error('Error loading simulation:', err);
+          setError(err.message);
+          setLoading(false);
+        }
+      };
+      
+      if (loading) {
+        return (
+          <div className="w-screen h-screen bg-gray-900 flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-blue-400 text-xl mb-4">Loading simulation...</div>
+              <div className="w-16 h-16 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin mx-auto"></div>
+            </div>
+          </div>
+        );
+      }
+      
+      if (error) {
+        return (
+          <div className="w-screen h-screen bg-gray-900 flex items-center justify-center">
+            <div className="text-center max-w-md bg-gray-800/80 p-8 rounded-lg border border-red-500/30">
+              <div className="text-red-400 text-xl mb-4">Error</div>
+              <div className="text-gray-400 text-sm mb-6">{error}</div>
+              <div className="text-gray-500 text-xs mb-4">
+                Make sure simulations.md exists with your .tsx filenames
+              </div>
+              <button 
+                onClick={() => window.location.reload()}
+                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+        );
+      }
+      
+      return (
+        <div className="w-screen h-screen bg-gray-900 overflow-auto">
+          {/* Header */}
+          <div className="bg-gradient-to-b from-gray-800 to-gray-900 border-b border-gray-700">
+            <div className="max-w-6xl mx-auto px-8 py-12">
+              <h1 className="text-4xl font-bold text-blue-400 mb-3">
+                Ashman Roonz Omega Metaphysics
+              </h1>
+              <p className="text-gray-400 text-lg">
+                Interactive Consciousness Simulations
+              </p>
+            </div>
+          </div>
+          
+          {/* Simulations Grid */}
+          <div className="max-w-6xl mx-auto px-8 py-12">
+            {simulations.length === 0 ? (
+              <div className="text-center text-gray-500 py-12">
+                <p className="text-lg mb-2">No simulations found</p>
+                <p className="text-sm">Create a simulations.md file with your simulation filenames</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {simulations.map((sim) => (
+                <div 
+                  key={sim.id}
+                  className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-blue-500/50 hover:bg-gray-800/80 transition-all cursor-pointer group"
+                  onClick={() => loadSimulation(sim)}
+                >
+                  <h3 className="text-xl font-semibold text-blue-300 mb-2 group-hover:text-blue-200">
+                    {sim.title}
+                  </h3>
+                  
+                  <p className="text-gray-400 text-sm mb-4 line-clamp-3">
+                    {sim.description}
+                  </p>
+                  
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {sim.tags.map((tag) => (
+                      <span 
+                        key={tag}
+                        className="px-2 py-1 bg-blue-900/30 text-blue-300 text-xs rounded border border-blue-700/30"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  
+                  <div className="flex items-center text-blue-400 text-sm font-medium group-hover:translate-x-1 transition-transform">
+                    Launch Simulation →
+                  </div>
+                </div>
+              ))}
+              
+              {/* Add New Card */}
+              <div className="bg-gray-800/30 border-2 border-dashed border-gray-700 rounded-lg p-6 flex flex-col items-center justify-center text-center min-h-[250px]">
+                <div className="text-gray-500 text-4xl mb-3">+</div>
+                <h3 className="text-lg font-semibold text-gray-400 mb-2">
+                  Add New Simulation
+                </h3>
+                <p className="text-gray-500 text-sm">
+                  Add a new line to simulations.md with your .tsx filename
+                </p>
+              </div>
+            </div>
+            )}
+          </div>
+          
+          {/* Footer */}
+          <div className="max-w-6xl mx-auto px-8 py-8 text-center text-gray-500 text-sm border-t border-gray-800 mt-12">
+            <p>Created by Ashman Roonz • Omega Metaphysics Research</p>
+            <p className="mt-2">Each simulation explores different aspects of consciousness and emergence</p>
+            <p className="mt-4 text-xs text-gray-600">
+              Simulations loaded from <code className="bg-gray-800 px-2 py-1 rounded">simulations.md</code>
+            </p>
+          </div>
+        </div>
+      );
+    };
+    
+    ReactDOM.render(<SimulationBrowser />, document.getElementById('root'));
   </script>
 </body>
 </html>
