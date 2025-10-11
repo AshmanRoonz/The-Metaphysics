@@ -5,6 +5,13 @@ const ConsciousnessFractal = () => {
     const animationRef = useRef(null);
     const [zoomLevel, setZoomLevel] = useState(1);
     const zoomRef = useRef(1);
+    
+    // MEMORY SYSTEM - In-memory storage (persists during session)
+    const memorySystemRef = useRef({
+        persistentPatterns: [],
+        circuitMemory: new Map(), // Store successful circuits
+        patternReceipts: new Map() // Track connection counts
+    });
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -35,6 +42,10 @@ const ConsciousnessFractal = () => {
         let fieldCoherence = 0;
         let fieldResonance = [];
         let collectiveBreath = 0;
+        
+        // MEMORY: Receipt threshold for reinforcement learning
+        const RECEIPT_THRESHOLD = 5;
+        const MEMORY_BONUS_LONGEVITY = 0.7; // Patterns with high receipts live longer
 
         const updateChaos = (state) => {
             const dt = 0.005;
@@ -47,6 +58,41 @@ const ConsciousnessFractal = () => {
                 y: state.y + dy,
                 z: state.z + dz
             };
+        };
+        
+        // MEMORY: Store successful circuit in memory ledger
+        const recordCircuitMemory = (pattern1, pattern2) => {
+            const key = `${Math.min(pattern1.id, pattern2.id)}-${Math.max(pattern1.id, pattern2.id)}`;
+            const memory = memorySystemRef.current.circuitMemory;
+            
+            if (!memory.has(key)) {
+                memory.set(key, {
+                    pattern1Angle: pattern1.angle,
+                    pattern2Angle: pattern2.angle,
+                    pattern1Hue: pattern1.baseHue,
+                    pattern2Hue: pattern2.baseHue,
+                    strength: 1,
+                    successCount: 1
+                });
+            } else {
+                const record = memory.get(key);
+                record.successCount++;
+                record.strength = Math.min(1, record.strength + 0.1);
+            }
+        };
+        
+        // MEMORY: Increment pattern receipt (connection count)
+        const incrementPatternReceipt = (pattern) => {
+            const receipts = memorySystemRef.current.patternReceipts;
+            const currentCount = receipts.get(pattern.id) || 0;
+            receipts.set(pattern.id, currentCount + 1);
+            pattern.receipts = currentCount + 1;
+        };
+        
+        // MEMORY: Check if pattern has learned (exceeded receipt threshold)
+        const hasPatternLearned = (pattern) => {
+            const receipts = memorySystemRef.current.patternReceipts;
+            return (receipts.get(pattern.id) || 0) >= RECEIPT_THRESHOLD;
         };
 
         const checkBrainFormation = () => {
@@ -224,7 +270,7 @@ const ConsciousnessFractal = () => {
                 this.connectedPatterns = [];
                 this.energyLevel = 0;
 
-                for (let i = 0; i < 30; i++) { // Increased from 20 for denser membrane
+                for (let i = 0; i < 30; i++) {
                     this.particles.push({
                         angle: angle + (Math.random() - 0.5) * 0.8,
                         distOffset: (Math.random() - 0.5) * 50,
@@ -238,7 +284,7 @@ const ConsciousnessFractal = () => {
                         targetShape: 0,
                         rotation: Math.random() * Math.PI * 2,
                         rotationSpeed: (Math.random() - 0.5) * 0.02,
-                        nestingPatterns: [] // Patterns that nest into this particle
+                        nestingPatterns: []
                     });
                 }
             }
@@ -358,7 +404,6 @@ const ConsciousnessFractal = () => {
             }
 
             draw(ctx, centerX, centerY, time, fieldCoherence, allPatterns) {
-                // Calculate particle positions first
                 const particlePositions = [];
                 
                 this.particles.forEach(p => {
@@ -367,7 +412,6 @@ const ConsciousnessFractal = () => {
                     let px = centerX + Math.cos(baseParticleAngle) * baseParticleDist;
                     let py = centerY + Math.sin(baseParticleAngle) * baseParticleDist;
 
-                    // Find patterns nesting into this particle
                     p.nestingPatterns = [];
                     allPatterns.forEach(pattern => {
                         const tipX = pattern.x;
@@ -382,7 +426,6 @@ const ConsciousnessFractal = () => {
                                 resonance: resonance
                             });
                             
-                            // TENSION: Store nesting point in pattern
                             if (resonance > 0.5) {
                                 pattern.nestingPoint = { x: px, y: py };
                                 pattern.tensionStrength = resonance;
@@ -455,7 +498,6 @@ const ConsciousnessFractal = () => {
                     });
                 });
 
-                // Draw DENSER crystalline membrane - the flesh
                 const membraneConnectionDistance = 80;
                 particlePositions.forEach((p1, i) => {
                     particlePositions.slice(i + 1).forEach(p2 => {
@@ -487,14 +529,12 @@ const ConsciousnessFractal = () => {
                     });
                 });
 
-                // Draw nerve-flesh connections with TENSION
                 particlePositions.forEach(p => {
                     if (p.particle.nestingPatterns && p.particle.nestingPatterns.length > 0) {
                         p.particle.nestingPatterns.forEach(nest => {
                             const pattern = nest.pattern;
                             const resonance = nest.resonance;
                             
-                            // Organic nerve fiber
                             const alpha = resonance * 0.4 * this.alpha;
                             const mixedHue = (pattern.hue + p.hue) / 2;
                             
@@ -510,11 +550,8 @@ const ConsciousnessFractal = () => {
                             ctx.quadraticCurveTo(midX, midY, p.x, p.y);
                             ctx.stroke();
                             
-                            // TENSION LINES - showing strain
                             if (resonance > 0.7) {
-                                // Draw from pattern base (center) through pattern to nesting point
-                                // This shows the stretch
-                                const baseX = centerX + Math.cos(pattern.angle) * 20; // Near center
+                                const baseX = centerX + Math.cos(pattern.angle) * 20;
                                 const baseY = centerY + Math.sin(pattern.angle) * 20;
                                 
                                 const tensionAlpha = resonance * 0.3;
@@ -528,7 +565,6 @@ const ConsciousnessFractal = () => {
                                 ctx.stroke();
                                 ctx.setLineDash([]);
                                 
-                                // Pulsing at high tension
                                 const pulse = Math.sin(time * 0.05 + nest.distance) * 0.5 + 0.5;
                                 ctx.shadowBlur = 8;
                                 ctx.shadowColor = `hsla(${mixedHue}, 90%, 70%, ${pulse * 0.6})`;
@@ -542,7 +578,6 @@ const ConsciousnessFractal = () => {
                     }
                 });
 
-                // Draw particles on top
                 particlePositions.forEach(p => {
                     const coherencePulse = Math.sin(time * 0.05 + p.particle.phaseOffset) * 0.5 + 0.5;
                     const nestingBoost = p.particle.nestingPatterns ? p.particle.nestingPatterns.length * 0.3 : 0;
@@ -595,7 +630,6 @@ const ConsciousnessFractal = () => {
         const drawMindField = (ctx, brainClouds, validatedPatterns, time) => {
             if (!brainFormed || brainClouds.length === 0) return;
 
-            // Collect all high-resonance nesting points
             const activityFlashes = [];
             
             brainClouds.forEach(cloud => {
@@ -603,7 +637,6 @@ const ConsciousnessFractal = () => {
                     if (p.nestingPatterns && p.nestingPatterns.length > 0) {
                         p.nestingPatterns.forEach(nest => {
                             if (nest.resonance > 0.6) {
-                                // Calculate particle position
                                 const baseParticleAngle = p.angle + Math.sin(time * p.speed + p.phaseOffset) * 0.15;
                                 const baseParticleDist = cloud.distance + p.distOffset + Math.cos(time * p.speed * 0.7) * 10;
                                 const px = centerX + Math.cos(baseParticleAngle) * baseParticleDist;
@@ -622,17 +655,14 @@ const ConsciousnessFractal = () => {
                 });
             });
 
-            // Draw MRI-like activity flashes
             activityFlashes.forEach(flash => {
-                // Fast pulsing like neural firing
                 const pulse = Math.sin(time * 0.15 + flash.phase) * 0.5 + 0.5;
-                const flashIntensity = Math.pow(pulse, 3); // Sharp peaks like MRI signals
+                const flashIntensity = Math.pow(pulse, 3);
                 
-                if (flashIntensity > 0.3) { // Only show during peak activity
+                if (flashIntensity > 0.3) {
                     const flashAlpha = flashIntensity * flash.resonance * 0.8;
                     const flashRadius = 15 + flashIntensity * 25;
                     
-                    // Bright core flash
                     const flashGradient = ctx.createRadialGradient(flash.x, flash.y, 0, flash.x, flash.y, flashRadius);
                     flashGradient.addColorStop(0, `hsla(${flash.hue}, 100%, 90%, ${flashAlpha})`);
                     flashGradient.addColorStop(0.3, `hsla(${flash.hue}, 95%, 75%, ${flashAlpha * 0.7})`);
@@ -644,7 +674,6 @@ const ConsciousnessFractal = () => {
                     ctx.arc(flash.x, flash.y, flashRadius, 0, Math.PI * 2);
                     ctx.fill();
                     
-                    // Lightning-like bright center
                     if (flashIntensity > 0.7) {
                         ctx.shadowBlur = 20;
                         ctx.shadowColor = `hsla(${flash.hue}, 100%, 95%, ${flashIntensity})`;
@@ -654,7 +683,6 @@ const ConsciousnessFractal = () => {
                         ctx.fill();
                         ctx.shadowBlur = 0;
                         
-                        // Electrical spread between nearby flashes
                         activityFlashes.forEach(other => {
                             if (other !== flash) {
                                 const dx = other.x - flash.x;
@@ -663,14 +691,13 @@ const ConsciousnessFractal = () => {
                                 
                                 if (dist < 100 && Math.random() < 0.1) {
                                     const otherPulse = Math.sin(time * 0.15 + other.phase) * 0.5 + 0.5;
-                                    if (otherPulse > 0.7) { // Both need to be active
+                                    if (otherPulse > 0.7) {
                                         const arcAlpha = flashIntensity * otherPulse * 0.3;
                                         ctx.strokeStyle = `hsla(${flash.hue}, 100%, 85%, ${arcAlpha})`;
                                         ctx.lineWidth = 1 + flashIntensity * 2;
                                         ctx.beginPath();
                                         ctx.moveTo(flash.x, flash.y);
                                         
-                                        // Jagged lightning path
                                         const midX = (flash.x + other.x) / 2 + (Math.random() - 0.5) * 20;
                                         const midY = (flash.y + other.y) / 2 + (Math.random() - 0.5) * 20;
                                         ctx.lineTo(midX, midY);
@@ -770,7 +797,7 @@ const ConsciousnessFractal = () => {
         }
 
         class ValidatedPattern {
-            constructor(angle, hue, birthTime) {
+            constructor(angle, hue, birthTime, isReincarnated = false) {
                 this.angle = angle;
                 this.baseHue = hue;
                 this.hue = hue;
@@ -788,8 +815,14 @@ const ConsciousnessFractal = () => {
                 this.cloudInfluence = 0;
                 this.fieldEnergyBoost = 0;
                 this.gravitationalMass = 0;
-                this.nestingPoint = null; // Where this pattern nests into membrane
-                this.tensionStrength = 0; // How much tension from nesting
+                this.nestingPoint = null;
+                this.tensionStrength = 0;
+                
+                // MEMORY: Receipt tracking for reinforcement learning
+                this.receipts = 0;
+                this.isLearned = false;
+                this.isReincarnated = isReincarnated;
+                this.memoryGlow = isReincarnated ? 1.0 : 0;
 
                 this.x = centerX + Math.cos(angle) * this.baseLength * this.scale;
                 this.y = centerY + Math.sin(angle) * this.baseLength * this.scale;
@@ -799,9 +832,22 @@ const ConsciousnessFractal = () => {
                 this.age = time - this.birthTime;
 
                 const atBoundary = this.baseLength > 150;
-                const decayRate = atBoundary ? 0.0015 : 0.002;
+                
+                // MEMORY: Apply reinforcement learning - learned patterns decay slower
+                const baseDecayRate = atBoundary ? 0.0015 : 0.002;
+                const learningBonus = hasPatternLearned(this) ? MEMORY_BONUS_LONGEVITY : 0;
+                const decayRate = baseDecayRate * (1 - learningBonus);
+                
                 const ageScale = Math.max(0.15, 1 / (1 + this.age * decayRate));
                 this.scale = ageScale;
+                
+                // Update learned status
+                this.isLearned = hasPatternLearned(this);
+                
+                // Fade memory glow over time
+                if (this.memoryGlow > 0) {
+                    this.memoryGlow = Math.max(0, this.memoryGlow - 0.005);
+                }
 
                 this.x = centerX + Math.cos(this.angle) * this.baseLength * this.scale;
                 this.y = centerY + Math.sin(this.angle) * this.baseLength * this.scale;
@@ -841,11 +887,22 @@ const ConsciousnessFractal = () => {
 
                 const emergentBoost = 1 + this.fieldEnergyBoost;
                 const massBoost = 1 + Math.min(this.gravitationalMass, 1.5);
-                const alpha = Math.min(0.9, (0.3 + this.scale * 0.6) * validationStrength * emergentBoost * massBoost);
+                
+                // MEMORY: Learned patterns glow brighter
+                const memoryBoost = this.isLearned ? 1.3 : 1.0;
+                const alpha = Math.min(0.9, (0.3 + this.scale * 0.6) * validationStrength * emergentBoost * massBoost * memoryBoost);
 
-                if (this.gravitationalMass > 0.5) {
+                // MEMORY: Reincarnated patterns have golden glow that fades
+                if (this.memoryGlow > 0) {
+                    ctx.shadowBlur = 15 * this.memoryGlow;
+                    ctx.shadowColor = `hsla(45, 100%, 70%, ${this.memoryGlow * 0.6})`;
+                } else if (this.gravitationalMass > 0.5) {
                     ctx.shadowBlur = 8 * this.gravitationalMass;
                     ctx.shadowColor = `hsla(${this.hue}, 80%, 65%, ${this.gravitationalMass * 0.15})`;
+                } else if (this.isLearned) {
+                    // Learned patterns have persistent cyan glow
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = `hsla(180, 80%, 70%, 0.4)`;
                 }
 
                 this.drawBranch(ctx, centerX, centerY, length, this.angle, 5, this.hue, alpha, time, 0, validationStrength);
@@ -989,11 +1046,40 @@ const ConsciousnessFractal = () => {
             gradient.addColorStop(1, 'rgba(5, 5, 10, 0)');
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
+            
+            // MEMORY: Reincarnate persistent patterns from previous session
+            if (time === 1 && memorySystemRef.current.persistentPatterns.length > 0) {
+                memorySystemRef.current.persistentPatterns.forEach(savedPattern => {
+                    const reincarnated = new ValidatedPattern(
+                        savedPattern.angle,
+                        savedPattern.hue,
+                        time,
+                        true // Mark as reincarnated
+                    );
+                    // Restore receipt count
+                    memorySystemRef.current.patternReceipts.set(reincarnated.id, savedPattern.receipts || RECEIPT_THRESHOLD);
+                    reincarnated.receipts = savedPattern.receipts || RECEIPT_THRESHOLD;
+                    validatedPatterns.push(reincarnated);
+                });
+            }
+            
+            // MEMORY: Save highly successful patterns for persistence
+            if (time % 120 === 0) { // Every 2 seconds
+                const learnedPatterns = validatedPatterns
+                    .filter(p => hasPatternLearned(p) && p.scale > 0.5)
+                    .slice(0, 5); // Keep top 5
+                    
+                memorySystemRef.current.persistentPatterns = learnedPatterns.map(p => ({
+                    angle: p.angle,
+                    hue: p.baseHue,
+                    receipts: p.receipts
+                }));
+            }
 
             if (!brainFormed && checkBrainFormation()) {
                 brainFormed = true;
 
-                const numClouds = 12; // Increased from 8 for denser boundary
+                const numClouds = 12;
                 for (let i = 0; i < numClouds; i++) {
                     const angle = (i / numClouds) * Math.PI * 2;
                     const distance = 180 + Math.random() * 60;
@@ -1032,7 +1118,6 @@ const ConsciousnessFractal = () => {
             ctx.scale(totalZoom, totalZoom);
             ctx.translate(-centerX, -centerY);
 
-            // MEMBRANE-BASED SENSORY INPUT
             if (brainFormed && brainClouds.length > 0) {
                 brainClouds.forEach(cloud => {
                     if (Math.random() < 0.015) {
@@ -1090,13 +1175,11 @@ const ConsciousnessFractal = () => {
                     cloud.draw(ctx, centerX, centerY, time, fieldCoherence, validatedPatterns);
                 });
                 
-                // Draw inter-cloud membrane connections for continuous flesh
                 brainClouds.forEach((cloud1, i) => {
                     brainClouds.slice(i + 1).forEach(cloud2 => {
                         const angleDiff = Math.abs(cloud1.angle - cloud2.angle);
                         const normalizedDiff = Math.min(angleDiff, Math.PI * 2 - angleDiff);
                         
-                        // Connect adjacent clouds
                         if (normalizedDiff < Math.PI / 4) {
                             const x1 = centerX + Math.cos(cloud1.angle) * cloud1.distance;
                             const y1 = centerY + Math.sin(cloud1.angle) * cloud1.distance;
@@ -1127,6 +1210,13 @@ const ConsciousnessFractal = () => {
 
                     if (existingCircuit) {
                         existingCircuit.update(time, true, fieldCoherence);
+
+                        // MEMORY: Record successful circuit and increment receipts
+                        if (existingCircuit.strength > 0.7) {
+                            recordCircuitMemory(p1, p2);
+                            incrementPatternReceipt(p1);
+                            incrementPatternReceipt(p2);
+                        }
 
                         if (existingCircuit.strength > 0.7 && time - existingCircuit.lastPulseTime > 30) {
                             energyPulses.push(new EnergyPulse(existingCircuit, 1));
@@ -1190,10 +1280,36 @@ const ConsciousnessFractal = () => {
     const handleReset = () => {
         setZoomLevel(1);
     };
+    
+    const handleClearMemory = () => {
+        memorySystemRef.current = {
+            persistentPatterns: [],
+            circuitMemory: new Map(),
+            patternReceipts: new Map()
+        };
+    };
 
     useEffect(() => {
         zoomRef.current = zoomLevel;
     }, [zoomLevel]);
+    
+    const [memoryStats, setMemoryStats] = useState({
+        learned: 0,
+        circuits: 0,
+        persistent: 0
+    });
+    
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setMemoryStats({
+                learned: memorySystemRef.current.patternReceipts.size,
+                circuits: memorySystemRef.current.circuitMemory.size,
+                persistent: memorySystemRef.current.persistentPatterns.length
+            });
+        }, 1000);
+        
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <div className="w-full h-screen bg-gray-900 overflow-hidden relative">
@@ -1221,12 +1337,42 @@ const ConsciousnessFractal = () => {
                 >
                     - Zoom Out
                 </button>
+                <button
+                    onClick={handleClearMemory}
+                    className="bg-red-900/60 hover:bg-red-800/80 text-white px-4 py-2 rounded-lg backdrop-blur-sm border border-red-600/50 transition-colors font-mono text-sm mt-2"
+                    title="Clear all memory"
+                >
+                    Clear Memory
+                </button>
             </div>
             
             <div className="absolute top-8 left-8 text-gray-400 font-mono text-sm bg-gray-800/60 px-4 py-2 rounded-lg backdrop-blur-sm border border-gray-600/30">
                 Temporal Depth: {zoomLevel.toFixed(2)}x
                 <div className="text-xs text-gray-500 mt-1">
                     {zoomLevel > 1.2 ? '← Past' : zoomLevel < 0.8 ? '→ Present' : '⊙ Now'}
+                </div>
+            </div>
+            
+            <div className="absolute top-8 right-8 text-gray-400 font-mono text-xs bg-gray-800/60 px-4 py-3 rounded-lg backdrop-blur-sm border border-cyan-600/30">
+                <div className="text-cyan-400 font-semibold mb-2 text-sm">💾 MEMORY LEDGER</div>
+                <div className="space-y-1">
+                    <div className="flex justify-between gap-4">
+                        <span className="text-gray-500">Learned Patterns:</span>
+                        <span className="text-cyan-300 font-semibold">{memoryStats.learned}</span>
+                    </div>
+                    <div className="flex justify-between gap-4">
+                        <span className="text-gray-500">Circuit Records:</span>
+                        <span className="text-purple-300 font-semibold">{memoryStats.circuits}</span>
+                    </div>
+                    <div className="flex justify-between gap-4">
+                        <span className="text-gray-500">Persistent I(t):</span>
+                        <span className="text-yellow-300 font-semibold">{memoryStats.persistent}</span>
+                    </div>
+                </div>
+                <div className="mt-3 pt-2 border-t border-gray-700/50 text-xs text-gray-500">
+                    <div>Threshold: {5} receipts</div>
+                    <div className="mt-1 text-cyan-400">Cyan glow = learned</div>
+                    <div className="text-yellow-400">Gold glow = reincarnated</div>
                 </div>
             </div>
         </div>
