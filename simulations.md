@@ -1,2 +1,3 @@
 consciousness-center-periphery simulation.tsx
+
 consciousness-fractal2.tsx
