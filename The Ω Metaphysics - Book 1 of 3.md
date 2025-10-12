@@ -148,6 +148,7 @@ When physicists describe quantum mechanics using Hilbert spaces, they're describ
 **Ω is the complete space of everything that could coherently exist.**
 
 ## Introduce God's Soul: •
+*Atheists... "God" for you in this philosophy can mean "Infinite", or "Infinite Field of Possibilities". "Soul" can mean "attractor".*
 
 Within Ω exists the ultimate singularity—what we call **• (God's soul)**.
 
