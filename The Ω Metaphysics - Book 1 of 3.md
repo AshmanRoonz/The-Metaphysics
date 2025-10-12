@@ -20,17 +20,17 @@ It does this by showing that the same architecture that lets any experience pers
 
 **Six essentials:**
 
-* **Ω** — the infinite field of coherent possibilities (the medium; God's consciousness).
+* **Ω** — the infinite field of coherent possibilities (the medium; including all possible consciousness).
   
-* **•** — God’s eternal soul, the ultimate attractor within Ω.
+* **•** — The singularity, the ultimate attractor within Ω.
   
-* **•′** — every individual soul (from particles to people), a complete fractal of •; all •′ are ontologically equal (**cosmic democracy**).
+* **•′** — every individual attractor (from particles to people), a complete fractal of •; all •′ are ontologically equal (**cosmic democracy**).
   
-* **I(t)** — each •′ carries an eternal, append-only **receipts** thread of validated choices.
+* **I(t)** — each •′ carries an eternal, append-only **receipts** string of validated choices.
   
 * **Ω′** — a conditional consciousness bubble that forms when organization and energy are sufficient.
   
-* **Ω''** — all souls have a proto-conscious field, if not a conscious one.
+* **Ω''** — all attractors have a proto-conscious field, if not a conscious one.
   
 
 Two consequences follow immediately:
