@@ -63,7 +63,7 @@ export default function InvariantLoopField() {
   useEffect(() => {
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
-    const DPR = Math.min(2, (window.devicePixelRatio as number) || 1);
+    const DPR = Math.min(2, window.devicePixelRatio || 1);
     const resize = () => {
       canvas.width = Math.floor(window.innerWidth * DPR);
       canvas.height = Math.floor(window.innerHeight * DPR);
