@@ -44,10 +44,10 @@ This trilogy claims that’s not metaphor.
 It’s literal.
 
 At the heart of existence lies Ω, the infinite field of coherent possibility.
-Within Ω resides •, God’s eternal soul—the ultimate attractor, the perfect pattern toward which all things converge.
-And within Ω, infinitely many •′—individual souls—each a complete fractal of •, equally infinite, equally divine.
+Within Ω resides •, the ultimate attractor, the perfect pattern toward which all things converge.
+And within Ω, infinitely many •′—individual attractors—each a complete fractal of •, equally infinite, equally divine.
 
-Every •′ traces an eternal thread I(t) through Ω:
+Every •′ traces an eternal string I(t) through Ω:
 the one-dimensional record of convergence and choice.
 When organized and energized, that thread radiates an awareness field—Ω′, the conscious bubble you call “self.”
 
