@@ -1,543 +1,278 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
 /**
- * Invariant Loop Field — React Canvas (no scripted levels)
- * Now with camera + microphone as *pure perturbations* to the field.
- *
- * The loop (T = ℰ ∘ [ICE]_ℓ ∘ ∇) remains the invariant center.
- * Camera/mic only change the landscape the loop descends — they do not
- * create stages or levels.
- */
 
-// ------------------------------ Utility math ---------------------------------
-const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
-const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-const randn = () => {
-  const u = 1 - Math.random();
-  const v = 1 - Math.random();
-  return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+LeonardoWaveHuman.tsx
+
+Ω-Loop visual: Φ_{n+1} = ℰ([ICE]_ℓ(∇Φ_n)) in a human-outline cavity.
+
+A wave (ψ) is emitted from the body's center of mass and propagates.
+
+
+Boundary = Vitruvian-style human outline (Path2D). Waves reflect (Neumann-like) at the outline.
+
+
+A learning map accumulates |ψ| over time → reveals persistent interference structures (tissue-like layers).
+
+
+Controls: none (self-running). Click to re-seed a pulse at the click position (if inside the outline). */ export default function LeonardoWaveHuman() { const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+
+useEffect(() => { const canvas = canvasRef.current!; const ctx = canvas.getContext("2d")!;
+
+// -- sizing ---------------------------------------------------------------
+const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+const resize = () => {
+  canvas.width = Math.floor(window.innerWidth * DPR);
+  canvas.height = Math.floor(window.innerHeight * DPR);
+  canvas.style.width = `${window.innerWidth}px`;
+  canvas.style.height = `${window.innerHeight}px`;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  initDomain();
+};
+window.addEventListener("resize", resize);
+
+// -- simulation params ----------------------------------------------------
+const params = {
+  grid: 360, // simulation grid (square)
+  damping: 0.997, // global damping (slight)
+  c2: 0.25, // wave speed squared coefficient
+  learnDecay: 0.995, // persistence of learned field
+  learnGain: 0.02, // amount to add per frame
+  outlineStroke: "rgba(220,235,255,0.85)",
 };
 
-// Jensen–Shannon divergence (symmetric, bounded) between two histograms
-function jsDiv(p: number[], q: number[]) {
-  const m = p.map((pi, i) => 0.5 * (pi + (q[i] ?? 0)));
-  return 0.5 * (klDiv(p, m) + klDiv(q, m));
-}
-function klDiv(p: number[], q: number[]) {
-  let s = 0;
-  for (let i = 0; i < p.length; i++) {
-    const pi = Math.max(p[i], 1e-12);
-    const qi = Math.max(q[i] ?? 1e-12, 1e-12);
-    s += pi * Math.log(pi / qi);
-  }
-  return s / Math.log(2);
-}
+// domain arrays
+let W = 0, H = 0, dx = 1;
+let ψ = new Float32Array(0);
+let ψprev = new Float32Array(0);
+let inside: Uint8Array; // 1 if cell center is inside human outline
+let learn = new Float32Array(0); // accumulated |ψ|
 
-// Poor-man’s LZ proxy: count runs after binning headings
-function lzProxy(sequence: number[]) {
-  let runs = 1;
-  for (let i = 1; i < sequence.length; i++) if (sequence[i] !== sequence[i - 1]) runs++;
-  return runs / Math.max(sequence.length, 1);
-}
+// cached Path2D for human outline
+let bodyPath: Path2D;
 
-// ------------------------------ Types ----------------------------------------
-interface Particle { x: number; y: number; vx: number; vy: number; hue: number; id: number; }
-interface Stats { C: number; I: number; K: number; N: number; A: number; }
-interface Attractor { x: number; y: number; w: number; }
+// build outline path in normalized unit-space, then scale to canvas
+function makeBodyPath(w: number, h: number): Path2D {
+  // Use a portrait-aligned box centered on screen
+  const cx = w / 2;
+  const cy = h / 2;
+  const scale = Math.min(w, h) * 0.38; // fits comfortably
 
-// ------------------------------ Component ------------------------------------
-export default function InvariantLoopField() {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const animRef = useRef<number | null>(null);
+  // A simplified Vitruvian-like outline assembled from curves:
+  // head (circle), neck, torso, pelvis, arms out, legs out
+  const p = new Path2D();
 
-  // UI state
-  const [paused, setPaused] = useState(false);
-  const [camOn, setCamOn] = useState(false);
-  const [micOn, setMicOn] = useState(false);
-
-  // Loop params
-  const λK = useRef(0.25); // complexity weight
-  const λN = useRef(0.35); // novelty weight
-  const targetFPS = 60;
-
-  useEffect(() => {
-    const canvas = canvasRef.current!;
-    const ctx = canvas.getContext("2d")!;
-    const DPR = Math.min(2, window.devicePixelRatio || 1);
-    const resize = () => {
-      canvas.width = Math.floor(window.innerWidth * DPR);
-      canvas.height = Math.floor(window.innerHeight * DPR);
-      canvas.style.width = window.innerWidth + "px";
-      canvas.style.height = window.innerHeight + "px";
-      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    // ---------------------- Field state (Φ) ----------------------------------
-    const NUM = 480;
-    const W = () => window.innerWidth;
-    const H = () => window.innerHeight;
-
-    let ℓ = Math.min(W(), H()) * 0.12; // aperture
-    const ℓMin = Math.min(W(), H()) * 0.04;
-    const ℓMax = Math.min(W(), H()) * 0.25;
-
-    const particles: Particle[] = Array.from({ length: NUM }, (_, i) => ({
-      x: Math.random() * W(),
-      y: Math.random() * H(),
-      vx: (Math.random() - 0.5) * 0.5,
-      vy: (Math.random() - 0.5) * 0.5,
-      hue: Math.random() * 360,
-      id: i + 1,
-    }));
-
-    // Rolling priors & history for stats
-    const headingBins = 36; // 10° bins
-    let priorHist = new Array(headingBins).fill(1e-6);
-    const historyC: number[] = [];
-    const receipts: { t: number; C: number; I: number; K: number; N: number }[] = [];
-
-    // ---------------------- Camera / Mic perturbations -----------------------
-    // Camera
-    const video = document.createElement('video');
-    video.autoplay = true; video.muted = true; (video as any).playsInline = true;
-    let camStream: MediaStream | null = null;
-    const camS = 64, camT = 36; // downsample size for analysis
-    const camCanvas = document.createElement('canvas');
-    camCanvas.width = camS; camCanvas.height = camT;
-    const camCtx = camCanvas.getContext('2d', { willReadFrequently: true })!;
-    let prevFrame: Uint8ClampedArray | null = null;
-    let motionEMA = 0;       // 0..1
-    let brightnessEMA = 0;   // 0..1
-    let camAttractors: Attractor[] = []; // positions (x,y) with weight w
-
-    async function startCamera() {
-      try {
-        camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
-        video.srcObject = camStream;
-        setCamOn(true);
-      } catch (e) {
-        console.warn('Camera error', e);
-        setCamOn(false);
-      }
-    }
-
-    function stopCamera() {
-      camStream?.getTracks().forEach(t => t.stop());
-      camStream = null; setCamOn(false);
-    }
-
-    function analyzeCamera() {
-      if (!camOn || !video.videoWidth) return;
-      camCtx.drawImage(video, 0, 0, camS, camT);
-      const img = camCtx.getImageData(0, 0, camS, camT);
-      const data = img.data;
-      let sum = 0;
-      let diffSum = 0;
-      const attractors: Attractor[] = [];
-
-      // sample grid into coarse blocks to find bright/motion peaks
-      const block = 8; // 8x8 px per block on downsampled frame
-      for (let y = 0; y < camT; y++) {
-        for (let x = 0; x < camS; x++) {
-          const idx = (y * camS + x) * 4;
-          const r = data[idx], g = data[idx + 1], b = data[idx + 2];
-          const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255; // 0..1
-          sum += lum;
-
-          let d = 0;
-          if (prevFrame) {
-            const pr = prevFrame[idx], pg = prevFrame[idx + 1], pb = prevFrame[idx + 2];
-            const plum = (0.299 * pr + 0.587 * pg + 0.114 * pb) / 255;
-            d = Math.abs(lum - plum);
-            diffSum += d;
-          }
-
-          // pick a few strong local attractors (brightness + motion)
-          if ((x % block === 0) && (y % block === 0)) {
-            // compute local score over block
-            let score = 0, cnt = 0;
-            for (let yy = 0; yy < block && y + yy < camT; yy++) {
-              for (let xx = 0; xx < block && x + xx < camS; xx++) {
-                const ii = ((y + yy) * camS + (x + xx)) * 4;
-                const rr = data[ii], gg = data[ii + 1], bb = data[ii + 2];
-                const ll = (0.299 * rr + 0.587 * gg + 0.114 * bb) / 255;
-                let dd = 0;
-                if (prevFrame) {
-                  const prr = prevFrame[ii], pgg = prevFrame[ii + 1], pbb = prevFrame[ii + 2];
-                  const pll = (0.299 * prr + 0.587 * pgg + 0.114 * pbb) / 255;
-                  dd = Math.abs(ll - pll);
-                }
-                score += 0.7 * ll + 0.3 * dd; cnt++;
-              }
-            }
-            score /= Math.max(1, cnt);
-            if (score > 0.35) {
-              // map to canvas coords
-              const px = (x + block * 0.5) / camS * W();
-              const py = (y + block * 0.5) / camT * H();
-              attractors.push({ x: px, y: py, w: clamp(score, 0, 1) });
-            }
-          }
-        }
-      }
-
-      brightnessEMA = lerp(brightnessEMA, clamp(sum / (camS * camT), 0, 1), 0.15);
-      motionEMA = lerp(motionEMA, clamp(diffSum / (camS * camT), 0, 1), 0.25);
-      camAttractors = attractors.slice(0, 40); // cap
-      prevFrame = img.data;
-    }
-
-    // Microphone
-    let micStream: MediaStream | null = null;
-    let audioCtx: AudioContext | null = null;
-    let analyser: AnalyserNode | null = null;
-    const fftSize = 512;
-    const timeBuf = new Uint8Array(fftSize);
-    const freqBuf = new Uint8Array(fftSize / 2);
-    let volumeEMA = 0;      // 0..1
-    let centroidEMA = 0;    // 0..1
-
-    async function startMic() {
-      try {
-        micStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-        audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-        const src = audioCtx.createMediaStreamSource(micStream);
-        analyser = audioCtx.createAnalyser();
-        analyser.fftSize = fftSize;
-        analyser.smoothingTimeConstant = 0.8;
-        src.connect(analyser);
-        setMicOn(true);
-      } catch (e) {
-        console.warn('Mic error', e);
-        setMicOn(false);
-      }
-    }
-
-    function stopMic() {
-      micStream?.getTracks().forEach(t => t.stop());
-      micStream = null; setMicOn(false);
-      analyser?.disconnect(); analyser = null;
-      audioCtx?.close(); audioCtx = null;
-    }
-
-    function analyzeMic() {
-      if (!micOn || !analyser) return;
-      analyser.getByteTimeDomainData(timeBuf);
-      analyser.getByteFrequencyData(freqBuf);
-
-      // RMS volume (0..1)
-      let sumSq = 0;
-      for (let i = 0; i < timeBuf.length; i++) {
-        const v = (timeBuf[i] - 128) / 128; sumSq += v * v;
-      }
-      const rms = Math.sqrt(sumSq / timeBuf.length);
-      volumeEMA = lerp(volumeEMA, clamp(rms * 2.5, 0, 1), 0.2);
-
-      // Spectral centroid normalized by Nyquist
-      let num = 0, den = 0;
-      for (let i = 0; i < freqBuf.length; i++) { const mag = freqBuf[i]; num += mag * i; den += mag; }
-      const centroid = den > 0 ? (num / den) / freqBuf.length : 0;
-      centroidEMA = lerp(centroidEMA, centroid, 0.2);
-    }
-
-    // Composite input energy (0..1) used inside ∇ jitter
-    let inputEnergy = 0;
-
-    // ---------------------- Measurement (order-parameters) -------------------
-    function measureStats(): { stats: Stats; graph: Uint16Array[]; headings: number[]; compSizes: number[] } {
-      // Build neighbor graph within ℓ
-      const graph: Uint16Array[] = Array.from({ length: NUM }, () => new Uint16Array(0));
-      const neighborLists: number[][] = Array.from({ length: NUM }, () => []);
-      for (let i = 0; i < NUM; i++) {
-        const pi = particles[i];
-        for (let j = i + 1; j < NUM; j++) {
-          const pj = particles[j];
-          const dx = pi.x - pj.x;
-          const dy = pi.y - pj.y;
-          const d2 = dx * dx + dy * dy;
-          if (d2 < ℓ * ℓ) { neighborLists[i].push(j); neighborLists[j].push(i); }
-        }
-      }
-      for (let i = 0; i < NUM; i++) graph[i] = new Uint16Array(neighborLists[i]);
-
-      // Coherence proxy C
-      const degrees = neighborLists.map((n) => n.length);
-      const avgDeg = degrees.reduce((a, b) => a + b, 0) / Math.max(1, degrees.length);
-      const C = clamp(avgDeg / 32, 0, 1);
-
-      // Integration I via BFS
-      const seen = new Uint8Array(NUM);
-      const compSizes: number[] = [];
-      for (let i = 0; i < NUM; i++) {
-        if (seen[i]) continue;
-        let q: number[] = [i]; seen[i] = 1; let size = 0;
-        while (q.length) {
-          const k = q.pop()!; size++;
-          const neigh = neighborLists[k];
-          for (let v of neigh) if (!seen[v]) { seen[v] = 1; q.push(v); }
-        }
-        compSizes.push(size);
-      }
-      const I = Math.max(...compSizes) / NUM;
-
-      // Headings & hist for K, N
-      const headings: number[] = new Array(NUM);
-      const hist = new Array(headingBins).fill(0);
-      for (let i = 0; i < NUM; i++) {
-        const p = particles[i];
-        const a = Math.atan2(p.vy, p.vx); // -PI..PI
-        const d = a < 0 ? a + Math.PI * 2 : a;
-        const bin = Math.floor((d / (Math.PI * 2)) * headingBins);
-        headings[i] = bin; hist[bin] += 1;
-      }
-      for (let i = 0; i < headingBins; i++) hist[i] = hist[i] / NUM;
-
-      const K = clamp(lzProxy(headings), 0, 1);
-      const prior = priorHist.map((v) => v);
-      const N = clamp(jsDiv(hist, prior), 0, 1);
-      const A = 0;
-      return { stats: { C, I, K, N, A }, graph, headings, compSizes };
-    }
-
-    // ---------------------- Adaptive aperture & free energy ------------------
-    function adaptAperture(currentℓ: number, C: number, N: number) {
-      let next = currentℓ;
-      next += (C - 0.5) * 4;     // higher C → expand
-      next -= (N - 0.3) * 3;     // higher N → contract
-      return clamp(lerp(currentℓ, next, 0.08), ℓMin, ℓMax);
-    }
-
-    function freeEnergy(s: Stats) { return -s.C + λK.current * s.K + λN.current * s.N; }
-
-    // ---------------------- ∇ (propose), [ICE] (select), ℰ (commit) ----------
-    function stepLoop(dt: number) {
-      // Update sensors → perturbations first
-      analyzeCamera();
-      analyzeMic();
-      inputEnergy = clamp(0.6 * motionEMA + 0.3 * volumeEMA + 0.1 * brightnessEMA, 0, 1);
-
-      // Measure current state once
-      const measured = measureStats();
-      const prevStats = measured.stats;
-      const F_prev = freeEnergy(prevStats);
-
-      // ∇: local proposals — neighborhood pull + jitter + sensor-driven bias
-      const proposals: { i: number; dvx: number; dvy: number }[] = [];
-      for (let i = 0; i < NUM; i++) {
-        const p = particles[i];
-        let cx = 0, cy = 0, count = 0;
-        const neigh = measured.graph[i];
-        for (let j = 0; j < neigh.length; j++) { const k = neigh[j]; cx += particles[k].x; cy += particles[k].y; count++; }
-        if (count > 0) { cx /= count; cy /= count; } else { cx = p.x; cy = p.y; }
-
-        const pull = 0.04;
-        // jitter scaled by mic energy
-        const jx = randn() * 0.02 * (0.4 + inputEnergy);
-        const jy = randn() * 0.02 * (0.4 + inputEnergy);
-
-        // camera-derived attractor influence: towards nearest bright/motion cell
-        let ax = 0, ay = 0;
-        if (camAttractors.length) {
-          // pick the strongest nearby attractor
-          let bestW = 0, bx = 0, by = 0;
-          for (let a = 0; a < camAttractors.length; a++) {
-            const A = camAttractors[a];
-            const dx = A.x - p.x, dy = A.y - p.y;
-            const d = Math.hypot(dx, dy) + 1e-6;
-            const w = A.w / d; // inverse-distance weight
-            if (w > bestW) { bestW = w; bx = dx; by = dy; }
-          }
-          const camGain = 0.03 + 0.07 * inputEnergy; // stronger when sensors active
-          ax = bx * camGain; ay = by * camGain;
-        }
-
-        const dvx = (cx - p.x) * pull + jx + ax;
-        const dvy = (cy - p.y) * pull + jy + ay;
-        proposals.push({ i, dvx, dvy });
-      }
-
-      // [ICE]: accept if free energy decreases (local, approximate)
-      const sample = 1.0; // could downsample for speed
-      for (let k = 0; k < proposals.length; k++) {
-        if (Math.random() > sample) continue;
-        const pr = proposals[k];
-        const i = pr.i; const p = particles[i];
-        const ovx = p.vx, ovy = p.vy;
-        p.vx += pr.dvx; p.vy += pr.dvy;
-        p.vx *= 0.985; p.vy *= 0.985;
-        const sp = Math.hypot(p.vx, p.vy);
-        if (sp > 1.2) { p.vx *= 1.2 / sp; p.vy *= 1.2 / sp; }
-
-        const newMeasured = measureStats();
-        const accepted = freeEnergy(newMeasured.stats) < F_prev;
-        if (!accepted) { p.vx = ovx; p.vy = ovy; }
-      }
-
-      // ℰ: commit + receipts
-      for (let i = 0; i < NUM; i++) {
-        const p = particles[i];
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0) p.x += W(); if (p.x > W()) p.x -= W();
-        if (p.y < 0) p.y += H(); if (p.y > H()) p.y -= H();
-        const speed = Math.hypot(p.vx, p.vy);
-        // hue drifts with centroid → brighter/higher pitch nudges spectrum upward
-        const hueNudge = 30 * (centroidEMA - 0.3) + 40 * (brightnessEMA - 0.5);
-        p.hue = (p.hue + speed * 4 + hueNudge * 0.01) % 360;
-      }
-
-      // Update stats after commit
-      const measured2 = measureStats();
-      const s = measured2.stats;
-      ℓ = adaptAperture(ℓ, s.C, s.N);
-
-      // Update novelty prior
-      const alpha = 0.02;
-      const currHist = new Array(headingBins).fill(0);
-      for (let i = 0; i < measured2.headings.length; i++) currHist[measured2.headings[i]]++;
-      for (let i = 0; i < headingBins; i++) {
-        currHist[i] = currHist[i] / measured2.headings.length;
-        priorHist[i] = (1 - alpha) * priorHist[i] + alpha * currHist[i];
-      }
-
-      historyC.push(s.C); if (historyC.length > 600) historyC.shift();
-      receipts.push({ t: performance.now(), C: s.C, I: s.I, K: s.K, N: s.N });
-      if (receipts.length > 2000) receipts.shift();
-
-      draw(ctx, particles, measured2.graph, s, ℓ, measured2.compSizes);
-    }
-
-    function draw(
-      ctx: CanvasRenderingContext2D,
-      particles: Particle[],
-      graph: Uint16Array[],
-      s: Stats,
-      ℓ: number,
-      compSizes: number[],
-    ) {
-      ctx.fillStyle = "rgba(6,8,16,0.85)";
-      ctx.fillRect(0, 0, W(), H());
-
-      // Attractor glow (camera) — faint
-      for (const A of camAttractors) {
-        const r = 20 + A.w * 60;
-        const g = ctx.createRadialGradient(A.x, A.y, 0, A.x, A.y, r);
-        g.addColorStop(0, `rgba(180,200,255,${0.12 * A.w})`);
-        g.addColorStop(1, `rgba(180,200,255,0)`);
-        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(A.x, A.y, r, 0, Math.PI * 2); ctx.fill();
-      }
-
-      // Interaction graph filaments
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-        const neigh = graph[i];
-        for (let j = 0; j < neigh.length; j++) {
-          const k = neigh[j]; if (k <= i) continue;
-          const q = particles[k];
-          const dx = q.x - p.x, dy = q.y - p.y;
-          const d = Math.hypot(dx, dy);
-          const t = 1 - clamp(d / ℓ, 0, 1);
-          const hue = (p.hue * 0.5 + q.hue * 0.5) % 360;
-          const alpha = 0.06 + 0.35 * t * t;
-          ctx.strokeStyle = `hsla(${hue},80%,65%,${alpha})`;
-          ctx.lineWidth = 0.3 + 1.8 * t * t;
-          ctx.beginPath();
-          const mx = (p.x + q.x) / 2 + (Math.random() - 0.5) * 2;
-          const my = (p.y + q.y) / 2 + (Math.random() - 0.5) * 2;
-          ctx.moveTo(p.x, p.y); ctx.quadraticCurveTo(mx, my, q.x, q.y); ctx.stroke();
-        }
-      }
-
-      // Particles
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-        ctx.save(); ctx.translate(p.x, p.y);
-        const sp = Math.hypot(p.vx, p.vy);
-        const r = 1.2 + 1.2 * Math.min(1, sp);
-        ctx.shadowBlur = 8 * (0.3 + sp * 0.2);
-        ctx.shadowColor = `hsla(${p.hue},90%,70%,0.35)`;
-        ctx.fillStyle = `hsla(${p.hue},85%,72%,0.9)`;
-        ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
-        ctx.shadowBlur = 0; ctx.restore();
-      }
-
-      // HUD — order-parameters, aperture, sensors
-      const gcr = Math.max(...compSizes) / particles.length;
-      const panelX = 16, panelY = 16;
-      ctx.fillStyle = "rgba(0,0,0,0.55)";
-      ctx.fillRect(panelX - 8, panelY - 8, 332, 140);
-      ctx.fillStyle = "#cfe7ff";
-      ctx.font = "12px ui-monospace, SFMono-Regular, Menlo, monospace";
-      ctx.fillText(`C (coherence): ${s.C.toFixed(3)}`, panelX, panelY + 12);
-      ctx.fillText(`I (integration): ${s.I.toFixed(3)}  (giant: ${gcr.toFixed(3)})`, panelX, panelY + 28);
-      ctx.fillText(`K (complexity): ${s.K.toFixed(3)}`, panelX, panelY + 44);
-      ctx.fillText(`N (novelty):    ${s.N.toFixed(3)}`, panelX, panelY + 60);
-      ctx.fillText(`ℓ (aperture):   ${ℓ.toFixed(2)}`, panelX, panelY + 76);
-      ctx.fillText(`Input energy:   ${inputEnergy.toFixed(3)}`, panelX, panelY + 92);
-      ctx.fillText(`Cam motion/brt: ${motionEMA.toFixed(2)} / ${brightnessEMA.toFixed(2)}`, panelX, panelY + 108);
-      ctx.fillText(`Mic vol/cent:   ${volumeEMA.toFixed(2)} / ${centroidEMA.toFixed(2)}`, panelX, panelY + 124);
-    }
-
-    // ---------------------- Main animation loop ------------------------------
-    let last = performance.now();
-    const tick = () => {
-      animRef.current = requestAnimationFrame(tick);
-      if (paused) return;
-      const now = performance.now();
-      const dt = Math.min(1 / 15, (now - last) / 1000);
-      last = now;
-      stepLoop(dt);
-    };
-    tick();
-
-    // Expose start/stop to window for UI handlers below
-    (window as any).__Ω_startCam = startCamera;
-    (window as any).__Ω_stopCam = stopCamera;
-    (window as any).__Ω_startMic = startMic;
-    (window as any).__Ω_stopMic = stopMic;
-
-    return () => {
-      if (animRef.current) cancelAnimationFrame(animRef.current);
-      window.removeEventListener("resize", resize);
-      stopCamera();
-      stopMic();
-    };
-  }, [paused]);
-
-  // ---------------------- UI overlay -----------------------------------------
-  return (
-    <div className="w-screen h-screen bg-black">
-      <canvas ref={canvasRef} className="block w-full h-full" />
-
-      <div className="fixed top-3 right-3 flex items-center gap-2 text-xs text-white/90 bg-black/50 backdrop-blur px-3 py-2 rounded-xl border border-white/10 shadow-lg">
-        <button
-          onClick={() => setPaused((p) => !p)}
-          className="px-3 py-1 rounded-lg border border-white/20 hover:border-white/40 active:scale-[0.98]"
-        >{paused ? "Resume" : "Pause"}</button>
-        <span className="opacity-75">Loop = center • No scripted levels</span>
-      </div>
-
-      <div className="fixed bottom-3 left-3 flex flex-wrap items-center gap-2 text-xs text-white/90 bg-black/50 backdrop-blur px-3 py-2 rounded-xl border border-white/10 shadow-lg">
-        <button
-          onClick={() => {
-            if ((window as any).__Ω_startCam) (window as any).__Ω_startCam();
-          }}
-          className="px-3 py-1 rounded-lg border border-white/20 hover:border-white/40"
-        >Enable Camera</button>
-        <button
-          onClick={() => { if ((window as any).__Ω_stopCam) (window as any).__Ω_stopCam(); }}
-          className="px-3 py-1 rounded-lg border border-white/20 hover:border-white/40"
-        >Disable Camera</button>
-        <button
-          onClick={() => { if ((window as any).__Ω_startMic) (window as any).__Ω_startMic(); }}
-          className="px-3 py-1 rounded-lg border border-white/20 hover:border-white/40"
-        >Enable Mic</button>
-        <button
-          onClick={() => { if ((window as any).__Ω_stopMic) (window as any).__Ω_stopMic(); }}
-          className="px-3 py-1 rounded-lg border border-white/20 hover:border-white/40"
-        >Disable Mic</button>
-      </div>
-    </div>
+  // Helper to draw symmetric bezier from left to right with control points
+  const moveTo = (x: number, y: number) => p.moveTo(cx + x * scale, cy + y * scale);
+  const lineTo = (x: number, y: number) => p.lineTo(cx + x * scale, cy + y * scale);
+  const bezier = (
+    x1: number, y1: number,
+    c1x: number, c1y: number,
+    c2x: number, c2y: number,
+    x2: number, y2: number
+  ) => p.bezierCurveTo(
+    cx + c1x * scale, cy + c1y * scale,
+    cx + c2x * scale, cy + c2y * scale,
+    cx + x2 * scale, cy + y2 * scale
   );
+
+  // Head
+  p.arc(cx, cy - 0.44 * scale, 0.09 * scale, 0, Math.PI * 2);
+
+  // Neck to shoulders (small gap between head and torso is fine visually)
+  moveTo(-0.08, -0.33);
+  bezier(0.08, -0.33, -0.05, -0.29, 0.05, -0.29, 0.08, -0.33);
+
+  // Torso outer (left down)
+  moveTo(-0.18, -0.33);
+  bezier(-0.24, -0.05, -0.24, -0.25, -0.28, -0.10, -0.25, 0.00);
+  // Rib to waist (left inner curve)
+  bezier(-0.17, 0.10, -0.24, 0.07, -0.18, 0.18, -0.14, 0.22);
+  // Pelvis top
+  bezier(-0.12, 0.26, -0.13, 0.24, -0.10, 0.28, -0.08, 0.29);
+
+  // Mirror to right using separate path segments
+  moveTo(0.18, -0.33);
+  bezier(0.24, -0.05, 0.24, -0.25, 0.28, -0.10, 0.25, 0.00);
+  bezier(0.17, 0.10, 0.24, 0.07, 0.18, 0.18, 0.14, 0.22);
+  bezier(0.12, 0.26, 0.13, 0.24, 0.10, 0.28, 0.08, 0.29);
+
+  // Close pelvis band
+  moveTo(-0.08, 0.29); lineTo(0.08, 0.29);
+
+  // Arms (left): shoulder → elbow → wrist (slightly above shoulder level, outward)
+  moveTo(-0.18, -0.30);
+  bezier(-0.45, -0.32, -0.32, -0.28, -0.48, -0.18, -0.52, -0.12);
+  // forearm to hand (left)
+  bezier(-0.56, -0.05, -0.58, -0.02, -0.56, 0.00, -0.54, 0.02);
+
+  // Arms (right)
+  moveTo(0.18, -0.30);
+  bezier(0.45, -0.32, 0.32, -0.28, 0.48, -0.18, 0.52, -0.12);
+  bezier(0.56, -0.05, 0.58, -0.02, 0.56, 0.00, 0.54, 0.02);
+
+  // Legs (left): pelvis → knee → ankle (outward stance)
+  moveTo(-0.06, 0.30);
+  bezier(-0.12, 0.55, -0.12, 0.40, -0.18, 0.62, -0.20, 0.72);
+  bezier(-0.22, 0.82, -0.22, 0.86, -0.18, 0.90, -0.14, 0.90);
+
+  // Legs (right)
+  moveTo(0.06, 0.30);
+  bezier(0.12, 0.55, 0.12, 0.40, 0.18, 0.62, 0.20, 0.72);
+  bezier(0.22, 0.82, 0.22, 0.86, 0.18, 0.90, 0.14, 0.90);
+
+  // Hands and feet small arcs
+  p.arc(cx - 0.54 * scale, cy + 0.02 * scale, 0.015 * scale, 0, Math.PI * 2);
+  p.arc(cx + 0.54 * scale, cy + 0.02 * scale, 0.015 * scale, 0, Math.PI * 2);
+  p.arc(cx - 0.14 * scale, cy + 0.90 * scale, 0.018 * scale, 0, Math.PI * 2);
+  p.arc(cx + 0.14 * scale, cy + 0.90 * scale, 0.018 * scale, 0, Math.PI * 2);
+
+  return p;
 }
+
+// initialize arrays & mask
+function initDomain() {
+  W = canvas.width / DPR; H = canvas.height / DPR;
+  const N = params.grid; dx = Math.min(W, H) / N;
+  ψ = new Float32Array(N * N);
+  ψprev = new Float32Array(N * N);
+  learn = new Float32Array(N * N);
+  inside = new Uint8Array(N * N);
+
+  bodyPath = makeBodyPath(W, H);
+
+  // rasterize inside-mask at grid centers
+  for (let j = 0; j < N; j++) {
+    const y = (j + 0.5) * dx;
+    for (let i = 0; i < N; i++) {
+      const x = (i + 0.5) * dx;
+      inside[j * N + i] = ctx.isPointInPath(bodyPath, x, y) ? 1 : 0;
+    }
+  }
+
+  // seed wave at approximate center of mass (around navel)
+  const seed = worldToIndex(W * 0.5, H * 0.52);
+  ψ[seed] = 1.0;
+  ψprev[seed] = 0.8;
+}
+
+const idx = (i: number, j: number, N: number) => j * N + i;
+
+function worldToIndex(x: number, y: number) {
+  const i = Math.max(0, Math.min(params.grid - 1, Math.floor(x / dx)));
+  const j = Math.max(0, Math.min(params.grid - 1, Math.floor(y / dx)));
+  return j * params.grid + i;
+}
+
+// wave update with reflective boundary when neighbor is outside
+function step() {
+  const N = params.grid;
+  const next = new Float32Array(ψ.length);
+  const c2 = params.c2;
+  for (let j = 1; j < N - 1; j++) {
+    for (let i = 1; i < N - 1; i++) {
+      const k = idx(i, j, N);
+      if (!inside[k]) { next[k] = 0; continue; }
+
+      // neighbor sampling with reflection: if neighbor outside, mirror current cell (Neumann-like)
+      const leftK = idx(i - 1, j, N);
+      const rightK = idx(i + 1, j, N);
+      const upK = idx(i, j - 1, N);
+      const downK = idx(i, j + 1, N);
+
+      const ψL = inside[leftK] ? ψ[leftK] : ψ[k];
+      const ψR = inside[rightK] ? ψ[rightK] : ψ[k];
+      const ψU = inside[upK] ? ψ[upK] : ψ[k];
+      const ψD = inside[downK] ? ψ[downK] : ψ[k];
+
+      const lap = (ψL + ψR + ψU + ψD - 4 * ψ[k]);
+      // standard 2nd-order wave eq discrete form
+      const val = (2 * ψ[k] - ψprev[k]) + c2 * lap;
+      next[k] = val * params.damping;
+
+      // learning: accumulate magnitude slowly
+      learn[k] = learn[k] * params.learnDecay + Math.min(1, Math.abs(val)) * params.learnGain;
+    }
+  }
+  ψprev = ψ;
+  ψ = next;
+}
+
+function draw() {
+  const N = params.grid;
+  const image = ctx.createImageData(Math.floor(W), Math.floor(H));
+  const data = image.data;
+
+  // paint pixels by nearest grid cell (fast, blocky aesthetic smoothed by device scaling)
+  for (let j = 0; j < N; j++) {
+    const y0 = Math.floor(j * dx), y1 = Math.min(Math.floor((j + 1) * dx), Math.floor(H));
+    for (let i = 0; i < N; i++) {
+      const x0 = Math.floor(i * dx), x1 = Math.min(Math.floor((i + 1) * dx), Math.floor(W));
+      const k = j * N + i;
+      const insideCell = inside[k] === 1;
+
+      // base wave (cool blue), learned layer (warm gold)
+      const a = Math.abs(ψ[k]);
+      const L = learn[k];
+      const wave = Math.min(1, a * 3);
+      const learned = Math.min(1, L * 3);
+
+      const r = Math.floor(255 * (0.15 * wave + 0.95 * learned));
+      const g = Math.floor(255 * (0.45 * wave + 0.75 * learned));
+      const b = Math.floor(255 * (0.95 * wave + 0.10 * learned));
+      const alpha = insideCell ? 255 : 0; // keep background transparent outside
+
+      for (let y = y0; y < y1; y++) {
+        let p = (y * Math.floor(W) + x0) * 4;
+        for (let x = x0; x < x1; x++) {
+          data[p] = r; data[p + 1] = g; data[p + 2] = b; data[p + 3] = alpha; p += 4;
+        }
+      }
+    }
+  }
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.putImageData(image, 0, 0);
+
+  // outline glow
+  ctx.save();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = params.outlineStroke;
+  ctx.shadowBlur = 12;
+  ctx.shadowColor = "rgba(180,200,255,0.6)";
+  ctx.stroke(bodyPath);
+  ctx.restore();
+}
+
+// animate ---------------------------------------------------------------
+let raf = 0;
+const loop = () => {
+  step();
+  draw();
+  raf = requestAnimationFrame(loop);
+};
+
+// click to re-seed a pulse (if inside)
+canvas.addEventListener("click", (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const x = (e.clientX - rect.left);
+  const y = (e.clientY - rect.top);
+  if (ctx.isPointInPath(bodyPath, x, y)) {
+    const k = worldToIndex(x, y);
+    ψ[k] = 1.0;
+  }
+});
+
+resize();
+loop();
+
+return () => {
+  cancelAnimationFrame(raf);
+  window.removeEventListener("resize", resize);
+};
+
+}, []);
+
+return ( <div className="w-screen h-screen bg-black"> <canvas ref={canvasRef} className="block mx-auto" /> <div className="fixed left-4 bottom-4 text-xs text-slate-300/80 select-none"> Ω Leonardo Wave · click inside the body to inject a pulse </div> </div> ); }
+
