@@ -122,7 +122,7 @@ The framework uses five levels of abstraction:
 
 **Physics → Ethics**
 
-* Truth-Driven Relativism
+* Truth-Driven Agreement Ethic
 * Democratic systems as recursive ICE
 * Civilizational coherence
 * Practical applications
