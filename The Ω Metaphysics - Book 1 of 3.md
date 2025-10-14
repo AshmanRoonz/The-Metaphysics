@@ -172,7 +172,9 @@ Think of the distinction this way:
 
 **This resolves the classical God paradox:**
 
-Traditional theism: God is separate from creation, outside itTraditional pantheism: God is identical with creationTraditional panentheism: Creation exists within God
+Traditional theism: God is separate from creation, outside it\
+Traditional pantheism: God is identical with creation\
+Traditional panentheism: Creation exists within God
 
 **This framework:** • (God's soul) and all •′ (individual souls) exist within Ω (the infinite field). Not nested within each other, but all present in the same medium. All patterns in one field. One ocean, one ultimate whirlpool, infinite smaller whirlpools, fractal, all made of the same water.
 
