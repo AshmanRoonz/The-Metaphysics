@@ -2,8 +2,6 @@
 
 ### Deriving Quantum Mechanics from Validation Architecture
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)[![Status](https://img.shields.io/badge/status-peer_review_invited-green.svg)]()
-
 **By Ashman Roonz** | [email@ashmanroonz.ca](mailto:email@ashmanroonz.ca)
 
 * * *
