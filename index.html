@@ -246,6 +246,7 @@
         
         loadSimulationsList();
       }, []);
+      
       const loadSimulation = async (sim) => {
         setLoading(true);
         setError(null);
@@ -289,7 +290,7 @@
                       borderRadius: '4px',
                       color: 'rgba(150, 180, 255, 0.8)',
                       fontSize: '11px',
-                      cursor: 'pointer',
+                      cursor: pointer',
                       zIndex: 1000,
                       backdropFilter: 'blur(10px)',
                       transition: 'all 0.3s ease'
@@ -404,42 +405,53 @@
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {simulations.map((sim) => (
-                <div 
-                  key={sim.id}
-                  className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-blue-500/50 hover:bg-gray-800/80 transition-all cursor-pointer group"
-                  onClick={() => loadSimulation(sim)}
-                >
-                  <h3 className="text-xl font-semibold text-blue-300 mb-2 group-hover:text-blue-200">
-                    {sim.title}
-                  </h3>
-                  
-                  <p className="text-gray-400 text-sm mb-4 line-clamp-3">
-                    {sim.description}
-                  </p>
-                  
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {sim.tags.map((tag) => (
-                      <span 
-                        key={tag}
-                        className="px-2 py-1 bg-blue-900/30 text-blue-300 text-xs rounded border border-blue-700/30"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                  <div 
+                    key={sim.id}
+                    className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-blue-500/50 hover:bg-gray-800/80 transition-all cursor-pointer group"
+                    onClick={() => loadSimulation(sim)}
+                  >
+                    <h3 className="text-xl font-semibold text-blue-300 mb-2 group-hover:text-blue-200">
+                      {sim.title}
+                    </h3>
+                    
+                    <p className="text-gray-400 text-sm mb-4 line-clamp-3">
+                      {sim.description}
+                    </p>
+                    
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {sim.tags.map((tag) => (
+                        <span 
+                          key={tag}
+                          className="px-2 py-1 bg-blue-900/30 text-blue-300 text-xs rounded border border-blue-700/30"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    
+                    <div className="flex items-center text-blue-400 text-sm font-medium group-hover:translate-x-1 transition-transform">
+                      Launch Simulation →
+                    </div>
                   </div>
-                  
-                  <div className="flex items-center text-blue-400 text-sm font-medium group-hover:translate-x-1 transition-transform">
-                    Launch Simulation →
-                  </div>
-                </div>
-              ))}
-              
-            
+                ))}
+              </div>
+            )}
+          </div>
           
           {/* Footer */}
           <div className="max-w-6xl mx-auto px-8 py-8 text-center text-gray-500 text-sm border-t border-gray-800 mt-12">
             <p>Created by Ashman Roonz • Omega Metaphysics Research</p>
             <p className="mt-2">Each simulation explores different aspects of consciousness and emergence</p>
+            <p className="mt-3">
+              <a 
+                href="https://github.com/AshmanRoonz/The-Omega-Metaphysics" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-400 hover:text-blue-300 transition-colors underline"
+              >
+                View on GitHub
+              </a>
+            </p>
             <p className="mt-4 text-xs text-gray-600">
               Simulations loaded from <code className="bg-gray-800 px-2 py-1 rounded">simulations.md</code>
             </p>
@@ -451,6 +463,4 @@
     ReactDOM.render(<SimulationBrowser />, document.getElementById('root'));
   </script>
 </body>
-
-
 </html>
