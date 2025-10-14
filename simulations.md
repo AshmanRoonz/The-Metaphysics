@@ -6,4 +6,4 @@ mandelbrot-consciousness.tsx
 
 fractal-cellular.tsx
 
-InvariantLoopField.tsx
+
