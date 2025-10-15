@@ -100,7 +100,7 @@ The framework uses five levels of abstraction:
 
 * Necessity of existence from self-reference
 * The ICE principle as universal filter
-* Five-level ontology (Ω → • → •′ → I(t) → Ω′)
+* Six-level ontology (Ω → • → •′ → I(t) → Ω"→ Ω′)
 * Why persistence requires validation
 
 *Prerequisites: None*
