@@ -1,6 +1,6 @@
 # Topological Quantum Mechanics: Reality as Resonant Unbraid from an Eternal Braid Structure
 
-**Author:** [Ashman Roonz] email@ashmanroonz.ca
+**Author:** [Ashman Roonz](email@ashmanroonz.ca)
 
 ---
 
