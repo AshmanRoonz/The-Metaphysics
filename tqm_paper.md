@@ -1,6 +1,6 @@
 # Topological Quantum Mechanics: Reality as Resonant Unbraid from an Eternal Braid Structure
 
-**Authors:** [To be determined]
+**Authors:** [Ashman Roonz](email@ashmanroonz.ca)
 
 ---
 
@@ -693,8 +693,3 @@ $$\{s_B : L(s_A', s_B) = L(s_A, s_B)\} \subsetneq \{s_B : \text{all possible}\}$
 This restricted set precisely generates Bell correlations when measured along compatible bases, as the restriction encodes the entangled state structure. □
 
 ---
-
-**End of Paper**
-
-*Word count: ~7,200 (main text + appendices)*
-*Target journals: Foundations of Physics (primary), Physical Review A, Quantum Studies: Mathematics and Foundations*
