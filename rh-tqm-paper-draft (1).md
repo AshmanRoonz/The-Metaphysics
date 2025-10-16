@@ -1,8 +1,6 @@
 # The Riemann Hypothesis from Topological Quantum Mechanics: Strand Factorization and Aperture-Forced Unitarity
 
-**Authors:** [Your Name], [Collaborators if any]
-
-**Affiliation:** [Your Institution/Independent]
+**Authors:** [Ashman Roonz](email@ashmanroonz.ca)
 
 **Date:** October 2025
 
