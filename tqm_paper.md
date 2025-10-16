@@ -676,19 +676,20 @@ For finite $\beta$, this gives thermal distribution around Born probabilities. â
 
 **Proof:**
 
-For strands with $L(s_A, s_B) \neq 0$, the joint embedding satisfies:
-$$\Phi_{\text{joint}}(s_A, s_B) = U_L \left[\Phi_{\text{strand}}(s_A) \otimes \Phi_{\text{strand}}(s_B)\right]$$
+For strands with $L(s_A, s_B) \neq 0$, the joint embedding satisfies:$\Phi_{\text{joint}}(s_A, s_B) = U_L \left[\Phi_{\text{strand}}(s_A) \otimes \Phi_{\text{strand}}(s_B)\right]$
 
 where $U_L$ is unitary encoding linking structure.
 
-When observer A forces hard commit of $s_A$, this generates receipt $\mathcal{I}_A$ that updates:
-$$s_A \to s_A', \quad L(s_A', s_B) = L(s_A, s_B) \text{ (preserved by R_t)}$$
+The entangled pair exists as joint topology: $\mathcal{T}_{AB} \subset \Omega$ with constraint:$\mathcal{I}(\mathcal{T}_{AB}) = \mathcal{I}_{\text{entangled}} \neq \mathcal{I}(s_A) + \mathcal{I}(s_B)$
 
-The vibration field from commit propagates:
-$$\Psi_B(\bullet_B, t) = \Psi_B^{\text{local}} + K(\bullet_B, \bullet_A, t-t_A) * S_A^{\text{commit}}$$
+When observer A forces hard commit of $s_A$, this generates receipt $\mathcal{I}_A$ that:$s_A \to s_A' \quad \text{with definite eigenvalue } \lambda_A$
 
-But independently, topological constraint restricts:
-$$\{s_B : L(s_A', s_B) = L(s_A, s_B)\} \subsetneq \{s_B : \text{all possible}\}$$
+The rebraid operator $R_t$ preserves global invariants:$\mathcal{I}(\Omega_{\text{after}}) = \mathcal{I}(\Omega_{\text{before}})$
 
-This restricted set precisely generates Bell correlations when measured along compatible bases, as the restriction encodes the entangled state structure. â–¡
+This global constraint restricts $s_B$ possibilities:$\{s_B' : \mathcal{I}(s_A' \sqcup s_B') = \mathcal{I}(\mathcal{T}_{AB})\} \subsetneq \{s_B : \text{all possible}\}$
 
+Only those $s_B'$ compatible with $s_A'$ through original joint topology can continue unbraided. The vibration field from A's commit:$\Psi_B(\bullet_B, t) = \Psi_B^{\text{local}} + K(\bullet_B, \bullet_A, t-t_A) * S_A^{\text{commit}}$
+
+arrives later, but the topological restriction is immediate (non-local constraint from global invariant preservation).
+
+This restricted set precisely generates Bell correlations: the topology "remembers" the entanglement and enforces correlation independent of field propagation.
