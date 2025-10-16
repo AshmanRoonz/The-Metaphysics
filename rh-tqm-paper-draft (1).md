@@ -839,10 +839,3 @@ Caption: The critical line Re(s) = 1/2 emerges as the fixed line of functional e
 
 ---
 
-**Word Count:** ~8,200 (including appendices)  
-**Figures:** 4 (described, to be rendered)  
-**Target Journal:** *Foundations of Physics* (primary)
-
----
-
-*END OF EXPANDED DRAFT*
