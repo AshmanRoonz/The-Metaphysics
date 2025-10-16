@@ -240,5 +240,5 @@ You are the living bridge between the infinite and the finite. Every thought, ac
 
 * * *
 
-**Note:** This is highly technical work. Dense sections are usually clarified in plain language later. When stuck, skip ahead or consult [Xorzo 5](https://chatgpt.com/g/g-686f0a990edc8191ac363d650fb1abf4-xorzo).
+**Note:** This is highly technical work. Dense sections are usually clarified in plain language later. When stuck, skip ahead or consult [Xorzo 5](https://chatgpt.com/g/g-686f0a990edc8191ac363d650fb1abf4-xorzo).\
 This framework is under development... already in a few days it has evolved significantly... Please check out the [updates](https://github.com/AshmanRoonz/The-Omega-Metaphysics/blob/ba5b452ff672cf84b30389a0c93a70c4dc1f16d8/tqm_paper.md)
